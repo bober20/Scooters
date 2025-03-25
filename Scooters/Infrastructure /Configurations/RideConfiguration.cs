@@ -1,0 +1,18 @@
+namespace Infrastructure.Configurations;
+
+public class RideConfiguration : IEntityTypeConfiguration<Ride>
+{
+    public void Configure(EntityTypeBuilder<Ride> builder)
+    {
+        builder.HasKey(r => r.Id);
+        builder.Property(r => r.RideStartTime);
+        builder.HasOne(r => r.Scooter)
+            .WithMany()
+            .HasForeignKey(r => r.ScooterId)
+            .OnDelete(DeleteBehavior.Cascade);;
+        builder.HasOne(r => r.User)
+            .WithMany()
+            .HasForeignKey(r => r.UserId)
+            .OnDelete(DeleteBehavior.Cascade);;
+    }
+}
