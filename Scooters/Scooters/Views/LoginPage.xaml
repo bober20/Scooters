@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Scooters.Views.LoginPage"
+             BackgroundColor="LightGrey">
+    <ContentPage.Content>
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="20">
+            <Label 
+                Text="Scooters"
+                HorizontalTextAlignment="Center"
+                FontSize="72"
+                FontAttributes="Bold"/>
+            <Entry 
+                Placeholder="Email"
+                BackgroundColor="White"/>
+            <Entry
+                Placeholder="Password"
+                BackgroundColor="White"/>
+            <Button
+                Text="Log in"
+                BackgroundColor="Black"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                CornerRadius="10"/>
+            <Label
+                Text="Don't have an account? Sign up"/>
+            <Grid
+                RowSpan="2"
+                RowDefinitions="*, 30">
+                <HorizontalStackLayout>
+                    <Button 
+                        Text="G"
+                        CornerRadius="100"/>
+                    <Button 
+                        Text="A"
+                        CornerRadius="100"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>
