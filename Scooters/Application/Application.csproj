@@ -10,4 +10,18 @@
       <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="12.4.1" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-preview.2.25163.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Reservations\Commands\" />
+      <Folder Include="Reservations\Queries\" />
+      <Folder Include="Rides\Commands\" />
+      <Folder Include="Rides\Queries\" />
+      <Folder Include="Users\Commands\" />
+      <Folder Include="Users\Queries\" />
+    </ItemGroup>
+
 </Project>

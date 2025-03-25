@@ -1,6 +1,6 @@
 namespace Infrastructure.Configurations;
 
-public class RideConfiguration : IEntityTypeConfiguration<Ride>
+internal class RideConfiguration : IEntityTypeConfiguration<Ride>
 {
     public void Configure(EntityTypeBuilder<Ride> builder)
     {
@@ -9,10 +9,10 @@ public class RideConfiguration : IEntityTypeConfiguration<Ride>
         builder.HasOne(r => r.Scooter)
             .WithMany()
             .HasForeignKey(r => r.ScooterId)
-            .OnDelete(DeleteBehavior.Cascade);;
+            .OnDelete(DeleteBehavior.Cascade);
         builder.HasOne(r => r.User)
             .WithMany()
             .HasForeignKey(r => r.UserId)
-            .OnDelete(DeleteBehavior.Cascade);;
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

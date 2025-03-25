@@ -1,6 +1,6 @@
 namespace Infrastructure.Configurations;
 
-public class ScooterConfiguration : IEntityTypeConfiguration<Scooter>
+internal class ScooterConfiguration : IEntityTypeConfiguration<Scooter>
 {
     public void Configure(EntityTypeBuilder<Scooter> builder)
     {

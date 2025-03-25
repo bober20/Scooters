@@ -1,6 +1,6 @@
 namespace Infrastructure.Configurations;
 
-public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
+internal class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
 {
     public void Configure(EntityTypeBuilder<Reservation> builder)
     {

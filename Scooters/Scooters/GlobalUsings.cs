@@ -1,6 +1,2 @@
-namespace Scooters;
-
-public class GlobalUsings
-{
-    
-}
+global using Application;
+global using Infrastructure;
