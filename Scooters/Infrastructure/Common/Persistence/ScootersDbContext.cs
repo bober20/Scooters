@@ -2,7 +2,7 @@ using System.Reflection;
 
 namespace Infrastructure.Common.Persistence;
 
-internal class ScootersDbContext : DbContext, IUnitOfWork
+public class ScootersDbContext : DbContext, IUnitOfWork
 {
     public DbSet<Scooter> Scooters { get; set; }
     public DbSet<User> Users { get; set; }
@@ -26,9 +26,9 @@ internal class ScootersDbContext : DbContext, IUnitOfWork
         base.OnConfiguring(optionsBuilder);
     }
     
-    public Task SaveChangesAsync()
+    public async Task SaveChangesAsync()
     {
-        throw new NotImplementedException();
+        await base.SaveChangesAsync();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
