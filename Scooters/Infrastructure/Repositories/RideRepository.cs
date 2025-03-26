@@ -14,7 +14,6 @@ public class RideRepository : IRideRepository
     public async Task<Ride?> GetRideById(Guid id)
     {
         var ride = await _dbContext.Rides
-            .AsNoTracking()
             .SingleOrDefaultAsync(x => x.Id == id);
         return ride;
     }

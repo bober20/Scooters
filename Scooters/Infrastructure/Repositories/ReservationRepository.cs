@@ -14,7 +14,6 @@ public class ReservationRepository : IReservationRepository
     public async Task<Reservation?> GetReservationByIdAsync(Guid id)
     {
         var reservation = await _dbContext.Reservations
-            .AsNoTracking()
             .FirstOrDefaultAsync(s => s.Id == id);
         return reservation;
     }
