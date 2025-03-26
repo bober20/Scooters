@@ -3,7 +3,7 @@ namespace Application.Interfaces.Repositories;
 public interface IUserRepository
 {
     Task<User?> GetUserByIdAsync(Guid id);
-    Task CreateUserAsync(User user);
-    Task UpdateUserAsync(User user);
-    Task DeleteUserAsync(Guid userId);
+    Task<Guid> CreateUserAsync(User user);
+    Task<User> UpdateUserAsync(User user);
+    Task<Guid> DeleteUserAsync(Guid userId);
 }

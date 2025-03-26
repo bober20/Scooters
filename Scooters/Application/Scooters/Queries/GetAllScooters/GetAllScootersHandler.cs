@@ -1,9 +1,21 @@
+using Application.Interfaces.Repositories;
+
 namespace Application.Scooters.Queries.GetAllScooters;
 
-public class GetAllScootersHandler : IRequestHandler<GetAllScootersQuery, ResponseData<Scooter>>
+public class GetAllScootersHandler : IRequestHandler<GetAllScootersQuery, ResponseData<List<Scooter>>>
 {
-    public Task<ResponseData<Scooter>> Handle(GetAllScootersQuery request, CancellationToken cancellationToken)
+    private readonly IScooterRepository _scooterRepository;
+    
+    public GetAllScootersHandler(IScooterRepository scooterRepository)
     {
-        throw new NotImplementedException();
+        _scooterRepository = scooterRepository;
+    }
+    
+    public async Task<ResponseData<List<Scooter>>> Handle(GetAllScootersQuery request, CancellationToken cancellationToken)
+    {
+        var scooters = await _scooterRepository.GetAllScootersAsync();
+        return scooters is null 
+            ? ResponseData<List<Scooter>>.Failure("Scooters not found")
+            : ResponseData<List<Scooter>>.Success(scooters);
     }
 }

@@ -36,17 +36,21 @@ public class ReservationRepository : IReservationRepository
         return reservation;
     }
 
-    public async Task CreateReservationAsync(Reservation reservation)
+    public async Task<Guid> CreateReservationAsync(Reservation reservation)
     {
-        await _dbContext.Reservations.AddAsync(reservation);
+        var addedReservation = await _dbContext.Reservations.AddAsync(reservation);
+        return addedReservation.Entity.Id;
     }
 
-    public async Task DeleteReservationAsync(Guid reservationId)
+    public async Task<Guid> DeleteReservationAsync(Guid reservationId)
     {
         var reservation = await _dbContext.Reservations.FindAsync(reservationId);
         if (reservation is not null)
         {
             _dbContext.Reservations.Remove(reservation);
+            return reservation.Id;
         }
+
+        throw new KeyNotFoundException("Reservation not found");
     }
 }

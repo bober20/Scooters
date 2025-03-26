@@ -36,21 +36,24 @@ public class RideRepository : IRideRepository
         return rides;
     }
 
-    public async Task CreateRideAsync(Ride ride)
+    public async Task<Guid> CreateRideAsync(Ride ride)
     {
-        await _dbContext.Rides.AddAsync(ride);
+        var addedRide = await _dbContext.Rides.AddAsync(ride);
+        return addedRide.Entity.Id;
     }
 
-    public async Task DeleteRideAsync(Guid rideId)
+    public async Task<Guid> DeleteRideAsync(Guid rideId)
     {
         var rideEntity = await _dbContext.Rides.FindAsync(rideId);
         if (rideEntity is not null)
         {
             _dbContext.Rides.Remove(rideEntity);
         }
+        
+        throw new KeyNotFoundException("Ride not found");
     }
 
-    public async Task UpdateRideAsync(Ride ride)
+    public async Task<Ride> UpdateRideAsync(Ride ride)
     {
         var rideEntity = await _dbContext.Rides.FindAsync(ride.Id);
         if (rideEntity is not null)
@@ -58,6 +61,9 @@ public class RideRepository : IRideRepository
             rideEntity.ScooterId = ride.ScooterId;
             rideEntity.UserId = ride.UserId;
             rideEntity.RideStartTime = ride.RideStartTime;
+            return rideEntity;
         }
+        
+        throw new KeyNotFoundException("Ride not found");
     }
 }

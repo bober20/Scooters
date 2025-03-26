@@ -18,28 +18,35 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task CreateUserAsync(User user)
+    public async Task<Guid> CreateUserAsync(User user)
     {
-        await _dbContext.Users.AddAsync(user);
+        var addedUser = await _dbContext.Users.AddAsync(user);
+        return addedUser.Entity.Id;
     }
 
-    public async Task UpdateUserAsync(User user)
+    public async Task<User> UpdateUserAsync(User user)
     {
         var userEntity = await _dbContext.Users
             .SingleOrDefaultAsync(u => u.Id == user.Id);
         if (userEntity is not null)
         {
             userEntity.PasswordHash = user.PasswordHash;
+            return userEntity;
         }
+
+        throw new KeyNotFoundException("User not found");
     }
 
-    public async Task DeleteUserAsync(Guid userId)
+    public async Task<Guid> DeleteUserAsync(Guid userId)
     {
         var userEntity = await _dbContext.Users
             .SingleOrDefaultAsync(u => u.Id == userId);
         if (userEntity is not null)
         {
             _dbContext.Users.Remove(userEntity);
+            return userEntity.Id;
         }
+        
+        throw new KeyNotFoundException("User not found");
     }
 }
