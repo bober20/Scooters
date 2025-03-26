@@ -1,4 +1,4 @@
-namespace Application.Scooters.Commands.UpdateScooterCommand;
+namespace Application.Scooters.Commands.UpdateScooter;
 
 public class UpdateScooterHandler : IRequestHandler<UpdateScooterCommand, ResponseData<Scooter>>
 {

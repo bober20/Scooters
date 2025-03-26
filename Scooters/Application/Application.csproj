@@ -16,10 +16,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Reservations\Commands\" />
-      <Folder Include="Reservations\Queries\" />
-      <Folder Include="Rides\Commands\" />
-      <Folder Include="Rides\Queries\" />
       <Folder Include="Users\Commands\" />
       <Folder Include="Users\Queries\" />
     </ItemGroup>

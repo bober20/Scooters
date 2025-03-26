@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Infrastructure.Common.Persistence;
 
 namespace Infrastructure.Repositories;
@@ -11,11 +12,20 @@ public class RideRepository : IRideRepository
         _dbContext = context;
     }
     
-    public async Task<Ride?> GetRideById(Guid id)
+    public async Task<Ride?> GetRideByIdAsync(Guid id)
     {
         var ride = await _dbContext.Rides
             .SingleOrDefaultAsync(x => x.Id == id);
         return ride;
+    }
+
+    public async Task<List<Ride>?> GetRidesByFilterAsync(Expression<Func<Ride, bool>> filter)
+    {
+        var rides = await _dbContext.Rides
+            .AsNoTracking()
+            .Where(filter)
+            .ToListAsync();
+        return rides;
     }
 
     public async Task<List<Ride>?> GetRidesByScooterIdAsync(Guid scooterId)

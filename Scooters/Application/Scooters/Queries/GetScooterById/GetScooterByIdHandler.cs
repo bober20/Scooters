@@ -1,5 +1,3 @@
-using Application.Interfaces.Repositories;
-
 namespace Application.Scooters.Queries.GetScooterById;
 
 public class GetScooterByIdHandler : IRequestHandler<GetScooterByIdQuery, ResponseData<Scooter>>

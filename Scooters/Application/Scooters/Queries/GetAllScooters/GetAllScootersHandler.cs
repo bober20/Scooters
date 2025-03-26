@@ -1,5 +1,3 @@
-using Application.Interfaces.Repositories;
-
 namespace Application.Scooters.Queries.GetAllScooters;
 
 public class GetAllScootersHandler : IRequestHandler<GetAllScootersQuery, ResponseData<List<Scooter>>>

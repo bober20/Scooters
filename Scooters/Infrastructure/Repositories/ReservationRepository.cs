@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Infrastructure.Common.Persistence;
 
 namespace Infrastructure.Repositories;
@@ -16,6 +17,15 @@ public class ReservationRepository : IReservationRepository
         var reservation = await _dbContext.Reservations
             .FirstOrDefaultAsync(s => s.Id == id);
         return reservation;
+    }
+
+    public async Task<List<Reservation>?> GetReservationsByFilterAsync(Expression<Func<Reservation, bool>> filter)
+    {
+        var reservations = await _dbContext.Reservations
+            .AsNoTracking()
+            .Where(filter)
+            .ToListAsync();
+        return reservations;
     }
 
     public async Task<List<Reservation>?> GetReservationsByUserIdAsync(Guid userId)

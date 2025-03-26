@@ -1,7 +1,7 @@
 using Application.Interfaces.Repositories;
 using Application.Interfaces.UnitOfWork;
 
-namespace Application.Scooters.Commands.DeleteScooterCommand;
+namespace Application.Scooters.Commands.DeleteScooter;
 
 public class DeleteScooterHandler : IRequestHandler<DeleteScooterCommand, ResponseData<Guid>>
 {
