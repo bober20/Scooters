@@ -26,14 +26,14 @@ public class ScootersDbContext : DbContext, IUnitOfWork
         base.OnConfiguring(optionsBuilder);
     }
     
-    public async Task SaveChangesAsync()
-    {
-        await base.SaveChangesAsync();
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(modelBuilder);
+    }
+    
+    public async Task SaveChangesAsync()
+    {
+        await base.SaveChangesAsync();
     }
 }

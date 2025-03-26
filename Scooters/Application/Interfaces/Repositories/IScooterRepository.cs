@@ -2,8 +2,8 @@ namespace Application.Interfaces.Repositories;
 
 public interface IScooterRepository
 {
-    Task<ResponseData<Scooter>> GetScooterByIdAsync(Guid id);
-    Task<ResponseData<List<Scooter>>> GetScootersAsync();
+    Task<Scooter> GetScooterByIdAsync(Guid id);
+    Task<Scooter> GetScootersAsync();
     Task CreateScooterAsync(Scooter scooter);
     
 }
