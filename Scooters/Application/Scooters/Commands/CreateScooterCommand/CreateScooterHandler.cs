@@ -11,6 +11,7 @@ public class CreateScooterHandler : IRequestHandler<CreateScooterCommand, Respon
     public CreateScooterHandler(IScooterRepository scooterRepository, IUnitOfWork unitOfWork)
     {
         _scooterRepository = scooterRepository;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<ResponseData<Guid>> Handle(CreateScooterCommand request, CancellationToken cancellationToken)
