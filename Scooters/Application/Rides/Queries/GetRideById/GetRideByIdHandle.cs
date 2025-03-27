@@ -13,7 +13,7 @@ public class GetRideByIdHandle : IRequestHandler<GetRideByIdQuery, ResponseData<
     {
         try
         {
-            var ride = await _rideRepository.GetRideByIdAsync(request.Id);
+            var ride = await _rideRepository.GetRideByIdOrDefaultAsync(request.Id);
             return ride is null 
                 ? ResponseData<Ride>.Failure("No ride with this id") 
                 : ResponseData<Ride>.Success(ride);

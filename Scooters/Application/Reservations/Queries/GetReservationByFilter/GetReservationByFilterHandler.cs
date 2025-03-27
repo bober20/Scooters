@@ -13,7 +13,7 @@ public class GetReservationByFilterHandler : IRequestHandler<GetReservationByFil
     {
         try
         {
-            var reservations = await _reservationRepository.GetReservationsByFilterAsync(request.Filter);
+            var reservations = await _reservationRepository.GetReservationsByFilterOrDefaultAsync(request.Filter);
             return reservations is null
                 ? ResponseData<List<Reservation>>.Failure("No rides found") 
                 : ResponseData<List<Reservation>>.Success(reservations);

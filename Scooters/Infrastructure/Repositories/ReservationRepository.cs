@@ -12,20 +12,29 @@ public class ReservationRepository : IReservationRepository
         _dbContext = dbContext;
     }
     
-    public async Task<Reservation?> GetReservationByIdAsync(Guid id)
+    public async Task<Reservation?> GetReservationByIdOrDefaultAsync(Guid id)
     {
         var reservation = await _dbContext.Reservations
             .FirstOrDefaultAsync(s => s.Id == id);
         return reservation;
     }
 
-    public async Task<List<Reservation>?> GetReservationsByFilterAsync(Expression<Func<Reservation, bool>> filter)
+    public async Task<List<Reservation>?> GetReservationsByFilterOrDefaultAsync(Expression<Func<Reservation, bool>> filter)
     {
         var reservations = await _dbContext.Reservations
             .AsNoTracking()
             .Where(filter)
             .ToListAsync();
         return reservations;
+    }
+
+    public async Task<Reservation?> GetSingleReservationByFilterOrDefaultAsync(Expression<Func<Reservation, bool>> filter)
+    {
+        var reservation = await _dbContext.Reservations
+            .AsNoTracking()
+            .Where(filter)
+            .FirstOrDefaultAsync();
+        return reservation;
     }
 
     public async Task<List<Reservation>?> GetReservationsByUserIdAsync(Guid userId)

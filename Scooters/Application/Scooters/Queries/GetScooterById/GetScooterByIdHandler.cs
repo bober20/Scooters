@@ -13,7 +13,7 @@ public class GetScooterByIdHandler : IRequestHandler<GetScooterByIdQuery, Respon
     {
         try
         {
-            var scooter = await _scooterRepository.GetScooterByIdAsync(request.Id);
+            var scooter = await _scooterRepository.GetScooterByIdOrDefaultAsync(request.Id);
             return scooter is null
                 ? ResponseData<Scooter>.Failure("Scooter not found")
                 : ResponseData<Scooter>.Success(scooter);

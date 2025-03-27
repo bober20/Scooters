@@ -13,7 +13,7 @@ public class GetRidesByFilterHandler : IRequestHandler<GetRidesByFilterQuery, Re
     {
         try
         {
-            var rides = await _rideRepository.GetRidesByFilterAsync(request.Filter);
+            var rides = await _rideRepository.GetRidesByFilterOrDefaultAsync(request.Filter);
             return rides is null
                 ? ResponseData<List<Ride>>.Failure("No rides found") 
                 : ResponseData<List<Ride>>.Success(rides);

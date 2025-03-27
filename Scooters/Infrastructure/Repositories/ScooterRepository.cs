@@ -17,7 +17,7 @@ public class ScooterRepository : IScooterRepository
         return scooters;
     }
 
-    public async Task<Scooter?> GetScooterByIdAsync(Guid id)
+    public async Task<Scooter?> GetScooterByIdOrDefaultAsync(Guid id)
     {
         var scooter = await _dbContext.Scooters
             .SingleOrDefaultAsync(s => s.Id == id);

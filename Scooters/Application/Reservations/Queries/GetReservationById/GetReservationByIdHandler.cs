@@ -13,7 +13,7 @@ public class GetReservationByIdHandler : IRequestHandler<GetReservationByIdQuery
     {
         try
         {
-            var reservation = await _reservationRepository.GetReservationByIdAsync(request.Id);
+            var reservation = await _reservationRepository.GetReservationByIdOrDefaultAsync(request.Id);
             return reservation is null
                 ? ResponseData<Reservation>.Failure("No reservation found") 
                 : ResponseData<Reservation>.Success(reservation);
