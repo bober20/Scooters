@@ -11,7 +11,7 @@ public class ScooterRepository : IScooterRepository
         _dbContext = dbContext;
     }
 
-    public async Task<IReadOnlyList<Scooter>?> GetAllScootersAsync()
+    public async Task<List<Scooter>?> GetAllScootersAsync()
     {
         var scooters = await _dbContext.Scooters.AsNoTracking().ToListAsync();
         return scooters;

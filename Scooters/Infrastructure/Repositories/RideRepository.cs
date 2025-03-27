@@ -19,7 +19,7 @@ public class RideRepository : IRideRepository
         return ride;
     }
 
-    public async Task<IReadOnlyList<Ride>?> GetRidesByFilterAsync(Expression<Func<Ride, bool>> filter)
+    public async Task<List<Ride>?> GetRidesByFilterAsync(Expression<Func<Ride, bool>> filter)
     {
         var rides = await _dbContext.Rides
             .AsNoTracking()
@@ -28,7 +28,7 @@ public class RideRepository : IRideRepository
         return rides;
     }
 
-    public async Task<IReadOnlyList<Ride>?> GetRidesByScooterIdAsync(Guid scooterId)
+    public async Task<List<Ride>?> GetRidesByScooterIdAsync(Guid scooterId)
     {
         var rides = await _dbContext.Rides
             .AsNoTracking()
@@ -37,7 +37,7 @@ public class RideRepository : IRideRepository
         return rides;
     }
 
-    public async Task<IReadOnlyList<Ride>?> GetRidesByUserIdAsync(Guid userId)
+    public async Task<List<Ride>?> GetRidesByUserIdAsync(Guid userId)
     {
         var rides = await _dbContext.Rides
             .AsNoTracking()
