@@ -1,4 +1,4 @@
-namespace Application.Reservations.Commands;
+namespace Application.Reservations.Validators;
 
 public class ReservationValidator : AbstractValidator<Reservation>
 {
@@ -6,6 +6,7 @@ public class ReservationValidator : AbstractValidator<Reservation>
     {
         RuleFor(x => x.ScooterId).NotEmpty();
         RuleFor(x => x.UserId).NotEmpty();
+        RuleFor(x => x.ReservationStartTime).NotEmpty().LessThanOrEqualTo(DateTime.Now);
         RuleFor(x => x.ReservationEndTime).NotEmpty().GreaterThanOrEqualTo(DateTime.Now);
     }
 }

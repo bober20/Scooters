@@ -1,4 +1,4 @@
-namespace Application.Scooters.Commands;
+namespace Application.Scooters.Validators;
 
 public class ScooterValidator : AbstractValidator<Scooter>
 {
