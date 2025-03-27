@@ -19,7 +19,7 @@ public class ReservationRepository : IReservationRepository
         return reservation;
     }
 
-    public async Task<List<Reservation>?> GetReservationsByFilterAsync(Expression<Func<Reservation, bool>> filter)
+    public async Task<IReadOnlyList<Reservation>?> GetReservationsByFilterAsync(Expression<Func<Reservation, bool>> filter)
     {
         var reservations = await _dbContext.Reservations
             .AsNoTracking()
@@ -28,7 +28,7 @@ public class ReservationRepository : IReservationRepository
         return reservations;
     }
 
-    public async Task<List<Reservation>?> GetReservationsByUserIdAsync(Guid userId)
+    public async Task<IReadOnlyList<Reservation>?> GetReservationsByUserIdAsync(Guid userId)
     {
         var reservation = await _dbContext.Reservations
             .AsNoTracking()
@@ -37,7 +37,7 @@ public class ReservationRepository : IReservationRepository
         return reservation;
     }
 
-    public async Task<List<Reservation>?> GetReservationsByScooterIdAsync(Guid scooterId)
+    public async Task<IReadOnlyList<Reservation>?> GetReservationsByScooterIdAsync(Guid scooterId)
     {
         var reservation = await _dbContext.Reservations
             .AsNoTracking()
