@@ -71,18 +71,33 @@ public class RideRepository : IRideRepository
         
         throw new KeyNotFoundException("Ride not found");
     }
-
-    public async Task<Ride> UpdateRideAsync(Ride ride)
+    
+    public async Task<Guid> EndRideAsync(Guid rideId)
     {
-        var rideEntity = await _dbContext.Rides.FindAsync(ride.Id);
+        var rideEntity = await _dbContext.Rides.FindAsync(rideId);
         if (rideEntity is not null)
         {
-            rideEntity.ScooterId = ride.ScooterId;
-            rideEntity.UserId = ride.UserId;
-            rideEntity.RideStartTime = ride.RideStartTime;
-            return rideEntity;
+            rideEntity.RideEndTime = DateTime.Now;
+            rideEntity.IsActive = false;
+            return rideEntity.Id;
         }
         
         throw new KeyNotFoundException("Ride not found");
     }
+
+    // public async Task<Ride> UpdateRideAsync(Ride ride)
+    // {
+    //     var rideEntity = await _dbContext.Rides.FindAsync(ride.Id);
+    //     if (rideEntity is not null)
+    //     {
+    //         rideEntity.ScooterId = ride.ScooterId;
+    //         rideEntity.UserId = ride.UserId;
+    //         rideEntity.RideStartTime = ride.RideStartTime;
+    //         rideEntity.RideEndTime = ride.RideEndTime;
+    //         rideEntity.IsActive = ride.IsActive;
+    //         return rideEntity;
+    //     }
+    //     
+    //     throw new KeyNotFoundException("Ride not found");
+    // }
 }

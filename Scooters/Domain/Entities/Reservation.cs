@@ -6,7 +6,7 @@ public class Reservation
     public Guid UserId { get; set; }
     public Guid ScooterId { get; set; }
     public DateTime ReservationStartTime { get; set; }
-    public DateTime ReservationEndTime { get; set; }
+    public int Duration { get; set; }
     public bool IsActive { get; set; } = true;
     public User? User { get; set; }
     public Scooter? Scooter { get; set; }

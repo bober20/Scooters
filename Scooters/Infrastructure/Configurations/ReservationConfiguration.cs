@@ -5,7 +5,7 @@ internal class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
     public void Configure(EntityTypeBuilder<Reservation> builder)
     {
         builder.HasKey(r => r.Id);
-        builder.Property(r => r.ReservationEndTime);
+        builder.Property(r => r.Duration);
         builder.Property(r => r.ReservationStartTime);
         builder.Property(r => r.IsActive)
             .HasDefaultValue(true);

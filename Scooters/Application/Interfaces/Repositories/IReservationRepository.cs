@@ -9,4 +9,5 @@ public interface IReservationRepository
     Task<Reservation?> GetSingleReservationByFilterOrDefaultAsync(Expression<Func<Reservation, bool>> filter);
     Task<Guid> CreateReservationAsync(Reservation reservation);
     Task<Guid> DeleteReservationAsync(Guid reservationId);
+    Task<Guid> EndReservationAsync(Guid reservationId);
 }

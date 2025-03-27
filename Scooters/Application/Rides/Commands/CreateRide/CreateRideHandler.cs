@@ -29,6 +29,8 @@ public class CreateRideHandler : IRequestHandler<CreateRideCommand, ResponseData
                 await _reservationRepository.DeleteReservationAsync(existingThisUserReservationForThisBike.Id);
             }
             
+            request.Ride.RideStartTime = DateTime.Now;
+            
             var guid = await _rideRepository.CreateRideAsync(request.Ride);
             await _unitOfWork.SaveChangesAsync();
             return ResponseData<Guid>.Success(guid);

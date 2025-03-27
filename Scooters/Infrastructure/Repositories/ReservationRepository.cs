@@ -72,4 +72,16 @@ public class ReservationRepository : IReservationRepository
 
         throw new KeyNotFoundException("Reservation not found");
     }
+
+    public async Task<Guid> EndReservationAsync(Guid reservationId)
+    {
+        var reservation = await _dbContext.Reservations.FindAsync(reservationId);
+        if (reservation is not null)
+        {
+            reservation.IsActive = false;
+            return reservation.Id;
+        }
+        
+        throw new KeyNotFoundException("Reservation not found");
+    }
 }
