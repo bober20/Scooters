@@ -4,25 +4,26 @@ namespace Infrastructure.Common.Persistence;
 
 public class ScootersDbContext : DbContext, IUnitOfWork
 {
+    private const string _dbName = "scooters.db";
+    private string _dbPath;
+    
     public DbSet<Scooter> Scooters { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Ride> Rides { get; set; }
     public DbSet<Reservation> Reservations { get; set; }
     
-    private string DbPath { get; }
-    
     public ScootersDbContext()
     {
         var folder = Environment.SpecialFolder.LocalApplicationData;
         var path = Environment.GetFolderPath(folder);
-        DbPath = System.IO.Path.Combine(path, "scooters.db");
+        _dbPath = System.IO.Path.Combine(path, _dbName);
         
         Database.EnsureCreated();
     }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite($"Data Source={DbPath}");
+        optionsBuilder.UseSqlite($"Data Source={_dbPath}");
         base.OnConfiguring(optionsBuilder);
     }
     

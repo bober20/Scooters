@@ -1,6 +1,8 @@
+using Domain.Abstractions;
+
 namespace Domain.Models;
 
-public class ResponseData<T>
+public class ResponseData<T> : IResponseData
 {
     public T? Data { get; private set; }
     public string? ErrorMessage { get; private set; }
