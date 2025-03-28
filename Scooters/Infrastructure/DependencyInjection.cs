@@ -1,3 +1,5 @@
+using Infrastructure.Authentication.JwtTokenGenerator;
+using Infrastructure.Authentication.PasswordHasher;
 using Infrastructure.Common.Persistence;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,9 @@ public static class DependencyInjection
         services.AddTransient<IReservationRepository, ReservationRepository>();
 
         services.AddTransient<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<ScootersDbContext>());
+        
+        services.AddTransient<IPasswordHasher, PasswordHasher>();
+        services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
         
         return services;
     }

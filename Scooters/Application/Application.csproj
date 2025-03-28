@@ -17,8 +17,4 @@
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-preview.2.25163.2" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Users\Queries\" />
-    </ItemGroup>
-
 </Project>
