@@ -22,7 +22,7 @@ public class AuthenticateUserHandler : IRequestHandler<AuthenticateUserQuery, Re
     {
         try 
         {
-            var user = await _userRepository.GetUserByEmailOrDefaultAsync(request.Email);
+            var user = await _userRepository.GetUserAsync(request.Email);
             if (user is null)
             {
                 return ResponseData<string>.Failure("User not found");

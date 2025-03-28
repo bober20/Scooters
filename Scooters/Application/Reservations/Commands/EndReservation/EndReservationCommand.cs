@@ -1,3 +1,3 @@
 namespace Application.Reservations.Commands.EndReservation;
 
-public record EndReservationCommand(Guid Id) : IRequest<ResponseData<Guid>>;
+public record EndReservationCommand(Guid Id) : IRequest;

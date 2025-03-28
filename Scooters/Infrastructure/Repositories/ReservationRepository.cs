@@ -12,14 +12,14 @@ public class ReservationRepository : IReservationRepository
         _dbContext = dbContext;
     }
     
-    public async Task<Reservation?> GetReservationByIdOrDefaultAsync(Guid id)
+    public async Task<Reservation?> GetReservationAsync(Guid id)
     {
         var reservation = await _dbContext.Reservations
-            .FirstOrDefaultAsync(s => s.Id == id);
+            .SingleOrDefaultAsync(s => s.Id == id);
         return reservation;
     }
 
-    public async Task<List<Reservation>?> GetReservationsByFilterOrDefaultAsync(Expression<Func<Reservation, bool>> filter)
+    public async Task<List<Reservation>?> GetReservationsAsync(Expression<Func<Reservation, bool>> filter)
     {
         var reservations = await _dbContext.Reservations
             .AsNoTracking()
@@ -28,42 +28,34 @@ public class ReservationRepository : IReservationRepository
         return reservations;
     }
 
-    public async Task<Reservation?> GetSingleReservationByFilterOrDefaultAsync(Expression<Func<Reservation, bool>> filter)
+    public async Task<Reservation?> GetReservationAsync(Guid userId, Guid scooterId)
     {
         var reservation = await _dbContext.Reservations
             .AsNoTracking()
-            .Where(filter)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(s => s.UserId == userId && s.ScooterId == scooterId);
         return reservation;
     }
-
-    public async Task<Guid> CreateReservationAsync(Reservation reservation)
+    
+    public async Task CreateReservationAsync(Reservation reservation)
     {
-        var addedReservation = await _dbContext.Reservations.AddAsync(reservation);
-        return addedReservation.Entity.Id;
+        await _dbContext.Reservations.AddAsync(reservation);
     }
 
-    public async Task<Guid> DeleteReservationAsync(Guid reservationId)
+    public async Task DeleteReservationAsync(Guid reservationId)
     {
         var reservation = await _dbContext.Reservations.FindAsync(reservationId);
         if (reservation is not null)
         {
             _dbContext.Reservations.Remove(reservation);
-            return reservation.Id;
         }
-
-        throw new KeyNotFoundException("Reservation not found");
     }
 
-    public async Task<Guid> EndReservationAsync(Guid reservationId)
+    public async Task EndReservationAsync(Guid reservationId)
     {
         var reservation = await _dbContext.Reservations.FindAsync(reservationId);
         if (reservation is not null)
         {
             reservation.IsActive = false;
-            return reservation.Id;
         }
-        
-        throw new KeyNotFoundException("Reservation not found");
     }
 }

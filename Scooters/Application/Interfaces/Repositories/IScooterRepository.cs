@@ -3,8 +3,8 @@ namespace Application.Interfaces.Repositories;
 public interface IScooterRepository
 {
     Task<List<Scooter>?> GetAllScootersAsync();
-    Task<Scooter?> GetScooterByIdOrDefaultAsync(Guid id);
-    Task<Guid> CreateScooterAsync(Scooter scooter);
-    Task<Guid> DeleteScooterAsync(Guid id);
-    Task<Scooter> UpdateScooterAsync(Scooter scooter);
+    Task<Scooter?> GetScooterAsync(Guid id);
+    Task CreateScooterAsync(Scooter scooter);
+    Task DeleteScooterAsync(Guid id);
+    Task UpdateScooterAsync(Scooter scooter);
 }

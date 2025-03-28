@@ -1,6 +1,6 @@
 namespace Application.Reservations.Commands.DeleteReservation;
 
-public class DeleteReservationHandler : IRequestHandler<DeleteReservationCommand, ResponseData<Guid>>
+public class DeleteReservationHandler : IRequestHandler<DeleteReservationCommand>
 {
     private readonly IReservationRepository _reservationRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -11,17 +11,9 @@ public class DeleteReservationHandler : IRequestHandler<DeleteReservationCommand
         _unitOfWork = unitOfWork;
     }
     
-    public async Task<ResponseData<Guid>> Handle(DeleteReservationCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteReservationCommand request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var guid = await _reservationRepository.DeleteReservationAsync(request.Id);
-            await _unitOfWork.SaveChangesAsync();
-            return ResponseData<Guid>.Success(guid);
-        }
-        catch(Exception ex)
-        {
-            return ResponseData<Guid>.Failure(ex.Message);
-        }
+        await _reservationRepository.DeleteReservationAsync(request.Id);
+        await _unitOfWork.SaveChangesAsync();
     }
 }

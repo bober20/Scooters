@@ -1,6 +1,6 @@
 namespace Application.Reservations.Commands.EndReservation;
 
-public class EndReservationHandler : IRequestHandler<EndReservationCommand, ResponseData<Guid>>
+public class EndReservationHandler : IRequestHandler<EndReservationCommand>
 {
     private readonly IReservationRepository _reservationRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -11,17 +11,9 @@ public class EndReservationHandler : IRequestHandler<EndReservationCommand, Resp
         _unitOfWork = unitOfWork;
     }
     
-    public async Task<ResponseData<Guid>> Handle(EndReservationCommand request, CancellationToken cancellationToken)
+    public async Task Handle(EndReservationCommand request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var guid = await _reservationRepository.EndReservationAsync(request.Id);
-            await _unitOfWork.SaveChangesAsync();
-            return ResponseData<Guid>.Success(guid);
-        }
-        catch(Exception ex)
-        {
-            return ResponseData<Guid>.Failure(ex.Message);
-        }
+        await _reservationRepository.EndReservationAsync(request.Id);
+        await _unitOfWork.SaveChangesAsync();
     }
 }

@@ -17,41 +17,34 @@ public class ScooterRepository : IScooterRepository
         return scooters;
     }
 
-    public async Task<Scooter?> GetScooterByIdOrDefaultAsync(Guid id)
+    public async Task<Scooter?> GetScooterAsync(Guid id)
     {
         var scooter = await _dbContext.Scooters
             .SingleOrDefaultAsync(s => s.Id == id);
         return scooter;
     }
 
-    public async Task<Guid> CreateScooterAsync(Scooter scooter)
+    public async Task CreateScooterAsync(Scooter scooter)
     {
-        var addedScooter = await _dbContext.Scooters.AddAsync(scooter);
-        return addedScooter.Entity.Id;
+        await _dbContext.Scooters.AddAsync(scooter);
     }
 
-    public async Task<Guid> DeleteScooterAsync(Guid id)
+    public async Task DeleteScooterAsync(Guid id)
     {
         var scooterEntity = await _dbContext.Scooters.FindAsync(id);
         if (scooterEntity is not null)
         {
             _dbContext.Scooters.Remove(scooterEntity);
-            return scooterEntity.Id;
         }
-        
-        throw new KeyNotFoundException("Ride not found");
     }
 
-    public async Task<Scooter> UpdateScooterAsync(Scooter scooter)
+    public async Task UpdateScooterAsync(Scooter scooter)
     {
         var scooterEntity = await _dbContext.Scooters.FindAsync(scooter.Id);
         if (scooterEntity is not null)
         {
             scooterEntity.Coordinates = scooter.Coordinates;
             scooterEntity.ModelDescription = scooter.ModelDescription;
-            return scooterEntity;
         }
-        
-        throw new KeyNotFoundException("Ride not found");
     }
 }

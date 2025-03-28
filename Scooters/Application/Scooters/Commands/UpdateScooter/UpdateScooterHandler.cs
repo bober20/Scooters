@@ -1,6 +1,6 @@
 namespace Application.Scooters.Commands.UpdateScooter;
 
-public class UpdateScooterHandler : IRequestHandler<UpdateScooterCommand, ResponseData<Scooter>>
+public class UpdateScooterHandler : IRequestHandler<UpdateScooterCommand>
 {
     private readonly IScooterRepository _scooterRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -11,17 +11,9 @@ public class UpdateScooterHandler : IRequestHandler<UpdateScooterCommand, Respon
         _unitOfWork = unitOfWork;
     }
     
-    public async Task<ResponseData<Scooter>> Handle(UpdateScooterCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateScooterCommand request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var updatedScooter = await _scooterRepository.UpdateScooterAsync(request.Scooter);
-            await _unitOfWork.SaveChangesAsync();
-            return ResponseData<Scooter>.Success(updatedScooter);
-        }
-        catch (Exception ex)
-        {
-            return ResponseData<Scooter>.Failure(ex.Message);
-        }
+        await _scooterRepository.UpdateScooterAsync(request.Scooter);
+        await _unitOfWork.SaveChangesAsync();
     }
 }

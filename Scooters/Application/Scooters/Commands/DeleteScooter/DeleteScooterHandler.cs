@@ -3,7 +3,7 @@ using Application.Interfaces.UnitOfWork;
 
 namespace Application.Scooters.Commands.DeleteScooter;
 
-public class DeleteScooterHandler : IRequestHandler<DeleteScooterCommand, ResponseData<Guid>>
+public class DeleteScooterHandler : IRequestHandler<DeleteScooterCommand>
 {
     private readonly IScooterRepository _scooterRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -14,17 +14,9 @@ public class DeleteScooterHandler : IRequestHandler<DeleteScooterCommand, Respon
         _unitOfWork = unitOfWork;
     }
     
-    public async Task<ResponseData<Guid>> Handle(DeleteScooterCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteScooterCommand request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var deletedScooterGuid = await _scooterRepository.DeleteScooterAsync(request.Id);
-            await _unitOfWork.SaveChangesAsync();
-            return ResponseData<Guid>.Success(deletedScooterGuid);
-        }
-        catch (Exception ex)
-        {
-            return ResponseData<Guid>.Failure(ex.Message);
-        }
+        await _scooterRepository.DeleteScooterAsync(request.Id);
+        await _unitOfWork.SaveChangesAsync();
     }
 }

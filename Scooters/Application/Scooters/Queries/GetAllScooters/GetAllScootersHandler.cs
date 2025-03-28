@@ -12,8 +12,6 @@ public class GetAllScootersHandler : IRequestHandler<GetAllScootersQuery, Respon
     public async Task<ResponseData<List<Scooter>>> Handle(GetAllScootersQuery request, CancellationToken cancellationToken)
     {
         var scooters = await _scooterRepository.GetAllScootersAsync();
-        return scooters is null 
-            ? ResponseData<List<Scooter>>.Failure("Scooters not found")
-            : ResponseData<List<Scooter>>.Success(scooters);
+        return ResponseData<List<Scooter>>.Success(scooters);
     }
 }

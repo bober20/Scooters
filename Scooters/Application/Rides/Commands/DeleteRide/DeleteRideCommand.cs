@@ -1,3 +1,3 @@
 namespace Application.Rides.Commands.DeleteRide;
 
-public record DeleteRideCommand(Guid Id) : IRequest<ResponseData<Guid>>;
+public record DeleteRideCommand(Guid Id) : IRequest;

@@ -6,6 +6,7 @@ public class ReservationValidator : AbstractValidator<Reservation>
     {
         RuleFor(x => x.ScooterId).NotEmpty();
         RuleFor(x => x.UserId).NotEmpty();
+        RuleFor(x => x.StartTime).NotEmpty();
         RuleFor(x => x.Duration).NotEmpty().GreaterThan(0);
     }
 }

@@ -3,7 +3,7 @@ using Application.Interfaces.UnitOfWork;
 
 namespace Application.Scooters.Commands.CreateScooter;
 
-public class CreateScooterHandler : IRequestHandler<CreateScooterCommand, ResponseData<Guid>>
+public class CreateScooterHandler : IRequestHandler<CreateScooterCommand>
 {
     private readonly IScooterRepository _scooterRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -14,17 +14,9 @@ public class CreateScooterHandler : IRequestHandler<CreateScooterCommand, Respon
         _unitOfWork = unitOfWork;
     }
     
-    public async Task<ResponseData<Guid>> Handle(CreateScooterCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CreateScooterCommand request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var guid = await _scooterRepository.CreateScooterAsync(request.Scooter);
-            await _unitOfWork.SaveChangesAsync();
-            return ResponseData<Guid>.Success(guid);
-        }
-        catch(Exception ex)
-        {
-            return ResponseData<Guid>.Failure(ex.Message);
-        }
+        await _scooterRepository.CreateScooterAsync(request.Scooter);
+        await _unitOfWork.SaveChangesAsync();
     }
 }

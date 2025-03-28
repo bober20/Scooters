@@ -11,14 +11,14 @@ public class UserRepository : IUserRepository
         _dbContext = dbContext;
     }
     
-    public async Task<User?> GetUserByIdOrDefaultAsync(Guid id)
+    public async Task<User?> GetUserAsync(Guid id)
     {
         var user = await _dbContext.Users
             .SingleOrDefaultAsync(u => u.Id == id);
         return user;
     }
     
-    public async Task<User?> GetUserByEmailOrDefaultAsync(string email)
+    public async Task<User?> GetUserAsync(string email)
     {
         var user = await _dbContext.Users
             .SingleOrDefaultAsync(u => u.Email == email);
@@ -31,30 +31,24 @@ public class UserRepository : IUserRepository
         return addedUser.Entity.Id;
     }
 
-    public async Task<User> UpdateUserAsync(User user)
+    public async Task UpdateUserAsync(User user)
     {
         var userEntity = await _dbContext.Users
             .SingleOrDefaultAsync(u => u.Id == user.Id);
         if (userEntity is not null)
         {
             userEntity.PasswordHash = user.PasswordHash;
-            return userEntity;
         }
-
-        throw new KeyNotFoundException("User not found");
     }
 
-    public async Task<Guid> DeleteUserAsync(Guid userId)
+    public async Task DeleteUserAsync(Guid userId)
     {
         var userEntity = await _dbContext.Users
             .SingleOrDefaultAsync(u => u.Id == userId);
         if (userEntity is not null)
         {
             _dbContext.Users.Remove(userEntity);
-            return userEntity.Id;
         }
-        
-        throw new KeyNotFoundException("User not found");
     }
 
     public async Task<bool> ExistsByEmailAsync(string email)

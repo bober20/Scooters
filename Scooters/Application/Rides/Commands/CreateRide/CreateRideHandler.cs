@@ -1,6 +1,6 @@
 namespace Application.Rides.Commands.CreateRide;
 
-public class CreateRideHandler : IRequestHandler<CreateRideCommand, ResponseData<Guid>>
+public class CreateRideHandler : IRequestHandler<CreateRideCommand, ResponseData<Ride>>
 {
     private readonly IRideRepository _rideRepository;
     private readonly IReservationRepository _reservationRepository;
@@ -15,29 +15,25 @@ public class CreateRideHandler : IRequestHandler<CreateRideCommand, ResponseData
         _unitOfWork = unitOfWork;
     }
     
-    public async Task<ResponseData<Guid>> Handle(CreateRideCommand request, CancellationToken cancellationToken)
+    public async Task<ResponseData<Ride>> Handle(CreateRideCommand request, CancellationToken cancellationToken)
     {
         try
         {
-            var existingThisUserReservationForThisBike = await _reservationRepository
-                .GetSingleReservationByFilterOrDefaultAsync(
-                    r => r.ScooterId == request.Ride.ScooterId
-                         && r.UserId == request.Ride.UserId);
+            var scooterReservation = await _reservationRepository
+                .GetReservationAsync(request.Ride.UserId, request.Ride.UserId);
             
-            if (existingThisUserReservationForThisBike is not null)
+            if (scooterReservation is not null)
             {
-                await _reservationRepository.DeleteReservationAsync(existingThisUserReservationForThisBike.Id);
+                await _reservationRepository.EndReservationAsync(scooterReservation.Id);
             }
             
-            request.Ride.StartTime = DateTime.Now;
-            
-            var guid = await _rideRepository.CreateRideAsync(request.Ride);
+            var ride = await _rideRepository.CreateRideAsync(request.Ride);
             await _unitOfWork.SaveChangesAsync();
-            return ResponseData<Guid>.Success(guid);
+            return ResponseData<Ride>.Success(ride);
         }
         catch(Exception ex)
         {
-            return ResponseData<Guid>.Failure(ex.Message);
+            return ResponseData<Ride>.Failure(ex.Message);
         }
     }
 }
