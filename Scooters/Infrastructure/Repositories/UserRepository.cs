@@ -11,14 +11,21 @@ public class UserRepository : IUserRepository
         _dbContext = dbContext;
     }
     
-    public async Task<User?> GetUserByIdAsync(Guid id)
+    public async Task<User?> GetUserByIdOrDefaultAsync(Guid id)
     {
         var user = await _dbContext.Users
             .SingleOrDefaultAsync(u => u.Id == id);
         return user;
     }
+    
+    public async Task<User?> GetUserByEmailOrDefaultAsync(string email)
+    {
+        var user = await _dbContext.Users
+            .SingleOrDefaultAsync(u => u.Email == email);
+        return user;
+    }
 
-    public async Task<Guid> CreateUserAsync(User user)
+    public async Task<Guid> RegisterUserAsync(User user)
     {
         var addedUser = await _dbContext.Users.AddAsync(user);
         return addedUser.Entity.Id;
@@ -48,5 +55,10 @@ public class UserRepository : IUserRepository
         }
         
         throw new KeyNotFoundException("User not found");
+    }
+
+    public async Task<bool> ExistsByEmailAsync(string email)
+    {
+        return await _dbContext.Users.AnyAsync(u => u.Email == email);
     }
 }

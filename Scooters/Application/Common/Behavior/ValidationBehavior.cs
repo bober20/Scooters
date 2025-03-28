@@ -5,7 +5,6 @@ namespace Application.Common.Behavior;
 public class ValidationBehavior<TRequest, TResponse> 
     : IPipelineBehavior<TRequest, TResponse> 
     where TRequest : IRequest<TResponse>
-    where TResponse : ResponseData<IResponseData>
 {
     private readonly IValidator<TRequest>? _validator;
     
@@ -14,7 +13,9 @@ public class ValidationBehavior<TRequest, TResponse>
         _validator = validator;
     }
     
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(TRequest request, 
+        RequestHandlerDelegate<TResponse> next, 
+        CancellationToken cancellationToken)
     {
         if (_validator is null)
         {
@@ -27,9 +28,9 @@ public class ValidationBehavior<TRequest, TResponse>
         {
             return await next();
         }
+
+        var errors = validationResult.Errors.ConvertAll(e => e.ErrorMessage);
         
-        var errors = validationResult.Errors.Select(x => x.ErrorMessage);
-        
-        throw new NotImplementedException();
+        throw new ValidationException(string.Join(',', errors));
     }
 }

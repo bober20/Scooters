@@ -1,3 +1,5 @@
+using Domain.Abstractions;
+
 namespace Domain.Entities;
 
 public class User
@@ -8,4 +10,17 @@ public class User
     
     public List<Reservation> Reservations { get; set; }
     public List<Ride> Rides { get; set; }
+    
+    private User() { }
+    
+    public User(string email, string passwordHash)
+    {
+        Email = email;
+        PasswordHash = passwordHash;
+    }
+    
+    public bool IsCorrectPasswordHash(string password, IPasswordHasher passwordHasher)
+    {
+        return passwordHasher.IsCorrectPassword(password, PasswordHash);
+    }
 }

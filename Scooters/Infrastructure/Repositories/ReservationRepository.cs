@@ -37,24 +37,6 @@ public class ReservationRepository : IReservationRepository
         return reservation;
     }
 
-    public async Task<List<Reservation>?> GetReservationsByUserIdAsync(Guid userId)
-    {
-        var reservation = await _dbContext.Reservations
-            .AsNoTracking()
-            .Where(s => s.UserId == userId)
-            .ToListAsync();
-        return reservation;
-    }
-
-    public async Task<List<Reservation>?> GetReservationsByScooterIdAsync(Guid scooterId)
-    {
-        var reservation = await _dbContext.Reservations
-            .AsNoTracking()
-            .Where(s => s.ScooterId == scooterId)
-            .ToListAsync();
-        return reservation;
-    }
-
     public async Task<Guid> CreateReservationAsync(Reservation reservation)
     {
         var addedReservation = await _dbContext.Reservations.AddAsync(reservation);

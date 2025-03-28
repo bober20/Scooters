@@ -9,6 +9,5 @@ public interface IRideRepository
     Task<Ride?> GetSingleRideByFilterOrDefaultAsync(Expression<Func<Ride, bool>> filter);
     Task<Guid> CreateRideAsync(Ride ride);
     Task<Guid> DeleteRideAsync(Guid rideId);
-    // Task<Ride> UpdateRideAsync(Ride ride);
     Task<Guid> EndRideAsync(Guid rideId);
 }

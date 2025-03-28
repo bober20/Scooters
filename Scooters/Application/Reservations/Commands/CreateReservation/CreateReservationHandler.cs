@@ -15,7 +15,7 @@ public class CreateReservationHandler : IRequestHandler<CreateReservationCommand
     {
         try
         {
-            request.Reservation.ReservationStartTime = DateTime.Now;
+            request.Reservation.StartTime = DateTime.Now;
             var guid = await _repository.CreateReservationAsync(request.Reservation);
             await _unitOfWork.SaveChangesAsync();
             return ResponseData<Guid>.Success(guid);
