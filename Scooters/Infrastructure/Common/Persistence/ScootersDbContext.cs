@@ -5,6 +5,7 @@ namespace Infrastructure.Common.Persistence;
 public class ScootersDbContext : DbContext, IUnitOfWork
 {
     private const string _dbName = "scooters.db";
+    private string _dbPath;
     
     public DbSet<Scooter> Scooters { get; set; }
     public DbSet<User> Users { get; set; }
@@ -15,14 +16,14 @@ public class ScootersDbContext : DbContext, IUnitOfWork
     {
         var folder = Environment.SpecialFolder.LocalApplicationData;
         var path = Environment.GetFolderPath(folder);
-        var fullPath = System.IO.Path.Combine(path, _dbName);
+        _dbPath = System.IO.Path.Combine(path, _dbName);
         
         Database.EnsureCreated();
     }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite($"Data Source={_dbName}");
+        optionsBuilder.UseSqlite($"Data Source={_dbPath}");
         base.OnConfiguring(optionsBuilder);
     }
     
