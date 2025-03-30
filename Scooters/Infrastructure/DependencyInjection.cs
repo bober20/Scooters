@@ -1,3 +1,4 @@
+using Application.Common.Interfaces.JwtTokenValidator;
 using Infrastructure.Authentication.JwtTokenGenerator;
 using Infrastructure.Authentication.PasswordHasher;
 using Infrastructure.Common.Persistence;
@@ -21,6 +22,7 @@ public static class DependencyInjection
         
         services.AddTransient<IPasswordHasher, PasswordHasher>();
         services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddTransient<IJwtTokenValidator, JwtTokenValidator>();
         
         return services;
     }

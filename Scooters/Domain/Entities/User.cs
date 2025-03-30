@@ -11,7 +11,7 @@ public class User
     public List<Reservation> Reservations { get; set; }
     public List<Ride> Rides { get; set; }
     
-    private User() { }
+    public User() { }
     
     public User(string email, string passwordHash)
     {

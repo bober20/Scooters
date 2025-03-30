@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Application.Common.Interfaces.CurrentUserProvider;
+using Microsoft.Extensions.Logging;
+using Scooters.Services;
+using Scooters.ViewModels;
+using Scooters.Views;
 
 namespace Scooters;
 
@@ -18,6 +22,11 @@ public static class MauiProgram
         builder.Services
             .AddApplication()
             .AddInfrastructure();
+
+        builder.Services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
+
+        builder.Services.AddTransient<MainViewModel>();
+        builder.Services.AddTransient<MainPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();
