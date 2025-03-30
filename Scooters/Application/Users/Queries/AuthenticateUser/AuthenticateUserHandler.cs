@@ -1,6 +1,3 @@
-using Application.Interfaces.JwtTokenGenerator;
-using Domain.Abstractions;
-
 namespace Application.Users.Queries.AuthenticateUser;
 
 public class AuthenticateUserHandler : IRequestHandler<AuthenticateUserQuery, ResponseData<string>>
@@ -34,6 +31,8 @@ public class AuthenticateUserHandler : IRequestHandler<AuthenticateUserQuery, Re
             }
         
             var token = _jwtTokenGenerator.GenerateToken(user);
+            
+            
             
             return ResponseData<string>.Success(token);
         }

@@ -1,6 +1,3 @@
-using Application.Interfaces.Repositories;
-using Application.Interfaces.UnitOfWork;
-
 namespace Application.Scooters.Commands.CreateScooter;
 
 public class CreateScooterHandler : IRequestHandler<CreateScooterCommand>

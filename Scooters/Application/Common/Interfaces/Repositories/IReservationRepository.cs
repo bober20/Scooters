@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace Application.Interfaces.Repositories;
+namespace Application.Common.Interfaces.Repositories;
 
 public interface IReservationRepository
 {
