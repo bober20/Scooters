@@ -6,7 +6,8 @@ internal class RideConfiguration : IEntityTypeConfiguration<Ride>
     {
         builder.HasKey(r => r.Id);
         builder.Property(r => r.StartTime);
-        builder.Property(r => r.EndTime);
+        builder.Property(r => r.EndTime)
+            .IsRequired(false);
         builder.Property(r => r.IsActive)
             .HasDefaultValue(true);
         builder.HasOne(r => r.Scooter)
