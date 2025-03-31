@@ -11,7 +11,7 @@ public partial class LoginViewModel : ObservableObject
     [ObservableProperty] private string _email;
     [ObservableProperty] private string _password;
     [ObservableProperty] private string _passwordConfirmation;
-    [ObservableProperty] private string? _token;
+    [ObservableProperty] private string? _errors;
     private IMediator _mediator;
     
     public LoginViewModel(IMediator mediator)
@@ -29,26 +29,11 @@ public partial class LoginViewModel : ObservableObject
         
         if (token.IsSuccessful)
         {
-            Token = token.Data;
+            await Shell.Current.GoToAsync("//MainPage");
         }
         else
         {
-            Token = token.ErrorMessage;
-        }
-    }
-    
-    [RelayCommand]
-    private async Task SignUp()
-    {
-        var token = await _mediator.Send(new RegisterUserCommand(Email, Password, PasswordConfirmation));
-        
-        if (token.IsSuccessful)
-        {
-            Token = "Guid: " + token.Data.ToString();
-        }
-        else
-        {
-            Token = token.ErrorMessage;
+            Errors = token.ErrorMessage;
         }
     }
 

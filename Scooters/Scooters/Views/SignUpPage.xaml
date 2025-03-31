@@ -3,6 +3,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Scooters.Views.SignUpPage"
+             BackgroundColor="LightGrey"
+             Shell.NavBarIsVisible="False"
              xmlns:vewModels="clr-namespace:Scooters.ViewModels"
              x:DataType="vewModels:SignUpViewModel">
     <ContentPage.Content>
@@ -13,6 +15,10 @@
                 Text="Scooters"
                 HorizontalTextAlignment="Center"
                 FontSize="72"
+                FontAttributes="Bold"/>
+            <Label
+                Text="Sign up"
+                FontSize="32"
                 FontAttributes="Bold"/>
             <Entry 
                 Placeholder="Email"
@@ -34,7 +40,25 @@
                 CornerRadius="10"
                 Command="{Binding SignUpCommand}"/>
             <Label 
-                Text="{Binding Errors}"></Label>
+                Text="{Binding Errors}"
+                TextColor="Red"></Label>
+            <Label
+                HorizontalTextAlignment="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span 
+                            Text="Already have an account? " 
+                            TextColor="Black" />
+                        <Span
+                            Text="Sign in"
+                            TextColor="DarkCyan">
+                            <Span.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding LogInLinkCommand}" />
+                            </Span.GestureRecognizers>
+                        </Span>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
         </VerticalStackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -3,23 +3,34 @@
     x:Class="Scooters.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Scooters"
     xmlns:views="clr-namespace:Scooters.Views"
-    Shell.FlyoutBehavior="Flyout"
+    FlyoutBehavior="Disabled"
     Title="Scooters">
-
+    
     <FlyoutItem>
         <ShellContent
-            Title="Home"
+            Title="Main"
             ContentTemplate="{DataTemplate views:MainPage}"
             Route="MainPage" />
         <ShellContent
-            Title="Login"
-            ContentTemplate="{DataTemplate views:LoginPage}"
-            Route="LoginPage"/>
+            Title="Map"
+            ContentTemplate="{DataTemplate views:ScootersMapPage}"
+            Route="MapPage" />
         <ShellContent
-            Title="Sign up"
-            ContentTemplate="{DataTemplate views:SignUpPage}"
-            Route="SignUpPage" />
+            Title="QR"
+            ContentTemplate="{DataTemplate views:QRScannerPage}"
+            Route="QRScannerPage" />
+        <ShellContent
+            Title="Profile"
+            ContentTemplate="{DataTemplate views:ProfilePage}"
+            Route="ProfilePage"/>
     </FlyoutItem>
+    
+    <ShellContent
+        ContentTemplate="{DataTemplate views:LoginPage}"
+        Route="LoginPage"/>
+    
+    <ShellContent
+        ContentTemplate="{DataTemplate views:SignUpPage}"
+        Route="SignUpPage"/>
 </Shell>

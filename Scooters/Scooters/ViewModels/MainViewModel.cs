@@ -40,4 +40,10 @@ public partial class MainViewModel : ObservableObject
         scooter.Coordinates = new Coordinates() {X = 0, Y = 0};
         await _mediator.Send(new CreateScooterCommand(scooter));
     }
+    
+    [RelayCommand]
+    private async Task MapPageLink()
+    {
+        await Shell.Current.GoToAsync("//MapPage");
+    }
 }

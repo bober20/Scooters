@@ -1,23 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:maps="clr-namespace:Microsoft.Maui.Controls.Maps;assembly=Microsoft.Maui.Controls.Maps"
              x:Class="Scooters.Views.MainPage"
-             xmlns:viewModels="clr-namespace:Scooters.ViewModels"
-             x:DataType="viewModels:MainViewModel"
-             x:Name="MainPageView">
-    <StackLayout Padding="10">
-        <ListView ItemsSource="{Binding Scooters}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <StackLayout Orientation="Vertical" Padding="10">
-                            <Label Text="{Binding Id}" FontAttributes="Bold" />
-                            <Label Text="{Binding ModelDescription}" />
-                        </StackLayout>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+             xmlns:viewModels1="clr-namespace:Scooters.ViewModels"
+             x:DataType="viewModels1:MainViewModel"
+             x:Name="MainPageView"
+             BackgroundColor="LightGrey">
+    <StackLayout Padding="10" Spacing="30">
+        <Label 
+            Text="Scooters"
+            HorizontalTextAlignment="Center"
+            FontSize="72"
+            FontAttributes="Bold"/>
+        <Label 
+            Text="Welcome to scooters application!"
+            HorizontalTextAlignment="Center"
+            FontSize="32"/>
+        <Label 
+            Text="Your current rides"
+            HorizontalTextAlignment="Center"
+            FontSize="32"/>
+        <Label 
+            Text="You don't have current rides right now"
+            HorizontalTextAlignment="Center"
+            FontSize="16"/>
+        <Button 
+            Text="Make reservations"
+            BackgroundColor="Black"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            CornerRadius="10"
+            Command="{Binding MapPageLinkCommand}"/> 
     </StackLayout>
 </ContentPage>

@@ -33,7 +33,15 @@ public partial class SignUpViewModel : ObservableObject
         {
             Errors = response.ErrorMessage!;
         }
-        
+        else
+        {
+            await Shell.Current.GoToAsync("//LoginPage");
+        }
+    }
+    
+    [RelayCommand]
+    private async Task LogInLink()
+    {
         await Shell.Current.GoToAsync("//LoginPage");
     }
 }

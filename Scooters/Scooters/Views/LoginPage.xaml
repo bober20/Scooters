@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Scooters.Views.LoginPage"
              BackgroundColor="LightGrey"
+             Shell.NavBarIsVisible="False"
              xmlns:viewModels="clr-namespace:Scooters.ViewModels"
              x:DataType="viewModels:LoginViewModel">
     <ContentPage.Content>
@@ -14,6 +15,10 @@
                 Text="Scooters"
                 HorizontalTextAlignment="Center"
                 FontSize="72"
+                FontAttributes="Bold"/>
+            <Label
+                Text="Sign in"
+                FontSize="32"
                 FontAttributes="Bold"/>
             <Entry 
                 Placeholder="Email"
@@ -31,14 +36,15 @@
                 CornerRadius="10"
                 Command="{Binding LogInCommand}"/>
             <Label
-                Text="{Binding Token}"/>
-            <Label>
+                Text="{Binding Errors}"
+                TextColor="Red"/>
+            <Label
+                HorizontalTextAlignment="Center">
                 <Label.FormattedText>
                     <FormattedString>
                         <Span Text="Don't have an account? " TextColor="Black" />
-                        <Span Text="Sign up here" 
-                              TextColor="Blue" 
-                              TextDecorations="Underline">
+                        <Span Text="Sign up" 
+                              TextColor="DarkCyan">
                             <Span.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding SignUpLinkCommand}" />
                             </Span.GestureRecognizers>
