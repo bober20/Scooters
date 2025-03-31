@@ -1,4 +1,6 @@
 ﻿using Application.Common.Interfaces.CurrentUserProvider;
+using Infrastructure.Authentication.JwtTokenGenerator;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Scooters.Services;
 using Scooters.ViewModels;
@@ -18,15 +20,21 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
+        
+        var appSettingsPath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
+        builder.Configuration.AddJsonFile(appSettingsPath, optional: false);
 
         builder.Services
             .AddApplication()
-            .AddInfrastructure();
-
+            .AddInfrastructure(builder.Configuration);
+        
         builder.Services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
 
         builder.Services.AddTransient<MainViewModel>();
         builder.Services.AddTransient<MainPage>();
+        
+        builder.Services.AddTransient<LoginViewModel>();
+        builder.Services.AddTransient<LoginPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

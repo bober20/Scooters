@@ -24,7 +24,7 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Response
                 return ResponseData<Guid>.Failure("Email already exists");
             }
 
-            if (string.Equals(request.Password, request.PasswordConfirmation))
+            if (!string.Equals(request.Password, request.PasswordConfirmation))
             {
                 return ResponseData<Guid>.Failure("Password and confirmation password do not match");
             }
