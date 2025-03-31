@@ -2,7 +2,7 @@ namespace Application.Common.Interfaces.CurrentUserProvider;
 
 public interface ICurrentUserProvider
 {
-    Task<string?> GetCurrentUserAsync();
-    Task SetCurrentUserAsync(string token);
+    string GetCurrentUserAsync();
+    void SetCurrentUserAsync(string token);
     void RemoveCurrentUser();
 }
