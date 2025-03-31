@@ -35,6 +35,9 @@ public static class MauiProgram
         
         builder.Services.AddTransient<LoginViewModel>();
         builder.Services.AddTransient<LoginPage>();
+        
+        builder.Services.AddTransient<SignUpViewModel>();
+        builder.Services.AddTransient<SignUpPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

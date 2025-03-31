@@ -3,7 +3,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Scooters.Views.LoginPage"
-             BackgroundColor="LightGrey">
+             BackgroundColor="LightGrey"
+             xmlns:viewModels="clr-namespace:Scooters.ViewModels"
+             x:DataType="viewModels:LoginViewModel">
     <ContentPage.Content>
         <VerticalStackLayout
             Padding="20"
@@ -15,18 +17,35 @@
                 FontAttributes="Bold"/>
             <Entry 
                 Placeholder="Email"
-                BackgroundColor="White"/>
+                BackgroundColor="White"
+                Text="{Binding Email}"/>
             <Entry
                 Placeholder="Password"
-                BackgroundColor="White"/>
+                BackgroundColor="White"
+                Text="{Binding Password}"/>
             <Button
                 Text="Log in"
                 BackgroundColor="Black"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
-                CornerRadius="10"/>
+                CornerRadius="10"
+                Command="{Binding LogInCommand}"/>
             <Label
-                Text="Don't have an account? Sign up"/>
+                Text="{Binding Token}"/>
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Don't have an account? " TextColor="Black" />
+                        <Span Text="Sign up here" 
+                              TextColor="Blue" 
+                              TextDecorations="Underline">
+                            <Span.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SignUpLinkCommand}" />
+                            </Span.GestureRecognizers>
+                        </Span>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
             <Grid
                 RowSpan="2"
                 RowDefinitions="*, 30">

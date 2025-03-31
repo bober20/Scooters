@@ -1,4 +1,6 @@
-﻿namespace Scooters;
+﻿using Scooters.Views;
+
+namespace Scooters;
 
 public partial class AppShell : Shell
 {

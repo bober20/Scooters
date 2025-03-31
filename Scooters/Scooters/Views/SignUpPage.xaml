@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Scooters.Views.SignUpPage"
+             xmlns:vewModels="clr-namespace:Scooters.ViewModels"
+             x:DataType="vewModels:SignUpViewModel">
+    <ContentPage.Content>
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="20">
+            <Label 
+                Text="Scooters"
+                HorizontalTextAlignment="Center"
+                FontSize="72"
+                FontAttributes="Bold"/>
+            <Entry 
+                Placeholder="Email"
+                BackgroundColor="White"
+                Text="{Binding Email}"/>
+            <Entry
+                Placeholder="Password"
+                BackgroundColor="White"
+                Text="{Binding Password}"/>
+            <Entry
+                Placeholder="Password confirmation"
+                BackgroundColor="White"
+                Text="{Binding PasswordConfirmation}"/>
+            <Button
+                Text="Sign up"
+                BackgroundColor="Black"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                CornerRadius="10"
+                Command="{Binding SignUpCommand}"/>
+            <Label 
+                Text="{Binding Errors}"></Label>
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>

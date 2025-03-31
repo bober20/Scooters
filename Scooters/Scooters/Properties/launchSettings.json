@@ -4,11 +4,5 @@
       "commandName": "Project",
       "nativeDebugging": false
     }
-  },
-  "JwtSettings": {
-    "Audience": "Scooters",
-    "Issuer": "Scooters",
-    "Secret": "secretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKey",
-    "ExpiresHours": 12
   }
 }

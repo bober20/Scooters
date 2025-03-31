@@ -7,9 +7,9 @@ using Scooters.ViewModels;
 
 namespace Scooters.Views;
 
-public partial class LoginPage : ContentPage
+public partial class SignUpPage : ContentPage
 {
-    public LoginPage(LoginViewModel viewModel)
+    public SignUpPage(SignUpViewModel viewModel)
     {
         BindingContext = viewModel;
         InitializeComponent();

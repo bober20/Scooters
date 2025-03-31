@@ -4,14 +4,14 @@ namespace Scooters.Services;
 
 public class CurrentUserProvider : ICurrentUserProvider
 {
-    public async Task<string?> GetCurrentUserAsync()
+    public string GetCurrentUserAsync()
     {
-        return await SecureStorage.GetAsync("oauth_token");
+        return Preferences.Get("oauth_token", null);
     }
 
-    public async Task SetCurrentUserAsync(string token)
+    public void SetCurrentUserAsync(string token)
     {
-        await SecureStorage.SetAsync("oauth_token", token);
+        Preferences.Set("oauth_token", token);
     }
 
     public void RemoveCurrentUser()
