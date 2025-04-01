@@ -2,6 +2,6 @@ namespace Domain.Entities;
 
 public class Coordinates
 {
-    public double X { get; set; }
-    public double Y { get; set; }
+    public double Latitude { get; set; }
+    public double Longitude { get; set; }
 }
