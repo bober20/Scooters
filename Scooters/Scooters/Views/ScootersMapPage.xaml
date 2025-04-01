@@ -2,8 +2,26 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Scooters.Views.ScootersMapPage">
+             x:Class="Scooters.Views.ScootersMapPage"
+             xmlns:viewModels="clr-namespace:Scooters.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="viewModels:ScootersMapViewModel">
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}" />
+    </ContentPage.Behaviors>
     <ContentPage.Content>
-        
+        <StackLayout>
+            <!-- <maps:Map x:Name="map" /> -->
+            <Picker
+                Title="Select scooter"
+                ItemsSource="{Binding Scooters}"
+                SelectedItem="{Binding SelectedScooter}"
+                ItemDisplayBinding="{Binding ModelDescription}"/>
+            <Button
+                Text="Reserve scooter"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Command="{Binding ReservationLinkCommand}"/>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

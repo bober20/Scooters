@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Scooters.Views.ReservationPage"
+             xmlns:viewModels="clr-namespace:Scooters.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="viewModels:ReservationViewModel">
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <VerticalStackLayout Margin="20" Spacing="10">
+            <Label
+                Text="Reserve scooter"
+                FontSize="32"
+                Margin="0,0,0,10"/>
+            <Label
+                Text="Scooter's id"
+                FontAttributes="Bold"
+                FontSize="20"/>
+            <Label
+                Text="{Binding ScooterId}"
+                FontSize="20"
+                Margin="0,0,0,10"/>
+            <Label
+                Text="Select time interval for reservation"
+                FontAttributes="Bold"
+                FontSize="20"/>
+            <Picker 
+                ItemsSource="{Binding TimeSlots}"
+                SelectedItem="{Binding Reservation.Duration}"/>
+            <Button
+                Text="Reserve"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Command="{Binding ReserveCommand}"></Button>
+        </VerticalStackLayout>
+        
+    </ContentPage.Content>
+</ContentPage>

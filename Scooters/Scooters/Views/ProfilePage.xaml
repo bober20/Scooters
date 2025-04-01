@@ -55,7 +55,6 @@
                 </Label.GestureRecognizers>
             </Label>
             <Button 
-                BackgroundColor="Black" 
                 CornerRadius="10" Grid.Row="5" 
                 Text="Log out" 
                 HorizontalOptions="Center"

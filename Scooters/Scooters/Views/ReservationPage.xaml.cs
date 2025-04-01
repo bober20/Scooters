@@ -7,9 +7,9 @@ using Scooters.ViewModels;
 
 namespace Scooters.Views;
 
-public partial class PasswordChangePage : ContentPage
+public partial class ReservationPage : ContentPage
 {
-    public PasswordChangePage(PasswordChangeViewModel viewModel)
+    public ReservationPage(ReservationViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;

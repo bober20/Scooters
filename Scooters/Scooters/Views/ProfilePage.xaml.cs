@@ -9,9 +9,9 @@ namespace Scooters.Views;
 
 public partial class ProfilePage : ContentPage
 {
-    public ProfilePage(ProfileViewModel profile)
+    public ProfilePage(ProfileViewModel viewModel)
     {
-        BindingContext = profile;
         InitializeComponent();
+        BindingContext = viewModel;
     }
 }

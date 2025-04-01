@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces.CurrentUserProvider;
+using CommunityToolkit.Maui;
 using Infrastructure.Authentication.JwtTokenGenerator;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -15,11 +16,13 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-            });
+            })
+            .UseMauiMaps();
         
         var appSettingsPath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
         builder.Configuration.AddJsonFile(appSettingsPath, optional: false);
@@ -41,6 +44,15 @@ public static class MauiProgram
         
         builder.Services.AddTransient<ProfileViewModel>();
         builder.Services.AddTransient<ProfilePage>();
+        
+        builder.Services.AddTransient<ScootersMapViewModel>();
+        builder.Services.AddTransient<ScootersMapPage>();
+        
+        builder.Services.AddTransient<ReservationViewModel>();
+        builder.Services.AddTransient<ReservationPage>();
+        
+        builder.Services.AddTransient<PasswordChangeViewModel>();
+        builder.Services.AddTransient<PasswordChangePage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

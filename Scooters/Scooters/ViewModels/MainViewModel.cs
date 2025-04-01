@@ -37,7 +37,7 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private async Task AddScooter(Scooter scooter)
     {
-        scooter.Coordinates = new Coordinates() {X = 0, Y = 0};
+        scooter.Coordinates = new Coordinates() {Latitude = 0, Longitude = 0};
         await _mediator.Send(new CreateScooterCommand(scooter));
     }
     

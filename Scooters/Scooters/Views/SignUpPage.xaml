@@ -3,7 +3,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Scooters.Views.SignUpPage"
-             BackgroundColor="LightGrey"
              Shell.NavBarIsVisible="False"
              xmlns:vewModels="clr-namespace:Scooters.ViewModels"
              x:DataType="vewModels:SignUpViewModel">
@@ -34,7 +33,6 @@
                 Text="{Binding PasswordConfirmation}"/>
             <Button
                 Text="Sign up"
-                BackgroundColor="Black"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
                 CornerRadius="10"

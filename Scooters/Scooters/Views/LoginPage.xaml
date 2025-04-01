@@ -3,67 +3,62 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Scooters.Views.LoginPage"
-             BackgroundColor="LightGrey"
              Shell.NavBarIsVisible="False"
              xmlns:viewModels="clr-namespace:Scooters.ViewModels"
              x:DataType="viewModels:LoginViewModel">
     <ContentPage.Content>
-        <VerticalStackLayout
-            Padding="20"
-            Spacing="20">
+        <Grid IgnoreSafeArea="True"
+              RowSpan="2"
+              RowDefinitions="Auto, *">
             <Label 
+                Grid.Row="0"
+                Padding="20, 80, 20, 40"
                 Text="Scooters"
                 HorizontalTextAlignment="Center"
                 FontSize="72"
                 FontAttributes="Bold"/>
-            <Label
-                Text="Sign in"
-                FontSize="32"
-                FontAttributes="Bold"/>
-            <Entry 
-                Placeholder="Email"
+            <Border 
+                Grid.Row="1"
                 BackgroundColor="White"
-                Text="{Binding Email}"/>
-            <Entry
-                Placeholder="Password"
-                BackgroundColor="White"
-                Text="{Binding Password}"/>
-            <Button
-                Text="Log in"
-                BackgroundColor="Black"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
-                CornerRadius="10"
-                Command="{Binding LogInCommand}"/>
-            <Label
-                Text="{Binding Errors}"
-                TextColor="Red"/>
-            <Label
-                HorizontalTextAlignment="Center">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="Don't have an account? " TextColor="Black" />
-                        <Span Text="Sign up" 
-                              TextColor="DarkCyan">
-                            <Span.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding SignUpLinkCommand}" />
-                            </Span.GestureRecognizers>
-                        </Span>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
-            <Grid
-                RowSpan="2"
-                RowDefinitions="*, 30">
-                <HorizontalStackLayout>
-                    <Button 
-                        Text="G"
-                        CornerRadius="100"/>
-                    <Button 
-                        Text="A"
-                        CornerRadius="100"/>
-                </HorizontalStackLayout>
-            </Grid>
-        </VerticalStackLayout>
+                StrokeShape="RoundRectangle 50 50">
+                <VerticalStackLayout Spacing="20" Padding="20, 40, 20, 10">
+                    <Label
+                        Text="Sign in"
+                        FontSize="32"
+                        FontAttributes="Bold"/>
+                    <Entry 
+                        Placeholder="Email"
+                        BackgroundColor="White"
+                        Text="{Binding Email}"/>
+                    <Entry
+                        Placeholder="Password"
+                        BackgroundColor="White"
+                        Text="{Binding Password}"/>
+                    <Button
+                        Text="Log in"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        CornerRadius="10"
+                        Command="{Binding LogInCommand}"/>
+                    <Label
+                        Text="{Binding Errors}"
+                        TextColor="Red"/>
+                    <Label
+                        HorizontalTextAlignment="Center">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Don't have an account? " TextColor="Black" />
+                                <Span Text="Sign up" 
+                                      TextColor="DarkCyan">
+                                    <Span.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding SignUpLinkCommand}" />
+                                    </Span.GestureRecognizers>
+                                </Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

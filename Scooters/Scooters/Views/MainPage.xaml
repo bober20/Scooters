@@ -4,8 +4,7 @@
              x:Class="Scooters.Views.MainPage"
              xmlns:viewModels1="clr-namespace:Scooters.ViewModels"
              x:DataType="viewModels1:MainViewModel"
-             x:Name="MainPageView"
-             BackgroundColor="LightGrey">
+             x:Name="MainPageView">
     <StackLayout Padding="10" Spacing="30">
         <Label 
             Text="Scooters"
@@ -26,7 +25,6 @@
             FontSize="16"/>
         <Button 
             Text="Make reservations"
-            BackgroundColor="Black"
             HorizontalOptions="Center"
             VerticalOptions="Center"
             CornerRadius="10"
