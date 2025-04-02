@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Scooters.Services;
 using Scooters.ViewModels;
 using Scooters.Views;
+using ZXing.Net.Maui.Controls;
 
 namespace Scooters;
 
@@ -22,7 +23,8 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             })
-            .UseMauiMaps();
+            .UseMauiMaps()
+            .UseBarcodeReader();
         
         var appSettingsPath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
         builder.Configuration.AddJsonFile(appSettingsPath, optional: false);
@@ -53,6 +55,9 @@ public static class MauiProgram
         
         builder.Services.AddTransient<PasswordChangeViewModel>();
         builder.Services.AddTransient<PasswordChangePage>();
+        
+        builder.Services.AddTransient<RideViewModel>();
+        builder.Services.AddTransient<RideView>();
 
 #if DEBUG
         builder.Logging.AddDebug();

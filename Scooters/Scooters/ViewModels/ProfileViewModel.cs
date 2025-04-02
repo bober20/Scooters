@@ -27,7 +27,8 @@ public partial class ProfileViewModel : ObservableObject
     [RelayCommand]
     private async Task UploadPhoto()
     {
-        
+        var output = await Shell.Current.DisplayActionSheet(
+            "Upload Photo", "Cancel", null, "Camera", "Gallery", "Delete");
     }
     
     [RelayCommand]

@@ -6,60 +6,77 @@
              xmlns:viewModels="clr-namespace:Scooters.ViewModels"
              x:DataType="viewModels:ProfileViewModel">
     <ContentPage.Content>
-        <Grid 
-            RowSpan="6" 
-            RowDefinitions="5*, *, *, *, *, 2*" 
+        <Grid
+            RowSpan="3"
             Padding="20"
+            RowDefinitions="4*, Auto, Auto"
             RowSpacing="20">
-            <Border 
+            <Border
                 Grid.Row="0"
-                Margin="-20,-20,-20,0">
-                <Image/>
+                StrokeThickness="0"
+                StrokeShape="Ellipse"
+                HeightRequest="240"
+                WidthRequest="240"
+                HorizontalOptions="Center">
+                <ImageButton 
+                    Aspect="Fill"
+                    Source="man_profile.jpg"
+                    Command="{Binding UploadPhotoCommand}"/>
             </Border>
-            <FlexLayout
-                Grid.Row="1"
-                JustifyContent="SpaceBetween"
-                AlignItems="Center"
-                Margin="0"
-                Padding="0">
-                <Label 
-                    Text="Dark mode"/>
-                <Switch 
-                    OnColor="LightGray"
-                    ThumbColor="Grey"
-                    IsToggled="{Binding IsDarkMode}"/>
-            </FlexLayout>
             <Label 
-                Grid.Row="2" 
-                Text="Change password"
-                VerticalTextAlignment="Center">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding ChangePasswordLinkCommand}" />
-                </Label.GestureRecognizers>
-            </Label>
-            <Label 
-                Grid.Row="3" 
-                Text="Upload new profile picture"
-                VerticalTextAlignment="Center">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding UploadPhotoCommand}" />
-                </Label.GestureRecognizers>
-            </Label>
-            <Label 
-                Grid.Row="4" 
-                Text="Delete account"
-                TextColor="Red"
-                VerticalTextAlignment="Center">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding DeleteAccountCommand}" />
-                </Label.GestureRecognizers>
-            </Label>
-            <Button 
-                CornerRadius="10" Grid.Row="5" 
-                Text="Log out" 
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
-                Command="{Binding LogOutCommand}"/>
+                Grid.Row="1" 
+                Text="d@gmail.com"
+                FontSize="22"
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center"/>
+            <Border Grid.Row="2"
+                    StrokeShape="RoundRectangle 50 50"
+                    StrokeThickness="0"
+                    BackgroundColor="White"
+                    Padding="20">
+                <VerticalStackLayout Spacing="20" Padding="20">
+                        <FlexLayout
+                            JustifyContent="SpaceBetween"
+                            AlignItems="Center"
+                            Margin="0"
+                            Padding="0">
+                            <Label
+                                Text="Dark mode" />
+                            <Switch
+                                OnColor="LightGray"
+                                ThumbColor="Grey"
+                                IsToggled="{Binding IsDarkMode}" />
+                        </FlexLayout>
+                    <Border 
+                        Margin="-10, 0"
+                        StrokeThickness="0.5"/>
+                    <Label
+                        Text="Change password"
+                        VerticalTextAlignment="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChangePasswordLinkCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Border 
+                        Margin="-10, 0"
+                        StrokeThickness="0.5"/>
+                    <Label
+                        Text="Delete account"
+                        TextColor="Red"
+                        VerticalTextAlignment="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding DeleteAccountCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Border 
+                        Margin="-10, 0"
+                        StrokeThickness="0.5"/>
+                    <Button
+                        CornerRadius="10"
+                        Text="Log out"
+                        Command="{Binding LogOutCommand}" />
+                </VerticalStackLayout>
+            </Border>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

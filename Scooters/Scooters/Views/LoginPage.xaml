@@ -10,14 +10,14 @@
         <Grid IgnoreSafeArea="True"
               RowSpan="2"
               RowDefinitions="Auto, *">
-            <Label 
+            <Label
                 Grid.Row="0"
                 Padding="20, 80, 20, 40"
                 Text="Scooters"
                 HorizontalTextAlignment="Center"
                 FontSize="72"
-                FontAttributes="Bold"/>
-            <Border 
+                FontAttributes="Bold" />
+            <Border
                 Grid.Row="1"
                 BackgroundColor="White"
                 StrokeShape="RoundRectangle 50 50">
@@ -25,30 +25,50 @@
                     <Label
                         Text="Sign in"
                         FontSize="32"
-                        FontAttributes="Bold"/>
-                    <Entry 
+                        FontAttributes="Bold"
+                        HorizontalTextAlignment="Center"/>
+                    <Label
+                        Text="Email"
+                        Margin="0, 0, 0, -15"
+                        TextColor="DimGrey" />
+                    <Entry
                         Placeholder="Email"
                         BackgroundColor="White"
-                        Text="{Binding Email}"/>
-                    <Entry
-                        Placeholder="Password"
-                        BackgroundColor="White"
-                        Text="{Binding Password}"/>
+                        Text="{Binding Email}" />
+                    <Label
+                        Margin="0, 0, 0, -15"
+                        Text="Password"
+                        TextColor="DimGrey" />
+                    <FlexLayout>
+                        <Entry
+                            Margin="0, 0, 5, 0"
+                            Placeholder="Password"
+                            FlexLayout.Grow="1"
+                            FlexLayout.Basis="0"
+                            BackgroundColor="White"
+                            Text="{Binding Password}"
+                            IsPassword="True" />
+                        <Button
+                            Text="P"/>
+                    </FlexLayout>
                     <Button
                         Text="Log in"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center"
                         CornerRadius="10"
-                        Command="{Binding LogInCommand}"/>
+                        Command="{Binding LogInCommand}" />
+                    <Label
+                        Text="Or"
+                        HorizontalTextAlignment="Center"
+                        FontSize="26"
+                        FontAttributes="Bold" />
                     <Label
                         Text="{Binding Errors}"
-                        TextColor="Red"/>
+                        TextColor="Red" />
                     <Label
                         HorizontalTextAlignment="Center">
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="Don't have an account? " TextColor="Black" />
-                                <Span Text="Sign up" 
+                                <Span Text="Sign up"
                                       TextColor="DarkCyan">
                                     <Span.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding SignUpLinkCommand}" />

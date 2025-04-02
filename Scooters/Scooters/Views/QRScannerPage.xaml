@@ -2,8 +2,24 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Scooters.Views.QRScannerPage">
+             x:Class="Scooters.Views.QRScannerPage"
+             xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewModels="clr-namespace:Scooters.ViewModels"
+             xmlns:maui="clr-namespace:ZXing.Net.Maui;assembly=ZXing.Net.MAUI"
+             x:DataType="viewModels:QRScannerViewModel">
     <ContentPage.Content>
-        
+        <zxing:CameraBarcodeReaderView>
+            <zxing:CameraBarcodeReaderView.Options>
+                <maui:BarcodeReaderOptions
+                    Formats="QrCode"
+                    AutoRotate="True"/>
+            </zxing:CameraBarcodeReaderView.Options>
+            <zxing:CameraBarcodeReaderView.Behaviors>
+                <toolkit:EventToCommandBehavior 
+                    Command="{Binding BarcodeDetectedCommand}" 
+                    EventName="BarcodesDetected"/>
+            </zxing:CameraBarcodeReaderView.Behaviors>
+        </zxing:CameraBarcodeReaderView>
     </ContentPage.Content>
 </ContentPage>

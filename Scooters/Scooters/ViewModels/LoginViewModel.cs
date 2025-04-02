@@ -10,7 +10,7 @@ public partial class LoginViewModel : ObservableObject
 {
     [ObservableProperty] private string _email;
     [ObservableProperty] private string _password;
-    [ObservableProperty] private string _passwordConfirmation;
+    [ObservableProperty] private bool _isPasswordHidden = true;
     [ObservableProperty] private string? _errors;
     private IMediator _mediator;
     
