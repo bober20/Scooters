@@ -34,7 +34,22 @@
                     <Entry
                         Placeholder="Email"
                         BackgroundColor="White"
-                        Text="{Binding Email}" />
+                        Text="{Binding Email}">
+                        <Entry.Triggers>
+                            <DataTrigger
+                                TargetType="Entry"
+                                Binding="{Binding EmailHasErrors}"
+                                Value="True">
+                                <Setter
+                                    Property="BackgroundColor"
+                                    Value="{StaticResource Error}"></Setter>
+                            </DataTrigger>
+                        </Entry.Triggers>
+                    </Entry>
+                    <Label
+                        Text="{Binding EmailErrors}"
+                        Margin="0, -15, 0, 0"
+                        TextColor="{StaticResource ErrorText}" />
                     <Label
                         Margin="0, 0, 0, -15"
                         Text="Password"
@@ -47,10 +62,25 @@
                             FlexLayout.Basis="0"
                             BackgroundColor="White"
                             Text="{Binding Password}"
-                            IsPassword="True" />
+                            IsPassword="True">
+                            <Entry.Triggers>
+                                <DataTrigger
+                                    TargetType="Entry"
+                                    Binding="{Binding PasswordHasErrors}"
+                                    Value="True">
+                                <Setter 
+                                    Property="BackgroundColor"
+                                    Value="{StaticResource Error}"></Setter>
+                            </DataTrigger>
+                            </Entry.Triggers>
+                        </Entry>
                         <Button
                             Text="P"/>
                     </FlexLayout>
+                    <Label
+                        Text="{Binding PasswordErrors}"
+                        Margin="0, -15, 0, 0"
+                        TextColor="{StaticResource ErrorText}" />
                     <Button
                         Text="Log in"
                         CornerRadius="10"

@@ -28,6 +28,6 @@
             HorizontalOptions="Center"
             VerticalOptions="Center"
             CornerRadius="10"
-            Command="{Binding MapPageLinkCommand}"/> 
+            Command="{Binding MapPageLinkCommand}"/>
     </StackLayout>
 </ContentPage>

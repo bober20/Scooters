@@ -6,6 +6,13 @@
     xmlns:views="clr-namespace:Scooters.Views"
     FlyoutBehavior="Disabled"
     Title="Scooters">
+    <ShellContent
+        ContentTemplate="{DataTemplate views:LoginPage}"
+        Route="LoginPage"/>
+    
+    <ShellContent
+        ContentTemplate="{DataTemplate views:SignUpPage}"
+        Route="SignUpPage"/>
     <TabBar>
         <Tab Title="Main">
             <ShellContent ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage" />
@@ -20,12 +27,4 @@
             <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" Route="ProfilePage" />
         </Tab>
     </TabBar>
-    
-    <ShellContent
-        ContentTemplate="{DataTemplate views:LoginPage}"
-        Route="LoginPage"/>
-    
-    <ShellContent
-        ContentTemplate="{DataTemplate views:SignUpPage}"
-        Route="SignUpPage"/>
 </Shell>

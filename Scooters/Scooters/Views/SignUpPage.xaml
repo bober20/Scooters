@@ -34,7 +34,22 @@
                     <Entry
                         Placeholder="Email"
                         BackgroundColor="White"
-                        Text="{Binding Email}" />
+                        Text="{Binding Email}">
+                        <Entry.Triggers>
+                            <DataTrigger
+                                TargetType="Entry"
+                                Binding="{Binding EmailHasErrors}"
+                                Value="True">
+                                <Setter 
+                                    Property="BackgroundColor" 
+                                    Value="{StaticResource Error}"/>
+                            </DataTrigger>
+                        </Entry.Triggers>
+                    </Entry>
+                    <Label 
+                        Text="{Binding EmailErrors}"
+                        TextColor="{StaticResource ErrorText}"
+                        Margin="0, -15, 0, 0"/>
                     <Label Margin="0, 0, 0, -15"
                            Text="Password"
                            TextColor="DimGrey" />
@@ -45,10 +60,25 @@
                             FlexLayout.Basis="0"
                             FlexLayout.Grow="1"
                             Margin="0, 0, 5, 0"
-                            Text="{Binding Password}"/>
+                            Text="{Binding Password}">
+                            <Entry.Triggers>
+                                <DataTrigger
+                                    TargetType="Entry"
+                                    Binding="{Binding PasswordHasErrors}"
+                                    Value="True">
+                                    <Setter 
+                                        Property="BackgroundColor" 
+                                        Value="{StaticResource Error}"/>
+                                </DataTrigger>
+                            </Entry.Triggers>
+                        </Entry>
                         <Button
                             Text="P"/>
                     </FlexLayout>
+                    <Label 
+                        Text="{Binding PasswordErrors}"
+                        TextColor="{StaticResource ErrorText}"
+                        Margin="0, -15, 0, 0"/>
                     <Label Margin="0, 0, 0, -15"
                            Text="Password confirmation"
                            TextColor="DimGrey" />
@@ -59,18 +89,29 @@
                             Placeholder="Password confirmation"
                             BackgroundColor="White"
                             Margin="0, 0, 5, 0"
-                            Text="{Binding PasswordConfirmation}" />
+                            Text="{Binding PasswordConfirmation}">
+                            <Entry.Triggers>
+                                <DataTrigger
+                                    TargetType="Entry"
+                                    Binding="{Binding PasswordConfirmHasErrors}"
+                                    Value="True">
+                                    <Setter 
+                                        Property="BackgroundColor" 
+                                        Value="{StaticResource Error}"/>
+                                </DataTrigger>
+                            </Entry.Triggers>
+                        </Entry>
                         <Button
                             Text="P"/>
                     </FlexLayout>
+                    <Label 
+                        Text="{Binding PasswordConfirmErrors}"
+                        TextColor="{StaticResource ErrorText}"
+                        Margin="0, -15, 0, 0"/>
                     <Button
                         Text="Sign up"
                         CornerRadius="10"
                         Command="{Binding SignUpCommand}" />
-                    <Label
-                        Text="{Binding Errors}"
-                        TextColor="Red">
-                    </Label>
                     <Label
                         HorizontalTextAlignment="Center">
                         <Label.FormattedText>

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Application.Users.Commands.RegisterUser;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -6,36 +7,101 @@ using MediatR;
 
 namespace Scooters.ViewModels;
 
-public partial class SignUpViewModel : ObservableObject
+public partial class SignUpViewModel : ObservableValidator
 {
-    [ObservableProperty] private string _email;
-    [ObservableProperty] private string _password;
-    [ObservableProperty] private string _passwordConfirmation;
-    [ObservableProperty] private string _errors;
+    [ObservableProperty] 
+    [Required(ErrorMessage = "Field is required.")]
+    [EmailAddress]
+    private string _email;
+    
+    [ObservableProperty] private string _emailErrors;
+    [ObservableProperty] private bool _emailHasErrors;
+    
+    [ObservableProperty] 
+    [Required(ErrorMessage = "Field is required.")]
+    [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
+    [MaxLength(30, ErrorMessage = "Password cannot exceed 30 characters.")]
+    private string _password;
+    
+    [ObservableProperty] private string _passwordErrors;
+    [ObservableProperty] private bool _passwordHasErrors;
+    
+    [ObservableProperty] 
+    [Required(ErrorMessage = "Field is required.")]
+    [MinLength(8, ErrorMessage = "Password confirmation must be at least 8 characters long.")]
+    [MaxLength(30, ErrorMessage = "Password confirmation cannot exceed 30 characters.")]
+    private string _passwordConfirmation;
+    
+    [ObservableProperty] private string _passwordConfirmErrors;
+    [ObservableProperty] private bool _passwordConfirmHasErrors;
+    
     
     private readonly IMediator _mediator;
     
     public SignUpViewModel(IMediator mediator)
     {
-        Email = string.Empty;
-        Password = string.Empty;
-        PasswordConfirmation = string.Empty;
-        
         _mediator = mediator;
     }
 
     [RelayCommand]
     private async Task SignUp()
     {
-        var response = await _mediator.Send(new RegisterUserCommand(Email, Password, PasswordConfirmation));
-        
-        if (!response.IsSuccessful)
+        ValidateAllProperties();
+        if (PropertyHasErrors(nameof(Email)))
         {
-            Errors = response.ErrorMessage!;
+            EmailHasErrors = true;
+            EmailErrors = string.Join("\n", GetErrors(nameof(Email))
+                .Select(e => e.ErrorMessage));
         }
         else
         {
-            await Shell.Current.GoToAsync("//LoginPage");
+            EmailHasErrors = false;
+            EmailErrors = string.Empty;
+        }
+        
+        if (PropertyHasErrors(nameof(Password)))
+        {
+            PasswordHasErrors = true;
+            PasswordErrors = string.Join("\n", GetErrors(nameof(Password))
+                .Select(e => e.ErrorMessage));
+        }
+        else
+        {
+            PasswordHasErrors = false;
+            PasswordErrors = string.Empty;
+        }
+        
+        if (PropertyHasErrors(nameof(PasswordConfirmation)))
+        {
+            PasswordConfirmHasErrors = true;
+            PasswordConfirmErrors = string.Join("\n", GetErrors(nameof(PasswordConfirmation))
+                .Select(e => e.ErrorMessage));
+        }
+        else
+        {
+            PasswordConfirmHasErrors = false;
+            PasswordConfirmErrors = string.Empty;
+        }
+        
+        if (PasswordConfirmation != Password)
+        {
+            PasswordConfirmHasErrors = PasswordHasErrors = false;
+            PasswordConfirmErrors = PasswordErrors = "Password and confirmation password do not match";
+            return;
+        }
+
+        if (!HasErrors)
+        {
+            var response = await _mediator.Send(new RegisterUserCommand(Email, Password, PasswordConfirmation));
+        
+            if (!response.IsSuccessful)
+            {
+                await Shell.Current.DisplayAlert("Sign up error", response.ErrorMessage, "OK");
+            }
+            else
+            {
+                await Shell.Current.GoToAsync("//LoginPage");
+            }
         }
     }
     
@@ -43,5 +109,10 @@ public partial class SignUpViewModel : ObservableObject
     private async Task LogInLink()
     {
         await Shell.Current.GoToAsync("//LoginPage");
+    }
+    
+    private bool PropertyHasErrors(string propertyName)
+    {
+        return GetErrors(propertyName).Any();
     }
 }

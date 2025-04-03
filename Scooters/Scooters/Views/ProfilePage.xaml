@@ -13,7 +13,7 @@
             RowSpacing="20">
             <Border
                 Grid.Row="0"
-                StrokeThickness="0"
+                StrokeThickness="3"
                 StrokeShape="Ellipse"
                 HeightRequest="240"
                 WidthRequest="240"
@@ -49,7 +49,7 @@
                         </FlexLayout>
                     <Border 
                         Margin="-10, 0"
-                        StrokeThickness="0.5"/>
+                        StrokeThickness="1"/>
                     <Label
                         Text="Change password"
                         VerticalTextAlignment="Center">
@@ -59,7 +59,7 @@
                     </Label>
                     <Border 
                         Margin="-10, 0"
-                        StrokeThickness="0.5"/>
+                        StrokeThickness="1"/>
                     <Label
                         Text="Delete account"
                         TextColor="Red"
@@ -70,7 +70,7 @@
                     </Label>
                     <Border 
                         Margin="-10, 0"
-                        StrokeThickness="0.5"/>
+                        StrokeThickness="1"/>
                     <Button
                         CornerRadius="10"
                         Text="Log out"
