@@ -36,6 +36,8 @@ public partial class PasswordChangeViewModel : ObservableValidator
 
     [ObservableProperty] private string _newPasswordConfirmationErrors;
     [ObservableProperty] private bool _newPassConfirmHasErrors = false;
+    
+    [ObservableProperty] private bool _isPasswordVisible = true;
 
     private readonly IMediator _mediator;
 
@@ -92,6 +94,9 @@ public partial class PasswordChangeViewModel : ObservableValidator
         } 
         
     }
+    
+    [RelayCommand]
+    private void TogglePasswordVisibility() => IsPasswordVisible = !IsPasswordVisible;
 
     private bool PropertyHasErrors(string propertyName)
     {

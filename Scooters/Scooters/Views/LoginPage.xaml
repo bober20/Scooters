@@ -62,7 +62,7 @@
                             FlexLayout.Basis="0"
                             BackgroundColor="White"
                             Text="{Binding Password}"
-                            IsPassword="True">
+                            IsPassword="{Binding IsPasswordVisible}">
                             <Entry.Triggers>
                                 <DataTrigger
                                     TargetType="Entry"
@@ -75,7 +75,8 @@
                             </Entry.Triggers>
                         </Entry>
                         <Button
-                            Text="P"/>
+                            Text="P"
+                            Command="{Binding TogglePasswordVisibilityCommand}"/>
                     </FlexLayout>
                     <Label
                         Text="{Binding PasswordErrors}"

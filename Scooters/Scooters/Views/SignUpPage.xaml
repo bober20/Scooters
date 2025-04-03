@@ -34,7 +34,8 @@
                     <Entry
                         Placeholder="Email"
                         BackgroundColor="White"
-                        Text="{Binding Email}">
+                        Text="{Binding Email}"
+                        IsPassword="{Binding IsPasswordVisible}">
                         <Entry.Triggers>
                             <DataTrigger
                                 TargetType="Entry"
@@ -59,6 +60,7 @@
                             BackgroundColor="White"
                             FlexLayout.Basis="0"
                             FlexLayout.Grow="1"
+                            IsPassword="{Binding IsPasswordVisible}"
                             Margin="0, 0, 5, 0"
                             Text="{Binding Password}">
                             <Entry.Triggers>
@@ -73,6 +75,7 @@
                             </Entry.Triggers>
                         </Entry>
                         <Button
+                            Command="{Binding TogglePasswordVisibilityCommand}"
                             Text="P"/>
                     </FlexLayout>
                     <Label 
@@ -87,6 +90,7 @@
                             FlexLayout.Basis="0"
                             FlexLayout.Grow="1"
                             Placeholder="Password confirmation"
+                            IsPassword="{Binding IsPasswordVisible}"
                             BackgroundColor="White"
                             Margin="0, 0, 5, 0"
                             Text="{Binding PasswordConfirmation}">
@@ -102,6 +106,7 @@
                             </Entry.Triggers>
                         </Entry>
                         <Button
+                            Command="{Binding TogglePasswordVisibilityCommand}"
                             Text="P"/>
                     </FlexLayout>
                     <Label 

@@ -35,6 +35,7 @@ public partial class SignUpViewModel : ObservableValidator
     [ObservableProperty] private string _passwordConfirmErrors;
     [ObservableProperty] private bool _passwordConfirmHasErrors;
     
+    [ObservableProperty] private bool _isPasswordVisible = true;
     
     private readonly IMediator _mediator;
     
@@ -85,7 +86,7 @@ public partial class SignUpViewModel : ObservableValidator
         
         if (PasswordConfirmation != Password)
         {
-            PasswordConfirmHasErrors = PasswordHasErrors = false;
+            PasswordConfirmHasErrors = PasswordHasErrors = true;
             PasswordConfirmErrors = PasswordErrors = "Password and confirmation password do not match";
             return;
         }
@@ -110,6 +111,9 @@ public partial class SignUpViewModel : ObservableValidator
     {
         await Shell.Current.GoToAsync("//LoginPage");
     }
+    
+    [RelayCommand]
+    private void TogglePasswordVisibility() => IsPasswordVisible = !IsPasswordVisible;
     
     private bool PropertyHasErrors(string propertyName)
     {

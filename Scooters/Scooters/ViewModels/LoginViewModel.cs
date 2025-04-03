@@ -30,7 +30,7 @@ public partial class LoginViewModel : ObservableValidator
     [ObservableProperty]
     private bool _passwordHasErrors;
     
-    [ObservableProperty] private bool _isPasswordHidden = true;
+    [ObservableProperty] private bool _isPasswordVisible = true;
     [ObservableProperty] private string? _errors;
     private IMediator _mediator;
     
@@ -83,6 +83,9 @@ public partial class LoginViewModel : ObservableValidator
             await Shell.Current.DisplayAlert("Log in error", token.ErrorMessage, "OK");
         }
     }
+    
+    [RelayCommand]
+    private void TogglePasswordVisibility() => IsPasswordVisible = !IsPasswordVisible;
 
     [RelayCommand]
     private async Task SignUpLink()
