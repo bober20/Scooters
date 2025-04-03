@@ -23,7 +23,6 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim("id", user.Id.ToString())
         };
         
@@ -31,6 +30,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             issuer: _jwtSettings.Issuer,
             audience: _jwtSettings.Audience,
             claims: claims,
+            expires: DateTime.UtcNow.AddHours(_jwtSettings.ExpiresHours),
             signingCredentials: credentials
         );
         

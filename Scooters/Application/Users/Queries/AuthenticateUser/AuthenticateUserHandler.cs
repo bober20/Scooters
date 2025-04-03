@@ -37,7 +37,7 @@ public class AuthenticateUserHandler : IRequestHandler<AuthenticateUserQuery, Re
         
             var token = _jwtTokenGenerator.GenerateToken(user);
 
-            _currentUserProvider.SetCurrentUserAsync(token);
+            _currentUserProvider.SetCurrentUser(token);
             
             return ResponseData<string>.Success(token);
         }

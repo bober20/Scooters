@@ -23,4 +23,9 @@ public class User
     {
         return passwordHasher.IsCorrectPassword(password, PasswordHash);
     }
+
+    public void ChangePassword(string newPasswordHash)
+    {
+        PasswordHash = newPasswordHash;
+    }
 }

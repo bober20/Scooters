@@ -14,7 +14,9 @@ public class GetRideHandle : IRequestHandler<GetRideQuery, ResponseData<Ride>>
         try
         {
             var ride = await _rideRepository.GetRideAsync(request.Id);
-            return ResponseData<Ride>.Success(ride);
+            return ride is null 
+                ? ResponseData<Ride>.Failure("Ride not found") 
+                : ResponseData<Ride>.Success(ride);
         }
         catch(Exception ex)
         {

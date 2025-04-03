@@ -2,7 +2,7 @@ namespace Application.Common.Interfaces.CurrentUserProvider;
 
 public interface ICurrentUserProvider
 {
-    string GetCurrentUserAsync();
-    void SetCurrentUserAsync(string token);
+    Guid? GetCurrentUser();
+    void SetCurrentUser(string token);
     void RemoveCurrentUser();
 }

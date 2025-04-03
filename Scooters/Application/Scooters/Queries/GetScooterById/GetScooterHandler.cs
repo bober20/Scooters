@@ -14,7 +14,9 @@ public class GetScooterHandler : IRequestHandler<GetScooterQuery, ResponseData<S
         try
         {
             var scooter = await _scooterRepository.GetScooterAsync(request.Id);
-            return ResponseData<Scooter>.Success(scooter);
+            return scooter is null 
+                ? ResponseData<Scooter>.Failure("Scooter not found") 
+                : ResponseData<Scooter>.Success(scooter);
         }
         catch (Exception e)
         {
