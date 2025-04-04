@@ -33,8 +33,18 @@
                 <Shadow Brush="LightGrey" Offset="0,0" Radius="10" />
             </Border.Shadow>
             <Border.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding ReservationPressedCommand}"/>
+                <TapGestureRecognizer Command="{Binding ReservationDetailsCommand}" />
             </Border.GestureRecognizers>
+            <Border.Triggers>
+                <DataTrigger
+                    TargetType="Border"
+                    Binding="{Binding HasReservation}"
+                    Value="False">
+                    <Setter
+                        Property="IsVisible"
+                        Value="False" />
+                </DataTrigger>
+            </Border.Triggers>
             <FlexLayout JustifyContent="SpaceBetween">
                 <VerticalStackLayout>
                     <FlexLayout>
@@ -45,30 +55,21 @@
                         <VerticalStackLayout>
                             <Label
                                 Text="{Binding Reservation.StartTime, 
-                                        FallbackValue='Scooter is not specified'}"
-                                HorizontalTextAlignment="Center"
+                                        FallbackValue='Start time is not specified', StringFormat='{0:dd/MM/yyyy HH:mm}'}"
                                 FontSize="16" />
                             <Label
-                                Text="{Binding Reservation.Duration, 
-                                        FallbackValue='Duration is not specified'}"
-                                HorizontalTextAlignment="Center"
+                                Text="{Binding Reservation.Scooter.ModelDescription, 
+                                    FallbackValue='Scooter is not specified'}"
                                 FontSize="16" />
                         </VerticalStackLayout>
                     </FlexLayout>
-                    <Border
-                        StrokeThickness="1" />
-                    <Label
-                        Text="{Binding Reservation.Scooter.ModelDescription, 
-                    FallbackValue='Scooter is not specified'}"
-                        HorizontalTextAlignment="Center"
-                        FontSize="16" />
                 </VerticalStackLayout>
                 <Label
-                    Text="{Binding Countdown}" />
+                    Text="{Binding Countdown}"
+                    FontSize="32" />
             </FlexLayout>
         </Border>
         <Button
-            IsVisible="{Binding HasReservation}"
             Text="Make reservations"
             HorizontalOptions="Center"
             VerticalOptions="Center"

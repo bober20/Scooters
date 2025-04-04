@@ -1,10 +1,9 @@
 using System.Collections.ObjectModel;
 using Application.Common.Interfaces.CurrentUserProvider;
 using Application.Reservations.Commands.EndReservation;
-using Application.Reservations.Queries.GetReservationByFilter;
+using Application.Reservations.Queries.GetReservationByUser;
 using Application.Scooters.Commands.CreateScooter;
 using Application.Scooters.Queries.GetAllScooters;
-using Application.Scooters.Queries.GetScooterById;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
@@ -14,14 +13,15 @@ namespace Scooters.ViewModels;
 
 public partial class MainViewModel : ObservableObject 
 {
-    [ObservableProperty] private Scooter _scooter = new Scooter();
     [ObservableProperty] private Guid _currentUser;
-    [ObservableProperty] private Reservation _reservation;
+    [ObservableProperty] private Reservation? _reservation;
     [ObservableProperty] private bool _hasReservation;
-    [ObservableProperty] private bool _countdown;
+    [ObservableProperty] private string _countdown;
     public ObservableCollection<Scooter> Scooters { get; set; }
+    
     private IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
+    private System.Timers.Timer? _timer;
 
     public MainViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider)
     {
@@ -35,16 +35,22 @@ public partial class MainViewModel : ObservableObject
         GetCurrentUser();
         await FetchScooters();
         await FetchReservation();
+        InitiateTimer();
     }
 
     [RelayCommand]
-    private async Task ReservationPressed()
+    private async Task ReservationDetails()
     {
+        if (Reservation is null)
+        {
+            return;
+        }
         var result = await Shell.Current.DisplayActionSheet("Reservation", "Cancel", null,
             "Cancel Reservation");
         if (result is "Cancel Reservation")
         {
             await _mediator.Send(new EndReservationCommand(Reservation.Id));
+            HasReservation = false;
         }
     }
 
@@ -64,20 +70,14 @@ public partial class MainViewModel : ObservableObject
     private async Task FetchScooters()
     {
         var response = await _mediator.Send(new GetAllScootersQuery());
-        if (response.IsSuccessful)
-        {
-            Scooters = new ObservableCollection<Scooter>(response.Data);
-        }
-        else
-        {
-            Scooters = new ObservableCollection<Scooter>();
-        }
+        Scooters = response.IsSuccessful 
+            ? new ObservableCollection<Scooter>(response.Data) 
+            : new ObservableCollection<Scooter>();
     }
 
     private async Task FetchReservation()
     {
-        var reservation = await _mediator.Send(new GetReservationQuery(
-            r => r.UserId == CurrentUser && r.IsActive));
+        var reservation = await _mediator.Send(new GetReservationByUserQuery(CurrentUser));
         if (!reservation.IsSuccessful)
         {
             HasReservation = false;
@@ -85,12 +85,56 @@ public partial class MainViewModel : ObservableObject
         else
         {
             HasReservation = true;
-            Reservation = reservation.Data[0];
+            Reservation = reservation.Data;
         }
     }
     
     private void GetCurrentUser()
     {
         CurrentUser = _currentUserProvider.GetCurrentUser().Value;
+    }
+
+    private void UpdateCountdown()
+    {
+        if (Reservation is null)
+        {
+            return;
+        }
+        
+        var startTime = Reservation.StartTime;
+        var duration = Reservation.Duration;
+        var endTime = startTime.AddMinutes(duration);
+        var timeRemaining = endTime - DateTime.Now;
+
+        if (timeRemaining.TotalSeconds <= 0)
+        {
+            _mediator.Send(new EndReservationCommand(Reservation.Id));
+            Reservation = null;
+            HasReservation = false;
+            _timer.Stop();
+            return;
+        }
+        
+        Countdown = $"{timeRemaining.Minutes:D2}:{timeRemaining.Seconds:D2}";
+    }
+    
+    private void OnTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
+    {
+        MainThread.BeginInvokeOnMainThread(UpdateCountdown);
+    }
+
+    private void InitiateTimer()
+    {
+        if (_timer is not null)
+        {
+            _timer.Stop();
+            _timer.Dispose();
+        }
+
+        _timer = new(1000);
+        _timer.Elapsed += OnTimerElapsed;
+        _timer.Start();
+        
+        UpdateCountdown();
     }
 }

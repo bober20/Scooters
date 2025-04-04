@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Application.Scooters.Queries.GetAllScooters;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -8,7 +9,7 @@ namespace Scooters.ViewModels;
 
 public partial class ScootersMapViewModel : ObservableObject
 {
-    [ObservableProperty] private List<Scooter> _scooters;
+    public ObservableCollection<Scooter> Scooters { get; set; }
     [ObservableProperty] private Scooter _selectedScooter;
     private readonly IMediator _mediator;
     
@@ -19,7 +20,7 @@ public partial class ScootersMapViewModel : ObservableObject
     private async Task LoadScooters()
     {
         var response = await _mediator.Send(new GetAllScootersQuery());
-        Scooters = response.Data ?? new List<Scooter>();
+        Scooters = new ObservableCollection<Scooter>(response.Data);
     }
     
     [RelayCommand]

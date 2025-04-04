@@ -1,7 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using Application.Common.Interfaces.CurrentUserProvider;
-using Application.Common.Interfaces.JwtTokenValidator;
-using Application.Users.Commands.RegisterUser;
 using Application.Users.Queries.AuthenticateUser;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;

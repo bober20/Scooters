@@ -13,8 +13,9 @@ namespace Scooters.ViewModels;
 public partial class ReservationViewModel : ObservableObject
 {
     [ObservableProperty] private Reservation _reservation;
-    [ObservableProperty] private ObservableCollection<int> _timeSlots;
+    public ObservableCollection<int> TimeSlots { get; set; }
     [ObservableProperty] private Guid _scooterId;
+    
     private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
     
@@ -30,11 +31,14 @@ public partial class ReservationViewModel : ObservableObject
     private async Task Reserve()
     {
         Reservation.StartTime = DateTime.Now;
+        
         var response = await _mediator.Send(new CreateReservationCommand(Reservation));
         if (response.IsSuccessful)
         {
             await Shell.Current.DisplayAlert("Success", "Reservation created successfully", "OK");
+            await Shell.Current.Navigation.PopAsync();
             await Shell.Current.GoToAsync("//MainPage");
+            return;
         }
         
         await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
