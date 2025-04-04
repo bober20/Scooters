@@ -16,15 +16,22 @@ public class ReservationRepository : IReservationRepository
     {
         var reservation = await _dbContext.Reservations
             .SingleOrDefaultAsync(s => s.Id == id);
+        if (reservation is not null)
+        {
+            await _dbContext.Entry(reservation).Reference(r => r.Scooter).LoadAsync();
+        }
         return reservation;
     }
 
     public async Task<List<Reservation>?> GetReservationsAsync(Expression<Func<Reservation, bool>> filter)
     {
         var reservations = await _dbContext.Reservations
-            .AsNoTracking()
             .Where(filter)
             .ToListAsync();
+        foreach (var reservation in reservations)
+        {
+            await _dbContext.Entry(reservation).Reference(r => r.Scooter).LoadAsync();
+        }
         return reservations;
     }
 
@@ -48,6 +55,18 @@ public class ReservationRepository : IReservationRepository
         {
             _dbContext.Reservations.Remove(reservation);
         }
+    }
+
+    public async Task EndAllUserReservationsAsync(Guid userId)
+    {
+        var reservations = await _dbContext.Reservations
+            .Where(r => r.UserId == userId && r.IsActive)
+            .ToListAsync();
+        foreach (var reservation in reservations)
+        {
+            reservation.IsActive = false;
+        }
+        _dbContext.SaveChanges();
     }
 
     public async Task EndReservationAsync(Guid reservationId)

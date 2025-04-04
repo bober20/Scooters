@@ -10,4 +10,5 @@ public interface IReservationRepository
     Task CreateReservationAsync(Reservation reservation);
     Task DeleteReservationAsync(Guid reservationId);
     Task EndReservationAsync(Guid reservationId);
+    Task EndAllUserReservationsAsync(Guid userId);
 }

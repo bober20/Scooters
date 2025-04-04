@@ -14,7 +14,7 @@ public class GetReservationHandler : IRequestHandler<GetReservationQuery, Respon
         try
         {
             var reservation = await _reservationRepository.GetReservationAsync(request.Id);
-            return reservation is null 
+            return reservation is not null 
                 ? ResponseData<Reservation>.Success(reservation)
                 : ResponseData<Reservation>.Failure("Reservation not found");
         }
