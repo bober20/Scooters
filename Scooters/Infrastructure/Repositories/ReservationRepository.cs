@@ -28,10 +28,6 @@ public class ReservationRepository : IReservationRepository
         var reservations = await _dbContext.Reservations
             .Where(filter)
             .ToListAsync();
-        foreach (var reservation in reservations)
-        {
-            await _dbContext.Entry(reservation).Reference(r => r.Scooter).LoadAsync();
-        }
         return reservations;
     }
 
@@ -40,6 +36,22 @@ public class ReservationRepository : IReservationRepository
         var reservation = await _dbContext.Reservations
             .AsNoTracking()
             .FirstOrDefaultAsync(s => s.UserId == userId && s.ScooterId == scooterId);
+        return reservation;
+    }
+    
+    public async Task<Reservation?> GetReservationByScooterAsync(Guid scooterId)
+    {
+        var reservation = await _dbContext.Reservations
+            .FirstOrDefaultAsync(s => s.ScooterId == scooterId && s.IsActive);
+        await _dbContext.Entry(reservation).Reference(r => r.Scooter).LoadAsync();
+        return reservation;
+    }
+    
+    public async Task<Reservation?> GetReservationByUserAsync(Guid userId)
+    {
+        var reservation = await _dbContext.Reservations
+            .FirstOrDefaultAsync(s => s.UserId == userId && s.IsActive);
+        await _dbContext.Entry(reservation).Reference(r => r.Scooter).LoadAsync();
         return reservation;
     }
     

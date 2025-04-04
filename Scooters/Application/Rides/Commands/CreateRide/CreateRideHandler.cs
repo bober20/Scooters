@@ -20,13 +20,14 @@ public class CreateRideHandler : IRequestHandler<CreateRideCommand, ResponseData
         try
         {
             var reservation = await _reservationRepository
-                .GetReservationAsync(request.Ride.UserId, request.Ride.ScooterId);
+                .GetReservationAsync(request.Ride.ScooterId);
             
-            if (reservation is not null)
+            if (reservation is null && reservation?.UserId != request.Ride.UserId)
             {
-                await _reservationRepository.EndReservationAsync(reservation.Id);
+                return ResponseData<Ride>.Failure("Scooter is reserved");
             }
             
+            await _reservationRepository.EndReservationAsync(reservation.Id);
             var ride = await _rideRepository.CreateRideAsync(request.Ride);
             await _unitOfWork.SaveChangesAsync();
             return ResponseData<Ride>.Success(ride);
