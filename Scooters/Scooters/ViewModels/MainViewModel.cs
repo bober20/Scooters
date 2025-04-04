@@ -1,4 +1,7 @@
 using System.Collections.ObjectModel;
+using Application.Common.Interfaces.CurrentUserProvider;
+using Application.Reservations.Commands.EndReservation;
+using Application.Reservations.Queries.GetReservationByFilter;
 using Application.Scooters.Commands.CreateScooter;
 using Application.Scooters.Queries.GetAllScooters;
 using Application.Scooters.Queries.GetScooterById;
@@ -12,25 +15,36 @@ namespace Scooters.ViewModels;
 public partial class MainViewModel : ObservableObject 
 {
     [ObservableProperty] private Scooter _scooter = new Scooter();
+    [ObservableProperty] private Guid _currentUser;
+    [ObservableProperty] private Reservation _reservation;
+    [ObservableProperty] private bool _hasReservation;
+    [ObservableProperty] private bool _countdown;
     public ObservableCollection<Scooter> Scooters { get; set; }
     private IMediator _mediator;
+    private readonly ICurrentUserProvider _currentUserProvider;
 
-    public MainViewModel(IMediator mediator)
+    public MainViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider)
     {
         _mediator = mediator;
-        FetchScooters();
+        _currentUserProvider = currentUserProvider;
     }
 
-    private async Task FetchScooters()
+    [RelayCommand]
+    private async Task Appearing()
     {
-        var response = await _mediator.Send(new GetAllScootersQuery());
-        if (response.IsSuccessful)
+        GetCurrentUser();
+        await FetchScooters();
+        await FetchReservation();
+    }
+
+    [RelayCommand]
+    private async Task ReservationPressed()
+    {
+        var result = await Shell.Current.DisplayActionSheet("Reservation", "Cancel", null,
+            "Cancel Reservation");
+        if (result is "Cancel Reservation")
         {
-            Scooters = new ObservableCollection<Scooter>(response.Data);
-        }
-        else
-        {
-            Scooters = new ObservableCollection<Scooter>();
+            await _mediator.Send(new EndReservationCommand(Reservation.Id));
         }
     }
 
@@ -45,5 +59,38 @@ public partial class MainViewModel : ObservableObject
     private async Task MapPageLink()
     {
         await Shell.Current.GoToAsync("//MapPage");
+    }
+    
+    private async Task FetchScooters()
+    {
+        var response = await _mediator.Send(new GetAllScootersQuery());
+        if (response.IsSuccessful)
+        {
+            Scooters = new ObservableCollection<Scooter>(response.Data);
+        }
+        else
+        {
+            Scooters = new ObservableCollection<Scooter>();
+        }
+    }
+
+    private async Task FetchReservation()
+    {
+        var reservation = await _mediator.Send(new GetReservationQuery(
+            r => r.UserId == CurrentUser && r.IsActive));
+        if (!reservation.IsSuccessful)
+        {
+            HasReservation = false;
+        }
+        else
+        {
+            HasReservation = true;
+            Reservation = reservation.Data[0];
+        }
+    }
+    
+    private void GetCurrentUser()
+    {
+        CurrentUser = _currentUserProvider.GetCurrentUser().Value;
     }
 }

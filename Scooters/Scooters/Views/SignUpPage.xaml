@@ -34,8 +34,7 @@
                     <Entry
                         Placeholder="Email"
                         BackgroundColor="White"
-                        Text="{Binding Email}"
-                        IsPassword="{Binding IsPasswordVisible}">
+                        Text="{Binding Email}">
                         <Entry.Triggers>
                             <DataTrigger
                                 TargetType="Entry"

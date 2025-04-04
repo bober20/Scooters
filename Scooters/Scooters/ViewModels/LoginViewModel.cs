@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using Application.Common.Interfaces.CurrentUserProvider;
+using Application.Common.Interfaces.JwtTokenValidator;
 using Application.Users.Commands.RegisterUser;
 using Application.Users.Queries.AuthenticateUser;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -33,17 +35,64 @@ public partial class LoginViewModel : ObservableValidator
     [ObservableProperty] private bool _isPasswordVisible = true;
     [ObservableProperty] private string? _errors;
     private IMediator _mediator;
+    private readonly ICurrentUserProvider _currentUserProvider;
     
-    public LoginViewModel(IMediator mediator)
+    public LoginViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider)
     {
-        Email = string.Empty;
-        Password = string.Empty;
-        
         _mediator = mediator;
+        _currentUserProvider = currentUserProvider;
     }
 
     [RelayCommand]
     private async Task LogIn()
+    {
+        DisplayErrors();
+        
+        if (HasErrors) return;
+        
+        var response = await _mediator.Send(new AuthenticateUserQuery(Email, Password));
+        
+        if (response.IsSuccessful)
+        {
+            _currentUserProvider.SetCurrentUser(response.Data);
+            await Shell.Current.GoToAsync("//MainPage");
+        }
+        else
+        {
+            await Shell.Current.DisplayAlert("Log in error", response.ErrorMessage, "OK");
+        }
+    }
+    
+    [RelayCommand]
+    private void TogglePasswordVisibility() => IsPasswordVisible = !IsPasswordVisible;
+
+    [RelayCommand]
+    private async Task SignUpLink()
+    {
+        await Shell.Current.GoToAsync("//SignUpPage");
+    }
+    
+    [RelayCommand]
+    private async Task Appearing()
+    {
+        await GetCurrentUser();
+    }
+
+    private async Task GetCurrentUser()
+    {
+        var user = _currentUserProvider.GetCurrentUser();
+        if (user != null)
+        {
+            await Shell.Current.GoToAsync("//MainPage");
+        }
+    }
+    
+    private bool PropertyHasErrors(string propertyName)
+    {
+        return GetErrors(propertyName).Any();
+    }
+
+    private void DisplayErrors()
     {
         ValidateAllProperties();
         if (PropertyHasErrors(nameof(Email)))
@@ -69,32 +118,5 @@ public partial class LoginViewModel : ObservableValidator
             PasswordHasErrors = false;
             PasswordErrors = string.Empty;
         }
-
-        if (HasErrors) return;
-        
-        var token = await _mediator.Send(new AuthenticateUserQuery(Email, Password));
-        
-        if (token.IsSuccessful)
-        {
-            await Shell.Current.GoToAsync("//MainPage");
-        }
-        else
-        {
-            await Shell.Current.DisplayAlert("Log in error", token.ErrorMessage, "OK");
-        }
-    }
-    
-    [RelayCommand]
-    private void TogglePasswordVisibility() => IsPasswordVisible = !IsPasswordVisible;
-
-    [RelayCommand]
-    private async Task SignUpLink()
-    {
-        await Shell.Current.GoToAsync("//SignUpPage");
-    }
-    
-    private bool PropertyHasErrors(string propertyName)
-    {
-        return GetErrors(propertyName).Any();
     }
 }

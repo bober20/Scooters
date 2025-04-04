@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using Application.Common.Interfaces.CurrentUserProvider;
 using Application.Reservations.Commands.CreateReservation;
 using Application.Scooters.Queries.GetScooterById;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -15,20 +16,28 @@ public partial class ReservationViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<int> _timeSlots;
     [ObservableProperty] private Guid _scooterId;
     private readonly IMediator _mediator;
+    private readonly ICurrentUserProvider _currentUserProvider;
     
-    
-    public ReservationViewModel(IMediator mediator)
+    public ReservationViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider)
     {
         TimeSlots = new ObservableCollection<int>();
         Reservation = new Reservation();
         _mediator = mediator;
+        _currentUserProvider = currentUserProvider;
     }
 
     [RelayCommand]
     private async Task Reserve()
     {
         Reservation.StartTime = DateTime.Now;
-        await _mediator.Send(new CreateReservationCommand(Reservation));
+        var response = await _mediator.Send(new CreateReservationCommand(Reservation));
+        if (response.IsSuccessful)
+        {
+            await Shell.Current.DisplayAlert("Success", "Reservation created successfully", "OK");
+            await Shell.Current.GoToAsync("//MainPage");
+        }
+        
+        await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
     }
     
     [RelayCommand]
@@ -50,5 +59,6 @@ public partial class ReservationViewModel : ObservableObject
     private void InitializeReservation()
     {
         Reservation.ScooterId = ScooterId;
+        Reservation.UserId = _currentUserProvider.GetCurrentUser()!.Value;
     }
 }

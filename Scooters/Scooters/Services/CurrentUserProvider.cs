@@ -1,21 +1,45 @@
 using Application.Common.Interfaces.CurrentUserProvider;
+using Application.Common.Interfaces.JwtTokenValidator;
+using Domain.Entities;
 
 namespace Scooters.Services;
 
 public class CurrentUserProvider : ICurrentUserProvider
 {
-    public string GetCurrentUserAsync()
+    private readonly IJwtTokenValidator _jwtTokenValidator;
+
+    public CurrentUserProvider(IJwtTokenValidator jwtTokenValidator)
     {
-        return Preferences.Get("oauth_token", null);
+        _jwtTokenValidator = jwtTokenValidator;
     }
 
-    public void SetCurrentUserAsync(string token)
+    public Guid? GetCurrentUser()
+    {
+        var token = Preferences.Get("oauth_token", null);
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            return null;
+        }
+
+        try
+        {
+            var guid = _jwtTokenValidator.ValidateToken(token);
+            return guid;
+        }
+        catch
+        {
+            RemoveCurrentUser();
+            return null;
+        }
+    }
+
+    public void SetCurrentUser(string token)
     {
         Preferences.Set("oauth_token", token);
     }
 
     public void RemoveCurrentUser()
     {
-        SecureStorage.Remove("oauth_token");
+        Preferences.Remove("oauth_token");
     }
 }

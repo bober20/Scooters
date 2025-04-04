@@ -1,33 +1,89 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Scooters.Views.MainPage"
              xmlns:viewModels1="clr-namespace:Scooters.ViewModels"
              x:DataType="viewModels1:MainViewModel"
-             x:Name="MainPageView">
+             x:Name="MainPageView"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}" />
+    </ContentPage.Behaviors>
     <StackLayout Padding="10" Spacing="30">
-        <Label 
+        <Label
             Text="Scooters"
             HorizontalTextAlignment="Center"
             FontSize="72"
-            FontAttributes="Bold"/>
-        <Label 
+            FontAttributes="Bold" />
+        <Label
             Text="Welcome to scooters application!"
             HorizontalTextAlignment="Center"
-            FontSize="32"/>
-        <Label 
-            Text="Your current rides"
+            FontSize="32" />
+        <Label
+            Text="Your current reservation"
             HorizontalTextAlignment="Center"
-            FontSize="32"/>
-        <Label 
-            Text="You don't have current rides right now"
-            HorizontalTextAlignment="Center"
-            FontSize="16"/>
-        <Button 
+            FontSize="32" />
+        <Border
+            StrokeShape="RoundRectangle 20 20"
+            Padding="10"
+            BackgroundColor="White"
+            StrokeThickness="0">
+            <Border.Shadow>
+                <Shadow Brush="LightGrey" Offset="0,0" Radius="10" />
+            </Border.Shadow>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding ReservationPressedCommand}"/>
+            </Border.GestureRecognizers>
+            <FlexLayout JustifyContent="SpaceBetween">
+                <VerticalStackLayout>
+                    <FlexLayout>
+                        <Image
+                            Source="calendar.png"
+                            HeightRequest="50"
+                            WidthRequest="50" />
+                        <VerticalStackLayout>
+                            <Label
+                                Text="{Binding Reservation.StartTime, 
+                                        FallbackValue='Scooter is not specified'}"
+                                HorizontalTextAlignment="Center"
+                                FontSize="16" />
+                            <Label
+                                Text="{Binding Reservation.Duration, 
+                                        FallbackValue='Duration is not specified'}"
+                                HorizontalTextAlignment="Center"
+                                FontSize="16" />
+                        </VerticalStackLayout>
+                    </FlexLayout>
+                    <Border
+                        StrokeThickness="1" />
+                    <Label
+                        Text="{Binding Reservation.Scooter.ModelDescription, 
+                    FallbackValue='Scooter is not specified'}"
+                        HorizontalTextAlignment="Center"
+                        FontSize="16" />
+                </VerticalStackLayout>
+                <Label
+                    Text="{Binding Countdown}" />
+            </FlexLayout>
+        </Border>
+        <Button
+            IsVisible="{Binding HasReservation}"
             Text="Make reservations"
             HorizontalOptions="Center"
             VerticalOptions="Center"
             CornerRadius="10"
-            Command="{Binding MapPageLinkCommand}"/>
+            Command="{Binding MapPageLinkCommand}">
+            <Button.Triggers>
+                <DataTrigger
+                    TargetType="Button"
+                    Binding="{Binding HasReservation}"
+                    Value="True">
+                    <Setter
+                        Property="IsVisible"
+                        Value="False" />
+                </DataTrigger>
+            </Button.Triggers>
+        </Button>
     </StackLayout>
 </ContentPage>

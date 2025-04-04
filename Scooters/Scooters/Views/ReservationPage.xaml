@@ -36,6 +36,5 @@
                 VerticalOptions="Center"
                 Command="{Binding ReserveCommand}"></Button>
         </VerticalStackLayout>
-        
     </ContentPage.Content>
 </ContentPage>
