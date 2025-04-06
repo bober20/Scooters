@@ -7,7 +7,7 @@
              xmlns:vewModels="clr-namespace:Scooters.ViewModels"
              x:DataType="vewModels:SignUpViewModel">
     <ContentPage.Content>
-        <Grid RowSpan="2" 
+        <Grid RowSpan="2"
               RowDefinitions="Auto, *"
               IgnoreSafeArea="True">
             <Label Grid.Row="0"
@@ -16,102 +16,103 @@
                    HorizontalTextAlignment="Center"
                    FontSize="72"
                    FontAttributes="Bold" />
-            <Border 
+            <Border
                 Grid.Row="1"
                 BackgroundColor="White"
-                StrokeShape="RoundRectangle 50 50">
+                StrokeShape="RoundRectangle 40 40 0 0">
                 <VerticalStackLayout
-                    Spacing="20" 
+                    Spacing="20"
                     Padding="20, 40, 20, 10">
-                    <Label
-                        HorizontalTextAlignment="Center"
-                        Text="Sign up"
-                        FontSize="32"
-                        FontAttributes="Bold" />
-                    <Label Margin="0, 0, 0, -15"
-                           Text="Email"
-                           TextColor="DimGrey" />
-                    <Entry
-                        Placeholder="Email"
-                        BackgroundColor="White"
-                        Text="{Binding Email}">
-                        <Entry.Triggers>
-                            <DataTrigger
-                                TargetType="Entry"
-                                Binding="{Binding EmailHasErrors}"
-                                Value="True">
-                                <Setter 
-                                    Property="BackgroundColor" 
-                                    Value="{StaticResource Error}"/>
-                            </DataTrigger>
-                        </Entry.Triggers>
-                    </Entry>
-                    <Label 
-                        Text="{Binding EmailErrors}"
-                        TextColor="{StaticResource ErrorText}"
-                        Margin="0, -15, 0, 0"/>
-                    <Label Margin="0, 0, 0, -15"
-                           Text="Password"
-                           TextColor="DimGrey" />
-                    <FlexLayout>
+                    <VerticalStackLayout Spacing="5">
+                        <Label
+                            HorizontalTextAlignment="Center"
+                            Text="Sign up"
+                            FontSize="32"
+                            FontAttributes="Bold" />
+                        <Label
+                            Text="Email"
+                            TextColor="DimGrey" />
                         <Entry
-                            Placeholder="Password"
+                            Placeholder="Email"
                             BackgroundColor="White"
-                            FlexLayout.Basis="0"
-                            FlexLayout.Grow="1"
-                            IsPassword="{Binding IsPasswordVisible}"
-                            Margin="0, 0, 5, 0"
-                            Text="{Binding Password}">
+                            Text="{Binding Email}">
                             <Entry.Triggers>
                                 <DataTrigger
                                     TargetType="Entry"
-                                    Binding="{Binding PasswordHasErrors}"
+                                    Binding="{Binding EmailHasErrors}"
                                     Value="True">
-                                    <Setter 
-                                        Property="BackgroundColor" 
-                                        Value="{StaticResource Error}"/>
+                                    <Setter
+                                        Property="BackgroundColor"
+                                        Value="{StaticResource Error}" />
                                 </DataTrigger>
                             </Entry.Triggers>
                         </Entry>
-                        <Button
-                            Command="{Binding TogglePasswordVisibilityCommand}"
-                            Text="P"/>
-                    </FlexLayout>
-                    <Label 
-                        Text="{Binding PasswordErrors}"
-                        TextColor="{StaticResource ErrorText}"
-                        Margin="0, -15, 0, 0"/>
-                    <Label Margin="0, 0, 0, -15"
-                           Text="Password confirmation"
-                           TextColor="DimGrey" />
-                    <FlexLayout>
-                        <Entry
-                            FlexLayout.Basis="0"
-                            FlexLayout.Grow="1"
-                            Placeholder="Password confirmation"
-                            IsPassword="{Binding IsPasswordVisible}"
-                            BackgroundColor="White"
-                            Margin="0, 0, 5, 0"
-                            Text="{Binding PasswordConfirmation}">
-                            <Entry.Triggers>
-                                <DataTrigger
-                                    TargetType="Entry"
-                                    Binding="{Binding PasswordConfirmHasErrors}"
-                                    Value="True">
-                                    <Setter 
-                                        Property="BackgroundColor" 
-                                        Value="{StaticResource Error}"/>
-                                </DataTrigger>
-                            </Entry.Triggers>
-                        </Entry>
-                        <Button
-                            Command="{Binding TogglePasswordVisibilityCommand}"
-                            Text="P"/>
-                    </FlexLayout>
-                    <Label 
-                        Text="{Binding PasswordConfirmErrors}"
-                        TextColor="{StaticResource ErrorText}"
-                        Margin="0, -15, 0, 0"/>
+                        <Label
+                            Text="{Binding EmailErrors}"
+                            TextColor="{StaticResource ErrorText}" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Spacing="5">
+                        <Label
+                            Text="Password"
+                            TextColor="DimGrey" />
+                        <FlexLayout>
+                            <Entry
+                                Placeholder="Password"
+                                BackgroundColor="White"
+                                FlexLayout.Basis="0"
+                                FlexLayout.Grow="1"
+                                IsPassword="{Binding IsPasswordVisible}"
+                                Text="{Binding Password}">
+                                <Entry.Triggers>
+                                    <DataTrigger
+                                        TargetType="Entry"
+                                        Binding="{Binding PasswordHasErrors}"
+                                        Value="True">
+                                        <Setter
+                                            Property="BackgroundColor"
+                                            Value="{StaticResource Error}" />
+                                    </DataTrigger>
+                                </Entry.Triggers>
+                            </Entry>
+                            <Button
+                                Command="{Binding TogglePasswordVisibilityCommand}"
+                                Text="P" />
+                        </FlexLayout>
+                        <Label
+                            Text="{Binding PasswordErrors}"
+                            TextColor="{StaticResource ErrorText}" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Spacing="5">
+                        <Label
+                            Text="Password confirmation"
+                            TextColor="DimGrey" />
+                        <FlexLayout>
+                            <Entry
+                                FlexLayout.Basis="0"
+                                FlexLayout.Grow="1"
+                                Placeholder="Password confirmation"
+                                IsPassword="{Binding IsPasswordVisible}"
+                                BackgroundColor="White"
+                                Text="{Binding PasswordConfirmation}">
+                                <Entry.Triggers>
+                                    <DataTrigger
+                                        TargetType="Entry"
+                                        Binding="{Binding PasswordConfirmHasErrors}"
+                                        Value="True">
+                                        <Setter
+                                            Property="BackgroundColor"
+                                            Value="{StaticResource Error}" />
+                                    </DataTrigger>
+                                </Entry.Triggers>
+                            </Entry>
+                            <Button
+                                Command="{Binding TogglePasswordVisibilityCommand}"
+                                Text="P" />
+                        </FlexLayout>
+                        <Label
+                            Text="{Binding PasswordConfirmErrors}"
+                            TextColor="{StaticResource ErrorText}" />
+                    </VerticalStackLayout>
                     <Button
                         Text="Sign up"
                         CornerRadius="10"
@@ -135,7 +136,6 @@
                     </Label>
                 </VerticalStackLayout>
             </Border>
-
         </Grid>
     </ContentPage.Content>
 </ContentPage>

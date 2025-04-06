@@ -7,38 +7,45 @@
              x:DataType="viewModels:ProfileViewModel"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
     <ContentPage.Behaviors>
-        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>
+        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}" />
     </ContentPage.Behaviors>
     <ContentPage.Content>
         <Grid
-            RowSpan="3"
-            Padding="20"
-            RowDefinitions="4*, Auto, Auto"
+            RowSpan="2"
+            RowDefinitions="Auto, *"
             RowSpacing="20">
-            <Border
+            <VerticalStackLayout
+                Margin="10"
                 Grid.Row="0"
-                StrokeThickness="3"
-                StrokeShape="Ellipse"
-                HeightRequest="240"
-                WidthRequest="240"
-                HorizontalOptions="Center">
-                <ImageButton 
-                    Aspect="Fill"
-                    Source="man_profile.jpg"
-                    Command="{Binding UploadPhotoCommand}"/>
-            </Border>
-            <Label 
-                Grid.Row="1" 
-                Text="{Binding User.Email}"
-                FontSize="22"
-                HorizontalTextAlignment="Center"
-                VerticalTextAlignment="Center"/>
-            <Border Grid.Row="2"
-                    StrokeShape="RoundRectangle 50 50"
+                Spacing="10">
+                <Border
+                    StrokeThickness="3"
+                    StrokeShape="Ellipse"
+                    HeightRequest="240"
+                    WidthRequest="240"
+                    HorizontalOptions="Center">
+                    <ImageButton
+                        Aspect="Fill"
+                        Source="man_profile.jpg"
+                        Command="{Binding UploadPhotoCommand}" />
+                </Border>
+                <Label
+                    Text="{Binding User.Email}"
+                    FontSize="22"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center" />
+            </VerticalStackLayout>
+            <Border Grid.Row="1"
+                    StrokeShape="RoundRectangle 40 40 0 0"
                     StrokeThickness="0"
                     BackgroundColor="White"
-                    Padding="20">
-                <VerticalStackLayout Spacing="20" Padding="20">
+                    Padding="10">
+                <FlexLayout 
+                    JustifyContent="SpaceBetween" 
+                    Direction="Column">
+                    <VerticalStackLayout 
+                        Spacing="20" 
+                        Padding="20">
                         <FlexLayout
                             JustifyContent="SpaceBetween"
                             AlignItems="Center"
@@ -51,35 +58,36 @@
                                 ThumbColor="Grey"
                                 IsToggled="{Binding IsDarkMode}" />
                         </FlexLayout>
-                    <Border 
-                        Margin="-10, 0"
-                        StrokeThickness="1"/>
-                    <Label
-                        Text="Change password"
-                        VerticalTextAlignment="Center">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding ChangePasswordLinkCommand}" />
-                        </Label.GestureRecognizers>
-                    </Label>
-                    <Border 
-                        Margin="-10, 0"
-                        StrokeThickness="1"/>
-                    <Label
-                        Text="Delete account"
-                        TextColor="Red"
-                        VerticalTextAlignment="Center">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding DeleteAccountCommand}" />
-                        </Label.GestureRecognizers>
-                    </Label>
-                    <Border 
-                        Margin="-10, 0"
-                        StrokeThickness="1"/>
+                        <Border
+                            Margin="-10, 0"
+                            StrokeThickness="1" />
+                        <Label
+                            Text="Change password"
+                            VerticalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ChangePasswordLinkCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Border
+                            Margin="-10, 0"
+                            StrokeThickness="1" />
+                        <Label
+                            Text="Delete account"
+                            TextColor="Red"
+                            VerticalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding DeleteAccountCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Border
+                            Margin="-10, 0"
+                            StrokeThickness="1" />
+                    </VerticalStackLayout>
                     <Button
                         CornerRadius="10"
                         Text="Log out"
                         Command="{Binding LogOutCommand}" />
-                </VerticalStackLayout>
+                </FlexLayout>
             </Border>
         </Grid>
     </ContentPage.Content>

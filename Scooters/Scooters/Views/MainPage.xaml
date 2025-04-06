@@ -10,7 +10,7 @@
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}" />
     </ContentPage.Behaviors>
-    <StackLayout Padding="10" Spacing="30">
+    <VerticalStackLayout Padding="10" Spacing="30">
         <Label
             Text="Scooters"
             HorizontalTextAlignment="Center"
@@ -48,18 +48,18 @@
             <FlexLayout JustifyContent="SpaceBetween">
                 <VerticalStackLayout>
                     <FlexLayout>
-                        <Label 
+                        <Label
                             VerticalTextAlignment="Center"
                             Margin="5,0"
-                            Text="&#xe71d;" 
+                            Text="&#xe71d;"
                             FontFamily="MauiMaterialAssets"
-                            FontSize="40"/>
-                        <VerticalStackLayout>
+                            FontSize="40" />
+                        <VerticalStackLayout Spacing="5">
                             <Label
                                 Text="{Binding Reservation.StartTime, 
                                         FallbackValue='Start time is not specified', StringFormat='{0:dd/MM/yyyy HH:mm}'}"
                                 FontSize="16" />
-                            <Border Margin="5,5,5,5"/>
+                            <Border />
                             <Label
                                 Text="{Binding Reservation.Scooter.ModelDescription, 
                                     FallbackValue='Scooter is not specified'}"
@@ -90,5 +90,5 @@
                 </DataTrigger>
             </Button.Triggers>
         </Button>
-    </StackLayout>
+    </VerticalStackLayout>
 </ContentPage>

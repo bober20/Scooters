@@ -9,17 +9,17 @@
              xmlns:maui="clr-namespace:ZXing.Net.Maui;assembly=ZXing.Net.MAUI"
              x:DataType="viewModels:QRScannerViewModel">
     <ContentPage.Content>
-        <zxing:CameraBarcodeReaderView>
-            <zxing:CameraBarcodeReaderView.Options>
-                <maui:BarcodeReaderOptions
-                    Formats="QrCode"
-                    AutoRotate="True"/>
-            </zxing:CameraBarcodeReaderView.Options>
-            <zxing:CameraBarcodeReaderView.Behaviors>
-                <toolkit:EventToCommandBehavior 
-                    Command="{Binding BarcodeDetectedCommand}" 
-                    EventName="BarcodesDetected"/>
-            </zxing:CameraBarcodeReaderView.Behaviors>
-        </zxing:CameraBarcodeReaderView>
+        <!-- <zxing:CameraBarcodeReaderView> -->
+        <!--     <zxing:CameraBarcodeReaderView.Options> -->
+        <!--         <maui:BarcodeReaderOptions -->
+        <!--             Formats="QrCode" -->
+        <!--             AutoRotate="True"/> -->
+        <!--     </zxing:CameraBarcodeReaderView.Options> -->
+        <!--     <zxing:CameraBarcodeReaderView.Behaviors> -->
+        <!--         <toolkit:EventToCommandBehavior  -->
+        <!--             Command="{Binding BarcodeDetectedCommand}"  -->
+        <!--             EventName="BarcodesDetected"/> -->
+        <!--     </zxing:CameraBarcodeReaderView.Behaviors> -->
+        <!-- </zxing:CameraBarcodeReaderView> -->
     </ContentPage.Content>
 </ContentPage>

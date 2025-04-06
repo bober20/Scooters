@@ -109,12 +109,11 @@
                                 FontAttributes="Bold"
                                 FontSize="20" />
                             <Picker
+                                Title="Select time interval"
                                 ItemsSource="{Binding TimeSlots}"
                                 SelectedItem="{Binding Reservation.Duration}" />
                             <Button
                                 Text="Reserve"
-                                HorizontalOptions="Center"
-                                VerticalOptions="Center"
                                 Command="{Binding ReserveCommand}">
                             </Button>
                         </VerticalStackLayout>

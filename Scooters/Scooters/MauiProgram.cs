@@ -20,8 +20,8 @@ public static class MauiProgram
             .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                fonts.AddFont("arial.ttf", "Arial");
+                fonts.AddFont("MauiMaterialAssets.ttf", "MauiMaterialAssets");
             })
             .UseMauiMaps()
             .UseBarcodeReader();
@@ -58,6 +58,8 @@ public static class MauiProgram
         
         builder.Services.AddTransient<RideViewModel>();
         builder.Services.AddTransient<RideView>();
+        
+        // builder.Services.AddTransientPopup<ReservationPage, ReservationViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();
