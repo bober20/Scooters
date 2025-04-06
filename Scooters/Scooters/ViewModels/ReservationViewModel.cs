@@ -15,6 +15,7 @@ public partial class ReservationViewModel : ObservableObject
     [ObservableProperty] private Reservation _reservation;
     [ObservableProperty] private ObservableCollection<int> _timeSlots;
     [ObservableProperty] private Guid _scooterId;
+    [ObservableProperty] private Scooter _scooter;
     
     private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
@@ -45,8 +46,9 @@ public partial class ReservationViewModel : ObservableObject
     }
     
     [RelayCommand]
-    private void Appearing()
+    private async Task Appearing()
     {
+        await InitializeScooter();
         InitializeTimeSlots();
         InitializeReservation();
     }
@@ -64,5 +66,19 @@ public partial class ReservationViewModel : ObservableObject
     {
         Reservation.ScooterId = ScooterId;
         Reservation.UserId = _currentUserProvider.GetCurrentUser()!.Value;
+    }
+
+    private async Task InitializeScooter()
+    {
+        var scooter = await _mediator.Send(new GetScooterQuery(ScooterId));
+        if (scooter.IsSuccessful)
+        {
+            Scooter = scooter.Data;
+            Reservation.Scooter = scooter.Data;
+        }
+        else
+        {
+            await Shell.Current.Navigation.PopAsync();
+        }
     }
 }

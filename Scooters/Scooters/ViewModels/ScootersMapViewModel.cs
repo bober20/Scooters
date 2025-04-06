@@ -32,6 +32,10 @@ public partial class ScootersMapViewModel : ObservableObject
     [RelayCommand]
     private async Task ReservationLink()
     {
+        if (SelectedScooter is null)
+        {
+            return;
+        }
         Dictionary<string, object> parameters = new()
         {
             {"scooterId", SelectedScooter.Id}
