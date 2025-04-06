@@ -48,15 +48,18 @@
             <FlexLayout JustifyContent="SpaceBetween">
                 <VerticalStackLayout>
                     <FlexLayout>
-                        <Image
-                            Source="calendar.png"
-                            HeightRequest="50"
-                            WidthRequest="50" />
+                        <Label 
+                            VerticalTextAlignment="Center"
+                            Margin="5,0"
+                            Text="&#xe71d;" 
+                            FontFamily="MauiMaterialAssets"
+                            FontSize="40"/>
                         <VerticalStackLayout>
                             <Label
                                 Text="{Binding Reservation.StartTime, 
                                         FallbackValue='Start time is not specified', StringFormat='{0:dd/MM/yyyy HH:mm}'}"
                                 FontSize="16" />
+                            <Border Margin="5,5,5,5"/>
                             <Label
                                 Text="{Binding Reservation.Scooter.ModelDescription, 
                                     FallbackValue='Scooter is not specified'}"
@@ -65,6 +68,7 @@
                     </FlexLayout>
                 </VerticalStackLayout>
                 <Label
+                    VerticalTextAlignment="Center"
                     Text="{Binding Countdown}"
                     FontSize="32" />
             </FlexLayout>
