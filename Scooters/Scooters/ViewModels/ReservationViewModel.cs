@@ -13,7 +13,7 @@ namespace Scooters.ViewModels;
 public partial class ReservationViewModel : ObservableObject
 {
     [ObservableProperty] private Reservation _reservation;
-    public ObservableCollection<int> TimeSlots { get; set; }
+    [ObservableProperty] private ObservableCollection<int> _timeSlots;
     [ObservableProperty] private Guid _scooterId;
     
     private readonly IMediator _mediator;
@@ -54,7 +54,7 @@ public partial class ReservationViewModel : ObservableObject
     private void InitializeTimeSlots()
     {
         TimeSlots.Clear();
-        for (int i = 0; i < 60; i += 10)
+        for (int i = 10; i < 60; i += 10)
         {
             TimeSlots.Add(i);
         }

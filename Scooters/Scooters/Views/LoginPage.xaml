@@ -94,11 +94,6 @@
                         CornerRadius="10"
                         Command="{Binding LogInCommand}" />
                     <Label
-                        Text="Or"
-                        HorizontalTextAlignment="Center"
-                        FontSize="26"
-                        FontAttributes="Bold" />
-                    <Label
                         Text="{Binding Errors}"
                         TextColor="Red" />
                     <Label

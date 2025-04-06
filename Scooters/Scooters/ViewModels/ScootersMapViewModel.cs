@@ -9,7 +9,7 @@ namespace Scooters.ViewModels;
 
 public partial class ScootersMapViewModel : ObservableObject
 {
-    public ObservableCollection<Scooter> Scooters { get; set; }
+    [ObservableProperty] private List<Scooter> _scooters;
     [ObservableProperty] private Scooter _selectedScooter;
     private readonly IMediator _mediator;
     
@@ -20,7 +20,7 @@ public partial class ScootersMapViewModel : ObservableObject
     private async Task LoadScooters()
     {
         var response = await _mediator.Send(new GetAllScootersQuery());
-        Scooters = new ObservableCollection<Scooter>(response.Data);
+        Scooters = new List<Scooter>(response.Data);
     }
     
     [RelayCommand]
