@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Scooters.Views.ReservationPage"
-             xmlns:viewModels="clr-namespace:Scooters.ViewModels"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:DataType="viewModels:ReservationViewModel">
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               x:Class="Scooters.Views.ReservationPage"
+               xmlns:viewModels="clr-namespace:Scooters.ViewModels"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               x:DataType="viewModels:ReservationViewModel">
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}" />
     </ContentPage.Behaviors>
-    <ContentPage.Content>
-        <ScrollView>
-            <VerticalStackLayout Spacing="10">
-                <Label
-                    Text="Reserve scooter"
-                    HorizontalTextAlignment="Center"
-                    FontSize="32"
-                    FontAttributes="Bold"
-                    Margin="0, 10" />
-                <Border
-                    BackgroundColor="White"
-                    StrokeShape="RoundRectangle 40 40 0 0">
-                    <VerticalStackLayout 
-                        Margin="0, 10"
-                        Spacing="5" 
-                        Padding="20">
-                        <VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout Spacing="10">
+            <Label
+                Text="Reserve scooter"
+                HorizontalTextAlignment="Center"
+                FontSize="32"
+                FontAttributes="Bold"
+                Margin="0, 10" />
+            <Border
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 40 40 0 0">
+                <VerticalStackLayout
+                    Margin="0, 10"
+                    Spacing="5"
+                    Padding="20">
+                    <VerticalStackLayout>
                         <Border
                             StrokeThickness="0">
                             <Image
@@ -38,20 +37,20 @@
                             <Label Padding="5">
                                 <Label.FormattedText>
                                     <FormattedString>
-                                        <Span 
+                                        <Span
                                             Text="&#xe71c;"
-                                            FontFamily="MauiMaterialAssets"/>
-                                        <Span Text="{Binding Scooter.Coordinates.Latitude}"/>
+                                            FontFamily="MauiMaterialAssets" />
+                                        <Span Text="{Binding Scooter.Coordinates.Latitude}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
                             <Label Padding="5">
                                 <Label.FormattedText>
                                     <FormattedString>
-                                        <Span 
+                                        <Span
                                             Text="&#xe71e;"
-                                            FontFamily="MauiMaterialAssets"/>
-                                        <Span Text="80%"/>
+                                            FontFamily="MauiMaterialAssets" />
+                                        <Span Text="80%" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -64,62 +63,61 @@
                             Text="$10/hour"
                             TextColor="DimGrey"
                             FontSize="20" />
-                        </VerticalStackLayout>
-                        <Border Margin="0, 10"/>
-                        <FlexLayout JustifyContent="SpaceAround" AlignContent="Center">
-                            <VerticalStackLayout>
-                                <Label
-                                    HorizontalTextAlignment="Center"
-                                    TextColor="DimGrey"
-                                    Text="Max. Speed" />
-                                <Label
-                                    FontAttributes="Bold"
-                                    FontSize="26"
-                                    HorizontalTextAlignment="Center"
-                                    Text="40km." />
-                            </VerticalStackLayout>
-                            <VerticalStackLayout>
-                                <Label
-                                    HorizontalTextAlignment="Center"
-                                    TextColor="DimGrey"
-                                    Text="Max. Load" />
-                                <Label
-                                    FontAttributes="Bold"
-                                    FontSize="26"
-                                    HorizontalTextAlignment="Center"
-                                    Text="110kg." />
-                            </VerticalStackLayout>
-                            <VerticalStackLayout>
-                                <Label
-                                    TextColor="DimGrey"
-                                    HorizontalTextAlignment="Center"
-                                    Text="Max. Distance" />
-                                <Label
-                                    FontAttributes="Bold"
-                                    FontSize="26"
-                                    HorizontalTextAlignment="Center"
-                                    Text="100km." />
-                            </VerticalStackLayout>
-                        </FlexLayout>
-                        <VerticalStackLayout
-                            Margin="0, 20, 0, 0"
-                            Spacing="5">
-                            <Label
-                                Text="Select time interval for reservation"
-                                FontAttributes="Bold"
-                                FontSize="20" />
-                            <Picker
-                                Title="Select time interval"
-                                ItemsSource="{Binding TimeSlots}"
-                                SelectedItem="{Binding Reservation.Duration}" />
-                            <Button
-                                Text="Reserve"
-                                Command="{Binding ReserveCommand}">
-                            </Button>
-                        </VerticalStackLayout>
                     </VerticalStackLayout>
-                </Border>
-            </VerticalStackLayout>
-        </ScrollView>
-    </ContentPage.Content>
+                    <Border Margin="0, 10" />
+                    <FlexLayout JustifyContent="SpaceAround" AlignContent="Center">
+                        <VerticalStackLayout>
+                            <Label
+                                HorizontalTextAlignment="Center"
+                                TextColor="DimGrey"
+                                Text="Max. Speed" />
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="26"
+                                HorizontalTextAlignment="Center"
+                                Text="40km." />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout>
+                            <Label
+                                HorizontalTextAlignment="Center"
+                                TextColor="DimGrey"
+                                Text="Max. Load" />
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="26"
+                                HorizontalTextAlignment="Center"
+                                Text="110kg." />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout>
+                            <Label
+                                TextColor="DimGrey"
+                                HorizontalTextAlignment="Center"
+                                Text="Max. Distance" />
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="26"
+                                HorizontalTextAlignment="Center"
+                                Text="100km." />
+                        </VerticalStackLayout>
+                    </FlexLayout>
+                    <VerticalStackLayout
+                        Margin="0, 20, 0, 0"
+                        Spacing="5">
+                        <Label
+                            Text="Select time interval for reservation"
+                            FontAttributes="Bold"
+                            FontSize="20" />
+                        <Picker
+                            Title="Select time interval"
+                            ItemsSource="{Binding TimeSlots}"
+                            SelectedItem="{Binding Reservation.Duration}" />
+                        <Button
+                            Text="Reserve"
+                            Command="{Binding ReserveCommand}">
+                        </Button>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

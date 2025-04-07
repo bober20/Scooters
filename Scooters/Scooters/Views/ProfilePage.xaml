@@ -84,7 +84,6 @@
                             StrokeThickness="1" />
                     </VerticalStackLayout>
                     <Button
-                        CornerRadius="10"
                         Text="Log out"
                         Command="{Binding LogOutCommand}" />
                 </FlexLayout>
