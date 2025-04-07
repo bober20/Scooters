@@ -29,8 +29,8 @@
                 Grid.Row="1"
                 BackgroundColor="White"
                 StrokeShape="RoundRectangle 40 40 0 0">
-                <VerticalStackLayout 
-                    Spacing="20" 
+                <VerticalStackLayout
+                    Spacing="20"
                     Padding="20, 40, 20, 10">
                     <Label
                         Text="Sign in"
@@ -52,7 +52,7 @@
                                     Value="True">
                                     <Setter
                                         Property="BackgroundColor"
-                                        Value="{StaticResource Error}"/>
+                                        Value="{StaticResource Error}" />
                                 </DataTrigger>
                             </Entry.Triggers>
                         </Entry>
@@ -79,17 +79,31 @@
                                         Value="True">
                                         <Setter
                                             Property="BackgroundColor"
-                                            Value="{StaticResource Error}"/>
+                                            Value="{StaticResource Error}" />
                                     </DataTrigger>
                                 </Entry.Triggers>
                             </Entry>
                             <Button
-                                Text="P"
-                                Command="{Binding TogglePasswordVisibilityCommand}" />
-                            <Label
-                                Text="{Binding PasswordErrors}"
-                                TextColor="{StaticResource ErrorText}" />
+                                BackgroundColor="Transparent"
+                                TextColor="DimGrey"
+                                Text="&#xe758;"
+                                FontFamily="MauiMaterialAssets"
+                                Command="{Binding TogglePasswordVisibilityCommand}">
+                                <Button.Triggers>
+                                    <DataTrigger
+                                        TargetType="Button"
+                                        Binding="{Binding IsPasswordVisible}"
+                                        Value="True">
+                                        <Setter
+                                            Property="Text"
+                                            Value="&#xe78e;" />
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
                         </FlexLayout>
+                        <Label
+                            Text="{Binding PasswordErrors}"
+                            TextColor="{StaticResource ErrorText}" />
                     </VerticalStackLayout>
                     <Button
                         Text="Log in"

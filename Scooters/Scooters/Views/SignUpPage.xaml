@@ -75,8 +75,22 @@
                                 </Entry.Triggers>
                             </Entry>
                             <Button
+                                BackgroundColor="Transparent"
+                                FontFamily="MauiMaterialAssets"
+                                TextColor="DimGrey"
                                 Command="{Binding TogglePasswordVisibilityCommand}"
-                                Text="P" />
+                                Text="&#xe758;">
+                                <Button.Triggers>
+                                    <DataTrigger
+                                        TargetType="Button"
+                                        Binding="{Binding IsPasswordVisible}"
+                                        Value="True">
+                                        <Setter
+                                            Property="Text"
+                                            Value="&#xe78e;" />
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
                         </FlexLayout>
                         <Label
                             Text="{Binding PasswordErrors}"
@@ -106,8 +120,22 @@
                                 </Entry.Triggers>
                             </Entry>
                             <Button
+                                BackgroundColor="Transparent"
+                                FontFamily="MauiMaterialAssets"
+                                TextColor="DimGrey"
                                 Command="{Binding TogglePasswordVisibilityCommand}"
-                                Text="P" />
+                                Text="&#xe758;">
+                                <Button.Triggers>
+                                    <DataTrigger
+                                        TargetType="Button"
+                                        Binding="{Binding IsPasswordVisible}"
+                                        Value="True">
+                                        <Setter
+                                            Property="Text"
+                                            Value="&#xe78e;" />
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
                         </FlexLayout>
                         <Label
                             Text="{Binding PasswordConfirmErrors}"
