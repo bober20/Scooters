@@ -2,7 +2,6 @@
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Controls.Maps;
 using Scooters.Services;
 using Scooters.ViewModels;
 using Scooters.Views;
@@ -18,11 +17,6 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
-            .ConfigureFonts(fonts =>
-            {
-                fonts.AddFont("arial.ttf", "Arial");
-                fonts.AddFont("MauiMaterialAssets.ttf", "MauiMaterialAssets");
-            })
             .UseMauiMaps()
             .UseBarcodeReader();
 

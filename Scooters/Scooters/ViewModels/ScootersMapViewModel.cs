@@ -1,9 +1,10 @@
-using System.Collections.ObjectModel;
 using Application.Scooters.Queries.GetAllScooters;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
 using MediatR;
+using Microsoft.Maui.Controls.Maps;
+using Scooters.Views;
 
 namespace Scooters.ViewModels;
 
@@ -11,16 +12,13 @@ public partial class ScootersMapViewModel : ObservableObject
 {
     [ObservableProperty] private List<Scooter> _scooters;
     [ObservableProperty] private Scooter _selectedScooter;
+    [ObservableProperty] private List<Pin> _pins;
     private readonly IMediator _mediator;
     
     public ScootersMapViewModel(IMediator mediator)
     {
         _mediator = mediator;
-    }
-    private async Task LoadScooters()
-    {
-        var response = await _mediator.Send(new GetAllScootersQuery());
-        Scooters = new List<Scooter>(response.Data);
+        AddPins();
     }
     
     [RelayCommand]
@@ -28,18 +26,52 @@ public partial class ScootersMapViewModel : ObservableObject
     {
         await LoadScooters();
     }
-    
+
     [RelayCommand]
-    private async Task ReservationLink()
+    private async Task PinClicked(Pin pin)
     {
-        if (SelectedScooter is null)
+        if (pin.BindingContext is not Scooter scooter)
         {
             return;
         }
+    
         Dictionary<string, object> parameters = new()
         {
-            {"scooterId", SelectedScooter.Id}
+            { "scooterId", scooter.Id }
         };
-        await Shell.Current.GoToAsync($"ReservationPage", parameters);
+    
+        await Shell.Current.GoToAsync(nameof(ReservationPage), parameters);
+    }
+    
+    private async Task AddPins()
+    {
+        Pins = new List<Pin>();
+        var response = await _mediator.Send(new GetAllScootersQuery());
+        if (!response.IsSuccessful) return;
+        foreach (var s in response.Data)
+        {
+            var pin = new Pin
+            {
+                Label = s.ModelDescription,
+                Type = PinType.Place,
+                Location = new Location(s.Coordinates.Latitude, s.Coordinates.Longitude),
+                BindingContext = s
+            };
+            pin.MarkerClicked += async (s, e) =>
+            {
+                e.HideInfoWindow = true;
+                if (PinClickedCommand.CanExecute(s))
+                {
+                    PinClickedCommand.Execute(s);
+                }
+            };
+            Pins.Add(pin);
+        }
+    }
+    
+    private async Task LoadScooters()
+    {
+        var response = await _mediator.Send(new GetAllScootersQuery());
+        Scooters = new List<Scooter>(response.Data);
     }
 }

@@ -5,24 +5,32 @@
              x:Class="Scooters.Views.ScootersMapPage"
              xmlns:viewModels="clr-namespace:Scooters.ViewModels"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:maps="clr-namespace:Microsoft.Maui.Controls.Maps;assembly=Microsoft.Maui.Controls.Maps"
-             x:DataType="viewModels:ScootersMapViewModel">
+             x:DataType="viewModels:ScootersMapViewModel"
+             xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
+             xmlns:sensors="clr-namespace:Microsoft.Maui.Devices.Sensors;assembly=Microsoft.Maui.Essentials">
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}" />
     </ContentPage.Behaviors>
     <ContentPage.Content>
         <StackLayout>
-            <!-- <maps:Map x:Name="map" /> -->
-            <Picker
-                Title="Select scooter"
-                ItemsSource="{Binding Scooters}"
-                SelectedItem="{Binding SelectedScooter}"
-                ItemDisplayBinding="{Binding ModelDescription}"/>
-            <Button
-                Text="Reserve scooter"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-                Command="{Binding ReservationLinkCommand}"/>
+            <maps:Map
+                x:Name="ScootersMap"
+                IsShowingUser="true">
+                <x:Arguments>
+                    <maps:MapSpan>
+                        <x:Arguments>
+                            <sensors:Location>
+                                <x:Arguments>
+                                    <x:Double>53.905043</x:Double>
+                                    <x:Double>27.557062</x:Double>
+                                </x:Arguments>
+                            </sensors:Location>
+                            <x:Double>0.01</x:Double>
+                            <x:Double>0.01</x:Double>
+                        </x:Arguments>
+                    </maps:MapSpan>
+                </x:Arguments>
+            </maps:Map>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

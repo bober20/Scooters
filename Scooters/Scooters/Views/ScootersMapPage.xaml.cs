@@ -13,5 +13,9 @@ public partial class ScootersMapPage : ContentPage
     {
         InitializeComponent();
         BindingContext = viewModel;
+        foreach (var scooter in viewModel.Pins)
+        {
+            ScootersMap.Pins.Add(scooter);
+        }
     }
 }
