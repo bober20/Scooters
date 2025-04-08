@@ -4,106 +4,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Scooters.Views.RideView"
              xmlns:viewModels="clr-namespace:Scooters.ViewModels"
-             x:DataType="viewModels:RideViewModel">
+             x:DataType="viewModels:RideViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}" />
+    </ContentPage.Behaviors>
     <ContentPage.Content>
         <VerticalStackLayout>
-            <Image
-                WidthRequest="280"
-                HeightRequest="280"
-                Source="scooter.png" />
-            <Border
-                Padding="10"
-                BackgroundColor="White"
-                StrokeShape="RoundRectangle 40 40 0 0">
-                <FlexLayout
-                    JustifyContent="SpaceBetween"
-                    AlignItems="Stretch"
-                    Direction="Column">
-                    <VerticalStackLayout>
-                        <Label
-                            HorizontalTextAlignment="Center"
-                            Text="Scooter number 1"
-                            FontSize="28"
-                            FontAttributes="Bold" />
-                        <Label
-                            HorizontalTextAlignment="Center"
-                            Text="Electro scooter"
-                            TextColor="DimGrey" />
-                        <Border
-                            Padding="10"
-                            Margin="20"
-                            StrokeShape="RoundRectangle 40 40"
-                            BackgroundColor="White"
-                            StrokeThickness="0">
-                            <Border.Shadow>
-                                <Shadow Brush="LightGrey" Offset="0,0" Radius="10" />
-                            </Border.Shadow>
-                            <Grid
-                                RowDefinitions="*, *"
-                                ColumnDefinitions="*, *"
-                                RowSpacing="5"
-                                ColumnSpacing="5"
-                                Padding="20, 0">
-                                <HorizontalStackLayout 
-                                    Grid.Row="0" 
-                                    Grid.Column="0">
-                                    <Image Source="home.png" HeightRequest="40" />
-                                    <VerticalStackLayout>
-                                        <Label
-                                            Text="BATTERY"
-                                            TextColor="DimGrey" />
-                                        <Label
-                                            FontAttributes="Bold"
-                                            Text="72%" />
-                                    </VerticalStackLayout>
-                                </HorizontalStackLayout>
-                                <HorizontalStackLayout
-                                    Grid.Row="1" 
-                                    Grid.Column="0">
-                                    <Image Source="home.png" HeightRequest="40" />
-                                    <VerticalStackLayout>
-                                        <Label
-                                            Text="DISTANCE"
-                                            TextColor="DimGrey" />
-                                        <Label
-                                            FontAttributes="Bold"
-                                            Text="4 km" />
-                                    </VerticalStackLayout>
-                                </HorizontalStackLayout>
-                                <HorizontalStackLayout
-                                    Grid.Row="0" 
-                                    Grid.Column="1">
-                                    <Image Source="home.png" HeightRequest="40" />
-                                    <VerticalStackLayout>
-                                        <Label
-                                            Text="MAX SPEED"
-                                            TextColor="DimGrey"/>
-                                        <Label 
-                                            FontAttributes="Bold"
-                                            Text="32 km/h" />
-                                    </VerticalStackLayout>
-                                </HorizontalStackLayout>
-                                <HorizontalStackLayout
-                                    Grid.Row="1" 
-                                    Grid.Column="1">
-                                    <Image Source="home.png" HeightRequest="40" />
-                                    <VerticalStackLayout>
-                                        <Label
-                                            Text="WALK TIME"
-                                            TextColor="DimGrey" />
-                                        <Label 
-                                            FontAttributes="Bold"
-                                            Text="28 min" />
-                                    </VerticalStackLayout>
-                                </HorizontalStackLayout>
-                            </Grid>
-                        </Border>
-                    </VerticalStackLayout>
-                    <Button
-                        Text="Create ride"
-                        VerticalOptions="End"/>
-                </FlexLayout>
-            </Border>
+            <Label Text="{Binding Ride.Id}"></Label>
+            <Label Text="{Binding Countdown}"></Label>
+            <Button 
+                Text="End ride"
+                Command="{Binding EndRideCommand}" />
         </VerticalStackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -40,11 +40,11 @@
                     StrokeThickness="0"
                     BackgroundColor="White"
                     Padding="10">
-                <FlexLayout 
-                    JustifyContent="SpaceBetween" 
+                <FlexLayout
+                    JustifyContent="SpaceBetween"
                     Direction="Column">
-                    <VerticalStackLayout 
-                        Spacing="20" 
+                    <VerticalStackLayout
+                        Spacing="20"
                         Padding="20">
                         <FlexLayout
                             JustifyContent="SpaceBetween"

@@ -13,12 +13,12 @@
             <zxing:CameraBarcodeReaderView.Options>
                 <maui:BarcodeReaderOptions
                     Formats="QrCode"
-                    AutoRotate="True"/>
+                    AutoRotate="True" />
             </zxing:CameraBarcodeReaderView.Options>
             <zxing:CameraBarcodeReaderView.Behaviors>
                 <toolkit:EventToCommandBehavior
                     Command="{Binding BarcodeDetectedCommand}"
-                    EventName="BarcodesDetected"/>
+                    EventName="BarcodesDetected" />
             </zxing:CameraBarcodeReaderView.Behaviors>
         </zxing:CameraBarcodeReaderView>
     </ContentPage.Content>

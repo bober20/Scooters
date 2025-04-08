@@ -3,10 +3,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Scooters.Views.MainPage"
-             xmlns:viewModels1="clr-namespace:Scooters.ViewModels"
-             x:DataType="viewModels1:MainViewModel"
+             xmlns:viewModels="clr-namespace:Scooters.ViewModels"
+             x:DataType="viewModels:MainViewModel"
              x:Name="MainPageView"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:entities="clr-namespace:Domain.Entities;assembly=Domain">
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}" />
     </ContentPage.Behaviors>
@@ -57,7 +58,8 @@
                         <VerticalStackLayout Spacing="5">
                             <Label
                                 Text="{Binding Reservation.StartTime, 
-                                        FallbackValue='Start time is not specified', StringFormat='{0:dd/MM/yyyy HH:mm}'}"
+                                        FallbackValue='Start time is not specified', 
+                                        StringFormat='{0:dd/MM/yyyy HH:mm}'}"
                                 FontSize="16" />
                             <Border />
                             <Label
@@ -90,5 +92,45 @@
                 </DataTrigger>
             </Button.Triggers>
         </Button>
+        <Label
+            Text="Your current rides"
+            HorizontalTextAlignment="Center"
+            FontSize="32" />
+        <CollectionView ItemsSource="{Binding Rides}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="entities:Ride">
+                    <FlexLayout JustifyContent="SpaceBetween">
+                        <StackLayout>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding
+                                    Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}},
+                                    Path=RidePageLinkCommand}" 
+                                    CommandParameter="{Binding}"/>
+                            </StackLayout.GestureRecognizers>
+                            <Label
+                                VerticalTextAlignment="Center"
+                                Margin="5,0"
+                                Text="&#xe71d;"
+                                FontFamily="MauiMaterialAssets"
+                                FontSize="40" />
+                            <VerticalStackLayout Spacing="5">
+                                <Label
+                                    Text="{Binding StartTime,
+                                        FallbackValue='Start time is not specified',
+                                        StringFormat='{0:dd/MM/yyyy HH:mm}'}"
+                                    FontSize="16" />
+                                <Border />
+                                <Label
+                                    Text="{Binding Scooter.ModelDescription,
+                                        FallbackValue='Scooter is not specified'}"
+                                    FontSize="16" />
+                            </VerticalStackLayout>
+                        </StackLayout>
+                    </FlexLayout>
+                    <!-- <Label Text="{Binding Id}"></Label> -->
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </VerticalStackLayout>
 </ContentPage>

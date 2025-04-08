@@ -2,19 +2,22 @@ using System.Collections.ObjectModel;
 using Application.Common.Interfaces.CurrentUserProvider;
 using Application.Reservations.Commands.EndReservation;
 using Application.Reservations.Queries.GetReservationByUser;
+using Application.Rides.Queries.GetRidesByFilter;
 using Application.Scooters.Commands.CreateScooter;
 using Application.Scooters.Queries.GetAllScooters;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
 using MediatR;
+using Scooters.Views;
 
 namespace Scooters.ViewModels;
 
 public partial class MainViewModel : ObservableObject 
 {
-    [ObservableProperty] private Guid _currentUser;
+    [ObservableProperty] private Guid _currentUserId;
     [ObservableProperty] private Reservation? _reservation;
+    [ObservableProperty] private List<Ride> _rides;
     [ObservableProperty] private bool _hasReservation;
     [ObservableProperty] private string _countdown;
     public ObservableCollection<Scooter> Scooters { get; set; }
@@ -27,14 +30,15 @@ public partial class MainViewModel : ObservableObject
     {
         _mediator = mediator;
         _currentUserProvider = currentUserProvider;
+        CurrentUserId = _currentUserProvider.GetCurrentUser().Value;
     }
 
     [RelayCommand]
     private async Task Appearing()
     {
-        GetCurrentUser();
         await FetchScooters();
         await FetchReservation();
+        await FetchRides();
         InitiateTimer();
     }
 
@@ -66,6 +70,17 @@ public partial class MainViewModel : ObservableObject
     {
         await Shell.Current.GoToAsync("//MapPage");
     }
+
+    [RelayCommand]
+    private async Task RidePageLink(Ride ride)
+    {
+        IDictionary<string, object> parameters = new Dictionary<string, object>
+        {
+            { "rideId", ride.Id }
+        };
+        
+        await Shell.Current.GoToAsync(nameof(RideView), parameters);
+    }
     
     private async Task FetchScooters()
     {
@@ -77,7 +92,7 @@ public partial class MainViewModel : ObservableObject
 
     private async Task FetchReservation()
     {
-        var reservation = await _mediator.Send(new GetReservationByUserQuery(CurrentUser));
+        var reservation = await _mediator.Send(new GetReservationByUserQuery(CurrentUserId));
         if (!reservation.IsSuccessful)
         {
             HasReservation = false;
@@ -88,10 +103,16 @@ public partial class MainViewModel : ObservableObject
             Reservation = reservation.Data;
         }
     }
-    
-    private void GetCurrentUser()
+
+    private async Task FetchRides()
     {
-        CurrentUser = _currentUserProvider.GetCurrentUser().Value;
+        var rides = await _mediator.Send(new GetRidesQuery(
+            r => r.UserId == CurrentUserId && r.IsActive));
+        if (!rides.IsSuccessful)
+        {
+            return;
+        }
+        Rides = rides.Data;
     }
 
     private void UpdateCountdown()

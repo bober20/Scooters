@@ -115,6 +115,10 @@
                             Text="Reserve"
                             Command="{Binding ReserveCommand}">
                         </Button>
+                        <Button
+                            Text="Ride straight away"
+                            Command="{Binding RideLinkCommand}">
+                        </Button>
                     </VerticalStackLayout>
                 </VerticalStackLayout>
             </Border>
