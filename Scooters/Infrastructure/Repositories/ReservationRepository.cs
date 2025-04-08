@@ -43,7 +43,10 @@ public class ReservationRepository : IReservationRepository
     {
         var reservation = await _dbContext.Reservations
             .FirstOrDefaultAsync(s => s.ScooterId == scooterId && s.IsActive);
-        await _dbContext.Entry(reservation).Reference(r => r.Scooter).LoadAsync();
+        if (reservation is not null)
+        {
+            await _dbContext.Entry(reservation).Reference(r => r.Scooter).LoadAsync();
+        }
         return reservation;
     }
     

@@ -16,15 +16,29 @@ public class RideRepository : IRideRepository
     {
         var ride = await _dbContext.Rides
             .SingleOrDefaultAsync(x => x.Id == id);
+        if (ride is not null)
+        {
+            await _dbContext.Entry(ride).Reference(r => r.Scooter).LoadAsync();
+        }
+        return ride;
+    }
+    
+    public async Task<Ride?> GetRideByScooterAsync(Guid scooterId)
+    {
+        var ride = await _dbContext.Rides
+            .FirstOrDefaultAsync(r => r.ScooterId == scooterId && r.IsActive);
         return ride;
     }
 
     public async Task<List<Ride>?> GetRidesAsync(Expression<Func<Ride, bool>> filter)
     {
         var rides = await _dbContext.Rides
-            .AsNoTracking()
             .Where(filter)
             .ToListAsync();
+        foreach (var ride in rides)
+        {
+            await _dbContext.Entry(ride).Reference(r => r.Scooter).LoadAsync();
+        }
         return rides;
     }
 

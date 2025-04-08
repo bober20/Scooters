@@ -1,6 +1,6 @@
 namespace Application.Rides.Commands.CreateRide;
 
-public class CreateRideHandler : IRequestHandler<CreateRideCommand, ResponseData<Ride>>
+public class CreateRideHandler : IRequestHandler<CreateRideCommand, ResponseData<Guid>>
 {
     private readonly IRideRepository _rideRepository;
     private readonly IReservationRepository _reservationRepository;
@@ -15,26 +15,33 @@ public class CreateRideHandler : IRequestHandler<CreateRideCommand, ResponseData
         _unitOfWork = unitOfWork;
     }
     
-    public async Task<ResponseData<Ride>> Handle(CreateRideCommand request, CancellationToken cancellationToken)
+    public async Task<ResponseData<Guid>> Handle(CreateRideCommand request, CancellationToken cancellationToken)
     {
         try
         {
             var reservation = await _reservationRepository
-                .GetReservationAsync(request.Ride.ScooterId);
+                .GetReservationByScooterAsync(request.Ride.ScooterId);
             
-            if (reservation is null && reservation?.UserId != request.Ride.UserId)
+            var ride = await _rideRepository
+                .GetRideByScooterAsync(request.Ride.ScooterId);
+            
+            if (ride is not null || reservation is not null && reservation.UserId != request.Ride.UserId)
             {
-                return ResponseData<Ride>.Failure("Scooter is reserved");
+                return ResponseData<Guid>.Failure("Scooter is reserved");
+            }
+
+            if (reservation is not null)
+            {
+                await _reservationRepository.EndReservationAsync(reservation.Id);
             }
             
-            await _reservationRepository.EndReservationAsync(reservation.Id);
-            var ride = await _rideRepository.CreateRideAsync(request.Ride);
+            var newRide = await _rideRepository.CreateRideAsync(request.Ride);
             await _unitOfWork.SaveChangesAsync();
-            return ResponseData<Ride>.Success(ride);
+            return ResponseData<Guid>.Success(newRide.Id);
         }
         catch(Exception ex)
         {
-            return ResponseData<Ride>.Failure(ex.Message);
+            return ResponseData<Guid>.Failure(ex.Message);
         }
     }
 }

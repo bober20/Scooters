@@ -39,7 +39,7 @@ public class ScootersDbContext : DbContext, IUnitOfWork
         await base.SaveChangesAsync();
     }
     
-    public void InitializeDatabase()
+    private void InitializeDatabase()
     {
         if (!Scooters.Any())
         {
@@ -49,7 +49,7 @@ public class ScootersDbContext : DbContext, IUnitOfWork
                 {
                     Id = Guid.NewGuid(),
                     ModelDescription = "Standard Scooter",
-                    Coordinates = new Coordinates { Latitude = 52.237049, Longitude = 21.017532 },
+                    Coordinates = new Coordinates { Latitude = 53.905043, Longitude = 27.557062 },
                     Reservations = new List<Reservation>(),
                     Rides = new List<Ride>()
                 },
@@ -57,7 +57,7 @@ public class ScootersDbContext : DbContext, IUnitOfWork
                 {
                     Id = Guid.NewGuid(),
                     ModelDescription = "Premium Scooter",
-                    Coordinates = new Coordinates { Latitude = 52.232180, Longitude = 21.006100 },
+                    Coordinates = new Coordinates { Latitude = 53.903362, Longitude = 27.556709 },
                     Reservations = new List<Reservation>(),
                     Rides = new List<Ride>()
                 },
@@ -65,7 +65,7 @@ public class ScootersDbContext : DbContext, IUnitOfWork
                 {
                     Id = Guid.NewGuid(),
                     ModelDescription = "Urban Explorer",
-                    Coordinates = new Coordinates { Latitude = 52.239750, Longitude = 21.026320 },
+                    Coordinates = new Coordinates { Latitude = 53.905646, Longitude = 27.561266 },
                     Reservations = new List<Reservation>(),
                     Rides = new List<Ride>()
                 }
