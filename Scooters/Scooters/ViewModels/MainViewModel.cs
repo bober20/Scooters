@@ -79,7 +79,7 @@ public partial class MainViewModel : ObservableObject
             { "rideId", ride.Id }
         };
         
-        await Shell.Current.GoToAsync(nameof(RideView), parameters);
+        await Shell.Current.GoToAsync(nameof(RidePage), parameters);
     }
     
     private async Task FetchScooters()

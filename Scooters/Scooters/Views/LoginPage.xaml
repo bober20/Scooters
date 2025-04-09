@@ -20,7 +20,7 @@
             RowDefinitions="Auto, *">
             <Label
                 Grid.Row="0"
-                Padding="20, 80, 20, 40"
+                Padding="20,80,20,40"
                 Text="Scooters"
                 HorizontalTextAlignment="Center"
                 FontSize="72"
@@ -31,7 +31,7 @@
                 StrokeShape="RoundRectangle 40 40 0 0">
                 <VerticalStackLayout
                     Spacing="20"
-                    Padding="20, 40, 20, 10">
+                    Padding="20,40,20,10">
                     <Label
                         Text="Sign in"
                         FontSize="32"

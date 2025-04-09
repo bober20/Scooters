@@ -7,9 +7,9 @@ using Scooters.ViewModels;
 
 namespace Scooters.Views;
 
-public partial class RideView : ContentPage
+public partial class RidePage : ContentPage
 {
-    public RideView(RideViewModel viewModel)
+    public RidePage(RideViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;

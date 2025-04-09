@@ -5,6 +5,7 @@ using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MediatR;
+using Scooters.ValidatorAttributes;
 
 namespace Scooters.ViewModels;
 
@@ -22,6 +23,7 @@ public partial class PasswordChangeViewModel : ObservableValidator
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
+    [PasswordsMatch(nameof(NewPasswordConfirmation))]
     [Required(ErrorMessage = "Field is required.")]
     [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
     [MaxLength(30, ErrorMessage = "Password cannot exceed 30 characters.")]
@@ -32,6 +34,7 @@ public partial class PasswordChangeViewModel : ObservableValidator
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
+    [PasswordsMatch(nameof(NewPassword))]
     [Required(ErrorMessage = "Field is required.")]
     [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
     [MaxLength(30, ErrorMessage = "Password cannot exceed 30 characters.")]

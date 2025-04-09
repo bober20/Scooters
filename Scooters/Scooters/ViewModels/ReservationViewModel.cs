@@ -58,12 +58,15 @@ public partial class ReservationViewModel : ObservableObject
     [RelayCommand]
     private async Task RideLink()
     {
-        var user = _currentUserProvider.GetCurrentUser();
+        if (_currentUserProvider.GetCurrentUser() is not Guid userId)
+        {
+            return;
+        }
         var ride = new Ride
         {
             StartTime = DateTime.Now,
             ScooterId = ScooterId,
-            UserId = user!.Value
+            UserId = userId
         };
         var response = await _mediator.Send(new CreateRideCommand(ride));
         if (!response.IsSuccessful)
@@ -75,7 +78,7 @@ public partial class ReservationViewModel : ObservableObject
         {
             { "rideId", response.Data }
         };
-        await Shell.Current.GoToAsync(nameof(RideView), parameters);
+        await Shell.Current.GoToAsync(nameof(RidePage), parameters);
     }
     
     private void InitializeTimeSlots()
@@ -90,7 +93,11 @@ public partial class ReservationViewModel : ObservableObject
     private void InitializeReservation()
     {
         Reservation.ScooterId = ScooterId;
-        Reservation.UserId = _currentUserProvider.GetCurrentUser()!.Value;
+        if (_currentUserProvider.GetCurrentUser() is not Guid userId)
+        {
+            return;
+        }
+        Reservation.UserId = userId;
     }
 
     private async Task InitializeScooter()

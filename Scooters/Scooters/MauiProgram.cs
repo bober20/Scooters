@@ -29,30 +29,15 @@ public static class MauiProgram
 
         builder.Services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
 
-        builder.Services.AddTransient<MainViewModel>();
-        builder.Services.AddTransient<MainPage>();
-
-        builder.Services.AddTransient<LoginViewModel>();
-        builder.Services.AddTransient<LoginPage>();
-
-        builder.Services.AddTransient<SignUpViewModel>();
-        builder.Services.AddTransient<SignUpPage>();
-
-        builder.Services.AddTransient<ProfileViewModel>();
-        builder.Services.AddTransient<ProfilePage>();
-
-        builder.Services.AddTransient<ScootersMapViewModel>();
-        builder.Services.AddTransient<ScootersMapPage>();
-
-        builder.Services.AddTransient<ReservationViewModel>();
-        builder.Services.AddTransient<ReservationPage>();
-
-        builder.Services.AddTransient<PasswordChangeViewModel>();
-        builder.Services.AddTransient<PasswordChangePage>();
-
-        builder.Services.AddTransient<RideViewModel>();
-        builder.Services.AddTransient<RideView>();
-
+        builder.Services.AddTransient<MainPage, MainViewModel>();
+        builder.Services.AddTransient<LoginPage, LoginViewModel>();
+        builder.Services.AddTransient<SignUpPage, SignUpViewModel>();
+        builder.Services.AddTransient<ProfilePage, ProfileViewModel>();
+        builder.Services.AddTransient<ScootersMapPage, ScootersMapViewModel>();
+        
+        builder.Services.AddTransientWithShellRoute<ReservationPage, ReservationViewModel>("ReservationPage");
+        builder.Services.AddTransientWithShellRoute<PasswordChangePage, PasswordChangeViewModel>("PasswordChangePage");
+        builder.Services.AddTransientWithShellRoute<RidePage, RideViewModel>("RidePage");
 #if DEBUG
         builder.Logging.AddDebug();
 #endif

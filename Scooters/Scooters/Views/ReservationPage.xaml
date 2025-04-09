@@ -16,12 +16,12 @@
                 HorizontalTextAlignment="Center"
                 FontSize="32"
                 FontAttributes="Bold"
-                Margin="0, 10" />
+                Margin="0,10" />
             <Border
                 BackgroundColor="White"
                 StrokeShape="RoundRectangle 40 40 0 0">
                 <VerticalStackLayout
-                    Margin="0, 10"
+                    Margin="0,10"
                     Spacing="5"
                     Padding="20">
                     <VerticalStackLayout>
@@ -64,7 +64,7 @@
                             TextColor="DimGrey"
                             FontSize="20" />
                     </VerticalStackLayout>
-                    <Border Margin="0, 10" />
+                    <Border Margin="0,10" />
                     <FlexLayout JustifyContent="SpaceAround" AlignContent="Center">
                         <VerticalStackLayout>
                             <Label
@@ -101,7 +101,7 @@
                         </VerticalStackLayout>
                     </FlexLayout>
                     <VerticalStackLayout
-                        Margin="0, 20, 0, 0"
+                        Margin="0,20,0,0"
                         Spacing="5">
                         <Label
                             Text="Select time interval for reservation"

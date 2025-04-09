@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <Shell
     x:Class="Scooters.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -8,22 +9,14 @@
     Title="Scooters">
     <ShellContent
         ContentTemplate="{DataTemplate views:LoginPage}"
-        Route="LoginPage"/>
+        Route="LoginPage" />
     <ShellContent
         ContentTemplate="{DataTemplate views:SignUpPage}"
-        Route="SignUpPage"/>
+        Route="SignUpPage" />
     <TabBar>
-        <Tab Title="Main">
-            <ShellContent ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage" />
-        </Tab>
-        <Tab Title="Map">
-            <ShellContent ContentTemplate="{DataTemplate views:ScootersMapPage}" Route="MapPage" />
-        </Tab>
-        <Tab Title="QR">
-            <ShellContent ContentTemplate="{DataTemplate views:QRScannerPage}" Route="QRScannerPage" />
-        </Tab>
-        <Tab Title="Profile">
-            <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" Route="ProfilePage" />
-        </Tab>
+        <ShellContent Title="Main" ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage" />
+        <ShellContent Title="Map" ContentTemplate="{DataTemplate views:ScootersMapPage}" Route="MapPage" />
+        <ShellContent Title="QR" ContentTemplate="{DataTemplate views:QRScannerPage}" Route="QRScannerPage" />
+        <ShellContent Title="Profile" ContentTemplate="{DataTemplate views:ProfilePage}" Route="ProfilePage" />
     </TabBar>
 </Shell>
