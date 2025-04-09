@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Application.Common.Interfaces.CurrentUserProvider;
+using Application.Common.Interfaces.NavigationService;
 using Application.Users.Commands.ChangePassword;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -47,11 +48,15 @@ public partial class PasswordChangeViewModel : ObservableValidator
 
     private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
+    private readonly INavigationService _navigationService;
 
-    public PasswordChangeViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider)
+    public PasswordChangeViewModel(IMediator mediator, 
+        ICurrentUserProvider currentUserProvider, 
+        INavigationService navigationService)
     {
         _currentUserProvider = currentUserProvider;
         _mediator = mediator;
+        _navigationService = navigationService;
     }
 
     [RelayCommand]
@@ -67,7 +72,7 @@ public partial class PasswordChangeViewModel : ObservableValidator
         {
             await Shell.Current.DisplayAlert(
                 "Success", "Password has been successfully changed", "OK");
-            await Shell.Current.GoToAsync("//ProfilePage");
+            await _navigationService.NavigateToAsync("//ProfilePage");
         }
         else
         {

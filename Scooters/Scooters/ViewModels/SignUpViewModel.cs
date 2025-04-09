@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Application.Common.Interfaces.NavigationService;
 using Application.Users.Commands.RegisterUser;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -39,10 +40,12 @@ public partial class SignUpViewModel : ObservableValidator
     [ObservableProperty] private bool _isPasswordVisible = true;
 
     private readonly IMediator _mediator;
+    private readonly INavigationService _navigationService;
 
-    public SignUpViewModel(IMediator mediator)
+    public SignUpViewModel(IMediator mediator, INavigationService navigationService)
     {
         _mediator = mediator;
+        _navigationService = navigationService;
     }
 
     [RelayCommand]
@@ -60,14 +63,14 @@ public partial class SignUpViewModel : ObservableValidator
         }
         else
         {
-            await Shell.Current.GoToAsync("//LoginPage");
+            await _navigationService.NavigateToAsync("//LoginPage");
         }
     }
 
     [RelayCommand]
     private async Task LogInLink()
     {
-        await Shell.Current.GoToAsync("//LoginPage");
+        await _navigationService.NavigateToAsync("//LoginPage");
     }
 
     [RelayCommand]

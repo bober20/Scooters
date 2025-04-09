@@ -1,3 +1,4 @@
+using Application.Common.Interfaces.NavigationService;
 using Application.Scooters.Queries.GetAllScooters;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -13,11 +14,14 @@ public partial class ScootersMapViewModel : ObservableObject
     [ObservableProperty] private List<Scooter> _scooters;
     [ObservableProperty] private Scooter _selectedScooter;
     [ObservableProperty] private List<Pin> _pins;
-    private readonly IMediator _mediator;
     
-    public ScootersMapViewModel(IMediator mediator)
+    private readonly IMediator _mediator;
+    private readonly INavigationService _navigationService;
+    
+    public ScootersMapViewModel(IMediator mediator, INavigationService navigationService)
     {
         _mediator = mediator;
+        _navigationService = navigationService;
         AddPins();
     }
     
@@ -40,7 +44,7 @@ public partial class ScootersMapViewModel : ObservableObject
             { "scooterId", scooter.Id }
         };
     
-        await Shell.Current.GoToAsync(nameof(ReservationPage), parameters);
+        await _navigationService.NavigateToAsync("ReservationPage", parameters);
     }
     
     private async Task AddPins()

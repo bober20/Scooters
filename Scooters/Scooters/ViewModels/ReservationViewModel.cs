@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Application.Common.Interfaces.CurrentUserProvider;
+using Application.Common.Interfaces.NavigationService;
 using Application.Reservations.Commands.CreateReservation;
 using Application.Rides.Commands.CreateRide;
 using Application.Scooters.Queries.GetScooterById;
@@ -14,20 +15,22 @@ namespace Scooters.ViewModels;
 [QueryProperty(nameof(ScooterId), "scooterId")]
 public partial class ReservationViewModel : ObservableObject
 {
-    [ObservableProperty] private Reservation _reservation;
-    [ObservableProperty] private ObservableCollection<int> _timeSlots;
+    [ObservableProperty] private Reservation _reservation = new();
+    [ObservableProperty] private ObservableCollection<int> _timeSlots = new();
     [ObservableProperty] private Guid _scooterId;
     [ObservableProperty] private Scooter _scooter;
     
     private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
+    private readonly INavigationService _navigationService;
     
-    public ReservationViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider)
+    public ReservationViewModel(IMediator mediator, 
+        ICurrentUserProvider currentUserProvider,
+        INavigationService navigationService)
     {
-        TimeSlots = new ObservableCollection<int>();
-        Reservation = new Reservation();
         _mediator = mediator;
         _currentUserProvider = currentUserProvider;
+        _navigationService = navigationService;
     }
 
     [RelayCommand]
@@ -39,8 +42,8 @@ public partial class ReservationViewModel : ObservableObject
         if (response.IsSuccessful)
         {
             await Shell.Current.DisplayAlert("Success", "Reservation created successfully", "OK");
-            await Shell.Current.Navigation.PopAsync();
-            await Shell.Current.GoToAsync("//MainPage");
+            await _navigationService.GoBackAsync();
+            await _navigationService.NavigateToAsync("//MainPage");
             return;
         }
         
@@ -78,7 +81,7 @@ public partial class ReservationViewModel : ObservableObject
         {
             { "rideId", response.Data }
         };
-        await Shell.Current.GoToAsync(nameof(RidePage), parameters);
+        await _navigationService.NavigateToAsync("RidePage", parameters);
     }
     
     private void InitializeTimeSlots()
@@ -110,7 +113,7 @@ public partial class ReservationViewModel : ObservableObject
         }
         else
         {
-            await Shell.Current.Navigation.PopAsync();
+            await _navigationService.GoBackAsync();
         }
     }
 }

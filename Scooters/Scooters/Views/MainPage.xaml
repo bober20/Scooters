@@ -105,8 +105,8 @@
                                 <TapGestureRecognizer
                                     Command="{Binding
                                     Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}},
-                                    Path=RidePageLinkCommand}" 
-                                    CommandParameter="{Binding}"/>
+                                    Path=RidePageLinkCommand}"
+                                    CommandParameter="{Binding}" />
                             </StackLayout.GestureRecognizers>
                             <Label
                                 VerticalTextAlignment="Center"
@@ -128,7 +128,6 @@
                             </VerticalStackLayout>
                         </StackLayout>
                     </FlexLayout>
-                    <!-- <Label Text="{Binding Id}"></Label> -->
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

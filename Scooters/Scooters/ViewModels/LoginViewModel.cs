@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Application.Common.Interfaces.CurrentUserProvider;
+using Application.Common.Interfaces.NavigationService;
 using Application.Users.Queries.AuthenticateUser;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -34,11 +35,15 @@ public partial class LoginViewModel : ObservableValidator
     [ObservableProperty] private string? _errors;
     private IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
+    private readonly INavigationService _navigationService;
     
-    public LoginViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider)
+    public LoginViewModel(IMediator mediator, 
+        ICurrentUserProvider currentUserProvider, 
+        INavigationService navigationService)
     {
         _mediator = mediator;
         _currentUserProvider = currentUserProvider;
+        _navigationService = navigationService;
     }
 
     [RelayCommand]
@@ -53,7 +58,7 @@ public partial class LoginViewModel : ObservableValidator
         if (response.IsSuccessful)
         {
             _currentUserProvider.SetCurrentUser(response.Data);
-            await Shell.Current.GoToAsync("//MainPage");
+            await _navigationService.NavigateToAsync("//MainPage");
         }
         else
         {
@@ -67,7 +72,7 @@ public partial class LoginViewModel : ObservableValidator
     [RelayCommand]
     private async Task SignUpLink()
     {
-        await Shell.Current.GoToAsync("//SignUpPage");
+        await _navigationService.NavigateToAsync("//SignUpPage");
     }
     
     [RelayCommand]
@@ -81,7 +86,7 @@ public partial class LoginViewModel : ObservableValidator
         var user = _currentUserProvider.GetCurrentUser();
         if (user != null)
         {
-            await Shell.Current.GoToAsync("//MainPage");
+            await _navigationService.NavigateToAsync("//MainPage");
         }
     }
     

@@ -1,3 +1,4 @@
+using Application.Common.Interfaces.NavigationService;
 using Application.Rides.Commands.EndRide;
 using Application.Rides.Queries.GetRideById;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -16,10 +17,12 @@ public partial class RideViewModel : ObservableObject
     private System.Timers.Timer _timer;
 
     private readonly IMediator _mediator;
+    private readonly INavigationService _navigationService;
     
-    public RideViewModel(IMediator mediator)
+    public RideViewModel(IMediator mediator, INavigationService navigationService)
     {
         _mediator = mediator;
+        _navigationService = navigationService;
     }
     
     [RelayCommand]
@@ -33,7 +36,7 @@ public partial class RideViewModel : ObservableObject
     private async Task EndRide()
     {
         await _mediator.Send(new EndRideCommand(Ride.Id));
-        await Shell.Current.Navigation.PopAsync();
+        await _navigationService.GoBackAsync();
     }
 
     private async Task InitializeRideAsync()
@@ -45,7 +48,7 @@ public partial class RideViewModel : ObservableObject
             return;
         }
 
-        await Shell.Current.Navigation.PopAsync();
+        await _navigationService.GoBackAsync();
     }
     
     private void InitialiseTimer()
@@ -58,8 +61,11 @@ public partial class RideViewModel : ObservableObject
 
     private void OnTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
     {
-        var timePassed = DateTime.Now - Ride.StartTime;
-        Countdown = $"{timePassed.Minutes:D2}:{timePassed.Seconds:D2}";
+        MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            var timePassed = DateTime.Now - Ride.StartTime;
+            Countdown = $"{timePassed.Minutes:D2}:{timePassed.Seconds:D2}";
+        });
     }
 
     public void StopTimer()

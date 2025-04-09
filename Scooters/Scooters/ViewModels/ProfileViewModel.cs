@@ -1,10 +1,13 @@
 using Application.Common.Interfaces.CurrentUserProvider;
+using Application.Common.Interfaces.NavigationService;
 using Application.Users.Commands.DeleteUser;
+using Application.Users.Commands.UpdateImage;
 using Application.Users.Queries.GetUser;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
 using MediatR;
+using Scooters.Services;
 
 namespace Scooters.ViewModels;
 
@@ -15,24 +18,46 @@ public partial class ProfileViewModel : ObservableObject
     
     private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
-
-    public ProfileViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider)
+    private readonly INavigationService _navigationService;
+    
+    public ProfileViewModel(IMediator mediator, 
+        ICurrentUserProvider currentUserProvider, 
+        INavigationService navigationService)
     {
         _mediator = mediator;
         _currentUserProvider = currentUserProvider;
+        _navigationService = navigationService;
     }
 
     [RelayCommand]
     private async Task ChangePasswordLink()
     {
-        await Shell.Current.GoToAsync("PasswordChangePage");
+        await _navigationService.NavigateToAsync("PasswordChangePage");
     }
 
     [RelayCommand]
     private async Task UploadPhoto()
     {
         var output = await Shell.Current.DisplayActionSheet(
-            "Upload Photo", "Cancel", null, "Camera", "Gallery", "Delete");
+            "Upload Photo", "Cancel", null, "Gallery", "Delete");
+        if (output == "Delete")
+        {
+            User.DeleteImage();
+        }
+        else if (output == "Gallery")
+        {
+            var result = await MediaPicker.PickPhotoAsync(new MediaPickerOptions
+            {
+                Title = "Pick a photo"
+            });
+            if (result is null)
+            {
+                return;
+            }
+            
+            User.ImageName = await ImageService.SaveImageAsync(result);
+            await _mediator.Send(new UpdateUserCommand(User));
+        }
     }
     
     [RelayCommand]
@@ -51,7 +76,7 @@ public partial class ProfileViewModel : ObservableObject
         {
             _currentUserProvider.RemoveCurrentUser();
             await Shell.Current.DisplayAlert("Success", "Your account has been deleted", "OK");
-            await Shell.Current.GoToAsync("//LoginPage");
+            await _navigationService.NavigateToAsync("//LoginPage");
         }
         else
         {
@@ -63,7 +88,7 @@ public partial class ProfileViewModel : ObservableObject
     private async Task LogOut()
     {
         _currentUserProvider.RemoveCurrentUser();
-        await Shell.Current.GoToAsync("//LoginPage");
+        await _navigationService.NavigateToAsync("//LoginPage");
     }
 
     [RelayCommand]
@@ -77,7 +102,7 @@ public partial class ProfileViewModel : ObservableObject
         var guid = _currentUserProvider.GetCurrentUser();
         if (guid is null)
         {
-            await Shell.Current.GoToAsync("//LoginPage");
+            await _navigationService.NavigateToAsync("//LoginPage");
             return;
         }
         
@@ -88,7 +113,7 @@ public partial class ProfileViewModel : ObservableObject
         }
         else
         {
-            await Shell.Current.GoToAsync("//LoginPage");
+            await _navigationService.NavigateToAsync("//LoginPage");
         }
     }
 }

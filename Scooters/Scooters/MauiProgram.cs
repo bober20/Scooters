@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces.CurrentUserProvider;
+using Application.Common.Interfaces.NavigationService;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -27,8 +28,9 @@ public static class MauiProgram
             .AddApplication()
             .AddInfrastructure(builder.Configuration);
 
-        builder.Services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
-
+        builder.Services.AddSingleton<ICurrentUserProvider, CurrentUserProvider>();
+        builder.Services.AddSingleton<INavigationService, NavigationService>();
+        
         builder.Services.AddTransient<MainPage, MainViewModel>();
         builder.Services.AddTransient<LoginPage, LoginViewModel>();
         builder.Services.AddTransient<SignUpPage, SignUpViewModel>();

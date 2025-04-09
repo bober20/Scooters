@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Application.Common.Interfaces.CurrentUserProvider;
+using Application.Common.Interfaces.NavigationService;
 using Application.Reservations.Commands.EndReservation;
 using Application.Reservations.Queries.GetReservationByUser;
 using Application.Rides.Queries.GetRidesByFilter;
@@ -24,18 +25,23 @@ public partial class MainViewModel : ObservableObject
     
     private IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
+    private readonly INavigationService _navigationService;
+    
     private System.Timers.Timer? _timer;
 
-    public MainViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider)
+    public MainViewModel(IMediator mediator, 
+        ICurrentUserProvider currentUserProvider, 
+        INavigationService navigationService)
     {
         _mediator = mediator;
         _currentUserProvider = currentUserProvider;
-        CurrentUserId = _currentUserProvider.GetCurrentUser().Value;
+        _navigationService = navigationService;
     }
 
     [RelayCommand]
     private async Task Appearing()
     {
+        await FetchUser();
         await FetchScooters();
         await FetchReservation();
         await FetchRides();
@@ -68,7 +74,7 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private async Task MapPageLink()
     {
-        await Shell.Current.GoToAsync("//MapPage");
+        await _navigationService.NavigateToAsync("//MapPage");
     }
 
     [RelayCommand]
@@ -79,7 +85,7 @@ public partial class MainViewModel : ObservableObject
             { "rideId", ride.Id }
         };
         
-        await Shell.Current.GoToAsync(nameof(RidePage), parameters);
+        await _navigationService.NavigateToAsync("RidePage", parameters);
     }
     
     private async Task FetchScooters()
@@ -113,6 +119,16 @@ public partial class MainViewModel : ObservableObject
             return;
         }
         Rides = rides.Data;
+    }
+
+    private async Task FetchUser()
+    {
+        if (_currentUserProvider.GetCurrentUser() is not Guid userId)
+        {
+            await _navigationService.NavigateToAsync("//LoginPage");
+            return;
+        }
+        CurrentUserId = userId;
     }
 
     private void UpdateCountdown()
