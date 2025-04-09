@@ -9,6 +9,7 @@ public class NavigationService : INavigationService
         if (parameters is null)
         {
             await Shell.Current.GoToAsync(page);
+            return;
         }
         
         await Shell.Current.GoToAsync(page, parameters);
