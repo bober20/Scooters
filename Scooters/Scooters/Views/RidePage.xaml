@@ -57,11 +57,11 @@
                                         FontSize="40" />
                                     <VerticalStackLayout>
                                         <Label
-                                            Text="{Binding Countdown}"
+                                            Text="TIME PASSED"
                                             TextColor="DimGrey" />
                                         <Label
                                             FontAttributes="Bold"
-                                            Text="72%" />
+                                            Text="{Binding Countdown}" />
                                     </VerticalStackLayout>
                                 </HorizontalStackLayout>
                                 <HorizontalStackLayout
@@ -73,11 +73,16 @@
                                         FontSize="40" />
                                     <VerticalStackLayout>
                                         <Label
-                                            Text="WALK TIME"
+                                            Text="DISTANCE"
                                             TextColor="DimGrey" />
-                                        <Label
-                                            FontAttributes="Bold"
-                                            Text="28 min" />
+                                        <Label>
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding Distance}"></Span>
+                                                    <Span Text=" m"></Span>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
                                     </VerticalStackLayout>
                                 </HorizontalStackLayout>
                             </Grid>

@@ -14,6 +14,7 @@ public partial class RideViewModel : ObservableObject
     [ObservableProperty] private Ride _ride;
     [ObservableProperty] private Guid _rideId;
     [ObservableProperty] private string _countdown;
+    [ObservableProperty] private string _distance = "0.00";
     private System.Timers.Timer _timer;
 
     private readonly IMediator _mediator;
@@ -65,6 +66,9 @@ public partial class RideViewModel : ObservableObject
         {
             var timePassed = DateTime.Now - Ride.StartTime;
             Countdown = $"{timePassed.Minutes:D2}:{timePassed.Seconds:D2}";
+
+            var distance = timePassed.TotalSeconds * 4.1;
+            Distance = $"{distance:F2}";
         });
     }
 
