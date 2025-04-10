@@ -15,7 +15,7 @@ public partial class ProfileViewModel : ObservableObject
 {
     [ObservableProperty] private User _user;
     [ObservableProperty] private bool _isDarkMode;
-    [ObservableProperty] private FileInfo _imagePath;
+    [ObservableProperty] private ImageSource _profileImage;
     
     private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
@@ -37,12 +37,14 @@ public partial class ProfileViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task UploadPhoto()
+    private async Task PhotoManagement()
     {
         var output = await Shell.Current.DisplayActionSheet(
             "Upload Photo", "Cancel", null, "Gallery", "Delete");
         if (output == "Delete")
         {
+            ProfileImage = null;
+            ImageService.RemoveImage(User.ImageName);
             User.DeleteImage();
         }
         else if (output == "Gallery")
@@ -55,9 +57,10 @@ public partial class ProfileViewModel : ObservableObject
             {
                 return;
             }
-            
+            ImageService.RemoveImage(User.ImageName);
             User.ImageName = await ImageService.SaveImageAsync(result);
             await _mediator.Send(new UpdateUserCommand(User));
+            ProfileImage = ImageService.GetImage(User.ImageName);
         }
     }
     
@@ -76,6 +79,7 @@ public partial class ProfileViewModel : ObservableObject
         if (response.IsSuccessful)
         {
             _currentUserProvider.RemoveCurrentUser();
+            ImageService.RemoveImage(User.ImageName);
             await Shell.Current.DisplayAlert("Success", "Your account has been deleted", "OK");
             await _navigationService.NavigateToAsync("//LoginPage");
         }
@@ -96,6 +100,7 @@ public partial class ProfileViewModel : ObservableObject
     private async Task Appearing()
     {
         await GetCurrentUser();
+        ProfileImage = ImageService.GetImage(User.ImageName);
     }
 
     private async Task GetCurrentUser()

@@ -25,9 +25,9 @@
                     WidthRequest="240"
                     HorizontalOptions="Center">
                     <ImageButton
-                        Aspect="Fill"
-                        Source="{Binding ImagePath}"
-                        Command="{Binding UploadPhotoCommand}" />
+                        Aspect="AspectFill"
+                        Source="{Binding ProfileImage}"
+                        Command="{Binding PhotoManagementCommand}" />
                 </Border>
                 <Label
                     Text="{Binding User.Email}"

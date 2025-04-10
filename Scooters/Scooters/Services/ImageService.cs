@@ -7,41 +7,45 @@ public static class ImageService
         var extension = Path.GetExtension(file.FileName);
         var newName = Path.ChangeExtension(Path.GetRandomFileName(), extension);
         
-        await using var stream = await file.OpenReadAsync();
-        var filePath = Path.Combine(FileSystem.Current.AppDataDirectory, newName);
+        await using var fileStream = await file.OpenReadAsync();
+        var filePath = Path.Combine(FileSystem.Current.CacheDirectory, newName);
         var fileInfo = new FileInfo(filePath);
-        
-        var files = Directory.GetFiles(FileSystem.Current.AppDataDirectory);
         
         if (fileInfo.Exists)
         {
             fileInfo.Delete();
         }
         
-        await using var fileStream = File.Create(filePath);
-        await stream.CopyToAsync(fileStream);
+        await using var storageStream = File.Create(filePath);
+        await fileStream.CopyToAsync(storageStream);
         
-        return filePath;
-        
-        // var extension = Path.GetExtension(file.FileName);
-        // var newName = Path.ChangeExtension(Path.GetRandomFileName(), extension);
-        //
-        // var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        //
-        // var files = Directory.GetFiles(folderPath);
-        //
-        // var filePath = Path.Combine(folderPath, newName);
-        // using (var fileStream = File.Create(filePath))
-        // {
-        //     await fileStream.CopyToAsync(fileStream);
-        // }
-        //
-        // return filePath;
+        return newName;
     }
     
-    public static string GetImagePath(string imageName)
+    public static ImageSource GetImage(string imageName)
     {
-        var filePath = Path.Combine(FileSystem.Current.AppDataDirectory, imageName);
-        return File.Exists(filePath) ? filePath : string.Empty;
+        if (string.IsNullOrEmpty(imageName))
+        {
+            return null;
+        }
+        var filePath = Path.Combine(FileSystem.Current.CacheDirectory, imageName);
+        if (File.Exists(filePath))
+        {
+            var fileStream = File.OpenRead(filePath);
+        
+            return ImageSource.FromStream(() => fileStream);
+        }
+
+        return null;
+    }
+
+    public static void RemoveImage(string imageName)
+    {
+        if (string.IsNullOrEmpty(imageName)) return;
+        var filePath = Path.Combine(FileSystem.Current.CacheDirectory, imageName);
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+        }
     }
 }
