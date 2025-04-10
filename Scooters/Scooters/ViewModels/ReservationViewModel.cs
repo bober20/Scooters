@@ -41,8 +41,6 @@ public partial class ReservationViewModel : ObservableObject
         var response = await _mediator.Send(new CreateReservationCommand(Reservation));
         if (response.IsSuccessful)
         {
-            await Shell.Current.DisplayAlert("Success", "Reservation created successfully", "OK");
-            await _navigationService.GoBackAsync();
             await _navigationService.NavigateToAsync("//MainPage");
             return;
         }

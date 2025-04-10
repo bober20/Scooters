@@ -3,6 +3,7 @@ using Application.Common.Interfaces.CurrentUserProvider;
 using Application.Common.Interfaces.NavigationService;
 using Application.Reservations.Commands.EndReservation;
 using Application.Reservations.Queries.GetReservationByUser;
+using Application.Rides.Commands.CreateRide;
 using Application.Rides.Queries.GetRidesByFilter;
 using Application.Scooters.Commands.CreateScooter;
 using Application.Scooters.Queries.GetAllScooters;
@@ -20,6 +21,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private Reservation? _reservation;
     [ObservableProperty] private List<Ride> _rides;
     [ObservableProperty] private bool _hasReservation;
+    [ObservableProperty] private bool _hasRides;
     [ObservableProperty] private string _countdown;
     public ObservableCollection<Scooter> Scooters { get; set; }
     
@@ -56,11 +58,31 @@ public partial class MainViewModel : ObservableObject
             return;
         }
         var result = await Shell.Current.DisplayActionSheet("Reservation", "Cancel", null,
-            "Cancel Reservation");
-        if (result is "Cancel Reservation")
+            "Start ride", "Cancel Reservation");
+        if (result == "Cancel Reservation")
         {
             await _mediator.Send(new EndReservationCommand(Reservation.Id));
             HasReservation = false;
+        } else if (result == "Start ride")
+        {
+            Ride ride = new Ride
+            {
+                ScooterId = Reservation.ScooterId,
+                UserId = CurrentUserId,
+                StartTime = DateTime.Now,
+            };
+            var response = await _mediator.Send(new CreateRideCommand(ride));
+            if (response.IsSuccessful)
+            {
+                IDictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    { "rideId", response.Data }
+                };
+                await _navigationService.NavigateToAsync("RidePage", parameters);
+                return;
+            }
+            
+            await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
         }
     }
 
@@ -112,13 +134,17 @@ public partial class MainViewModel : ObservableObject
 
     private async Task FetchRides()
     {
-        var rides = await _mediator.Send(new GetRidesQuery(
+        var response = await _mediator.Send(new GetRidesQuery(
             r => r.UserId == CurrentUserId && r.IsActive));
-        if (!rides.IsSuccessful)
+        if (!response.IsSuccessful)
         {
             return;
         }
-        Rides = rides.Data;
+        Rides = response.Data;
+        if (Rides is not null || Rides.Any())
+        {
+            HasRides = true;
+        }
     }
 
     private async Task FetchUser()

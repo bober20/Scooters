@@ -15,6 +15,7 @@ public partial class ProfileViewModel : ObservableObject
 {
     [ObservableProperty] private User _user;
     [ObservableProperty] private bool _isDarkMode;
+    [ObservableProperty] private FileInfo _imagePath;
     
     private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
