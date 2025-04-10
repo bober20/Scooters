@@ -78,8 +78,8 @@
                                         <Label>
                                             <Label.FormattedText>
                                                 <FormattedString>
-                                                    <Span Text="{Binding Distance}"></Span>
-                                                    <Span Text=" m"></Span>
+                                                    <Span Text="{Binding Distance}" />
+                                                    <Span Text=" m" />
                                                 </FormattedString>
                                             </Label.FormattedText>
                                         </Label>

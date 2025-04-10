@@ -26,7 +26,7 @@
                     HorizontalOptions="Center">
                     <ImageButton
                         Aspect="Fill"
-                        Source="{Binding User.ImageName}"
+                        Source="{Binding ImagePath}"
                         Command="{Binding UploadPhotoCommand}" />
                 </Border>
                 <Label
