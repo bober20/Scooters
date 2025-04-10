@@ -20,7 +20,7 @@ public partial class PasswordChangeViewModel : ObservableValidator
     private string _oldPassword;
 
     [ObservableProperty] private string _oldPasswordErrors;
-    [ObservableProperty] private bool _oldPassHasErrors = false;
+    [ObservableProperty] private bool _oldPassHasErrors;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
@@ -31,7 +31,7 @@ public partial class PasswordChangeViewModel : ObservableValidator
     private string _newPassword;
 
     [ObservableProperty] private string _newPasswordErrors;
-    [ObservableProperty] private bool _newPassHasErrors = false;
+    [ObservableProperty] private bool _newPassHasErrors;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
@@ -42,7 +42,7 @@ public partial class PasswordChangeViewModel : ObservableValidator
     private string _newPasswordConfirmation;
 
     [ObservableProperty] private string _newPasswordConfirmationErrors;
-    [ObservableProperty] private bool _newPassConfirmHasErrors = false;
+    [ObservableProperty] private bool _newPassConfirmHasErrors;
     
     [ObservableProperty] private bool _isPasswordVisible = true;
 
