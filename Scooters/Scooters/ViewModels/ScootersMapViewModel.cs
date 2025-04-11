@@ -43,8 +43,11 @@ public partial class ScootersMapViewModel : ObservableObject
         {
             { "scooterId", scooter.Id }
         };
-    
-        await _navigationService.NavigateToAsync("ReservationPage", parameters);
+        
+        await MainThread.InvokeOnMainThreadAsync(async () =>
+        {
+            await _navigationService.NavigateToAsync("ReservationPage", parameters);
+        });
     }
     
     private async Task AddPins()

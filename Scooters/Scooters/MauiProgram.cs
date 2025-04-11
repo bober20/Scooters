@@ -3,6 +3,7 @@ using Application.Common.Interfaces.NavigationService;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Plugin.LocalNotification;
 using Scooters.Services;
 using Scooters.ViewModels;
 using Scooters.Views;
@@ -19,7 +20,8 @@ public static class MauiProgram
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
             .UseMauiMaps()
-            .UseBarcodeReader();
+            .UseBarcodeReader()
+            .UseLocalNotification();
 
         var appSettingsPath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
         builder.Configuration.AddJsonFile(appSettingsPath, optional: false);
@@ -32,6 +34,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<INavigationService, NavigationService>();
         
         builder.Services.AddTransient<MainPage, MainViewModel>();
+        builder.Services.AddTransient<QRScannerPage, QRScannerViewModel>();
         builder.Services.AddTransient<LoginPage, LoginViewModel>();
         builder.Services.AddTransient<SignUpPage, SignUpViewModel>();
         builder.Services.AddTransient<ProfilePage, ProfileViewModel>();

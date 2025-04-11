@@ -46,18 +46,6 @@
                     <VerticalStackLayout
                         Spacing="20"
                         Padding="20">
-                        <FlexLayout
-                            JustifyContent="SpaceBetween"
-                            AlignItems="Center"
-                            Margin="0"
-                            Padding="0">
-                            <Label
-                                Text="Dark mode" />
-                            <Switch
-                                OnColor="LightGray"
-                                ThumbColor="Grey"
-                                IsToggled="{Binding IsDarkMode}" />
-                        </FlexLayout>
                         <Border
                             Margin="-10,0"
                             StrokeThickness="1" />

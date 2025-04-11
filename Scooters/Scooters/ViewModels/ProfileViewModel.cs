@@ -14,7 +14,6 @@ namespace Scooters.ViewModels;
 public partial class ProfileViewModel : ObservableObject
 {
     [ObservableProperty] private User _user;
-    [ObservableProperty] private bool _isDarkMode;
     [ObservableProperty] private ImageSource _profileImage;
     
     private readonly IMediator _mediator;
