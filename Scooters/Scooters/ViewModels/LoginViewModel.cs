@@ -10,35 +10,31 @@ namespace Scooters.ViewModels;
 
 public partial class LoginViewModel : ObservableValidator
 {
-    [ObservableProperty] 
+    [ObservableProperty]
     [Required(ErrorMessage = "Email is required.")]
     [EmailAddress(ErrorMessage = "Invalid email address.")]
     private string _email;
-    
+
+    [ObservableProperty] private string _emailErrors;
+    [ObservableProperty] private bool _emailHasErrors;
+
     [ObservableProperty]
-    private string _emailErrors;
-    [ObservableProperty]
-    private bool _emailHasErrors;
-    
-    [ObservableProperty] 
     [Required(ErrorMessage = "Password is required.")]
     [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
     [MaxLength(30, ErrorMessage = "Password cannot exceed 30 characters.")]
     private string _password;
-    
-    [ObservableProperty]
-    private string _passwordErrors;
-    [ObservableProperty]
-    private bool _passwordHasErrors;
-    
+
+    [ObservableProperty] private string _passwordErrors;
+    [ObservableProperty] private bool _passwordHasErrors;
+
     [ObservableProperty] private bool _isPasswordVisible = true;
     [ObservableProperty] private string? _errors;
+
     private IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
-    
-    public LoginViewModel(IMediator mediator, 
-        ICurrentUserProvider currentUserProvider, 
+
+    public LoginViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider,
         INavigationService navigationService)
     {
         _mediator = mediator;
@@ -50,11 +46,11 @@ public partial class LoginViewModel : ObservableValidator
     private async Task LogIn()
     {
         DisplayErrors();
-        
+
         if (HasErrors) return;
-        
+
         var response = await _mediator.Send(new AuthenticateUserQuery(Email, Password));
-        
+
         if (response.IsSuccessful)
         {
             _currentUserProvider.SetCurrentUser(response.Data);
@@ -65,7 +61,7 @@ public partial class LoginViewModel : ObservableValidator
             await Shell.Current.DisplayAlert("Log in error", response.ErrorMessage, "OK");
         }
     }
-    
+
     [RelayCommand]
     private void TogglePasswordVisibility() => IsPasswordVisible = !IsPasswordVisible;
 
@@ -74,7 +70,7 @@ public partial class LoginViewModel : ObservableValidator
     {
         await _navigationService.NavigateToAsync("//SignUpPage");
     }
-    
+
     [RelayCommand]
     private async Task Appearing()
     {
@@ -89,7 +85,7 @@ public partial class LoginViewModel : ObservableValidator
             await _navigationService.NavigateToAsync("//MainPage");
         }
     }
-    
+
     private bool PropertyHasErrors(string propertyName)
     {
         return GetErrors(propertyName).Any();
@@ -109,7 +105,7 @@ public partial class LoginViewModel : ObservableValidator
             EmailHasErrors = false;
             EmailErrors = string.Empty;
         }
-        
+
         if (PropertyHasErrors(nameof(Password)))
         {
             PasswordHasErrors = true;

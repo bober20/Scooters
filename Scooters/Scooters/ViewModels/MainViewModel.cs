@@ -16,7 +16,7 @@ using Scooters.Views;
 
 namespace Scooters.ViewModels;
 
-public partial class MainViewModel : ObservableObject 
+public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty] private Guid _currentUserId;
     [ObservableProperty] private Reservation? _reservation;
@@ -24,16 +24,15 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private bool _hasReservation;
     [ObservableProperty] private bool _hasRides;
     [ObservableProperty] private string _countdown;
-    public ObservableCollection<Scooter> Scooters { get; set; }
-    
+
     private IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
     private readonly IPopupService _popupService;
-    
+
     private System.Timers.Timer? _timer;
 
-    public MainViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider, 
+    public MainViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider,
         INavigationService navigationService, IPopupService popupService)
     {
         _mediator = mediator;
@@ -46,7 +45,6 @@ public partial class MainViewModel : ObservableObject
     private async Task Appearing()
     {
         await FetchUser();
-        await FetchScooters();
         await FetchReservation();
         await FetchRides();
         InitiateTimer();
@@ -59,13 +57,15 @@ public partial class MainViewModel : ObservableObject
         {
             return;
         }
+
         var result = await Shell.Current.DisplayActionSheet("Reservation", "Cancel", null,
             "Start ride", "Cancel Reservation");
         if (result == "Cancel Reservation")
         {
             await _mediator.Send(new EndReservationCommand(Reservation.Id));
             HasReservation = false;
-        } else if (result == "Start ride")
+        }
+        else if (result == "Start ride")
         {
             Ride ride = new Ride
             {
@@ -82,18 +82,11 @@ public partial class MainViewModel : ObservableObject
                     onPresenting: viewModel => viewModel.RideId = response.Data);
                 return;
             }
-            
+
             await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
         }
     }
 
-    [RelayCommand]
-    private async Task AddScooter(Scooter scooter)
-    {
-        scooter.Coordinates = new Coordinates() {Latitude = 0, Longitude = 0};
-        await _mediator.Send(new CreateScooterCommand(scooter));
-    }
-    
     [RelayCommand]
     private async Task MapPageLink()
     {
@@ -103,23 +96,10 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private async Task RidePageLink(Ride ride)
     {
-        IDictionary<string, object> parameters = new Dictionary<string, object>
-        {
-            { "rideId", ride.Id }
-        };
-        
         await _popupService.ShowPopupAsync<RideViewModel>(
             onPresenting: viewModel => viewModel.RideId = ride.Id);
         await FetchReservation();
         await FetchRides();
-    }
-    
-    private async Task FetchScooters()
-    {
-        var response = await _mediator.Send(new GetAllScootersQuery());
-        Scooters = response.IsSuccessful 
-            ? new ObservableCollection<Scooter>(response.Data) 
-            : new ObservableCollection<Scooter>();
     }
 
     private async Task FetchReservation()
@@ -140,10 +120,6 @@ public partial class MainViewModel : ObservableObject
     {
         var response = await _mediator.Send(new GetRidesQuery(
             r => r.UserId == CurrentUserId && r.IsActive));
-        if (!response.IsSuccessful)
-        {
-            return;
-        }
         Rides = response.Data;
         HasRides = Rides?.Count > 0;
     }
@@ -155,6 +131,7 @@ public partial class MainViewModel : ObservableObject
             await _navigationService.NavigateToAsync("//LoginPage");
             return;
         }
+
         CurrentUserId = userId;
     }
 
@@ -164,7 +141,7 @@ public partial class MainViewModel : ObservableObject
         {
             return;
         }
-        
+
         var startTime = Reservation.StartTime;
         var duration = Reservation.Duration;
         var endTime = startTime.AddMinutes(duration);
@@ -175,13 +152,13 @@ public partial class MainViewModel : ObservableObject
             _mediator.Send(new EndReservationCommand(Reservation.Id));
             Reservation = null;
             HasReservation = false;
-            _timer.Stop();
+            _timer?.Stop();
             return;
         }
-        
+
         Countdown = $"{timeRemaining.Minutes:D2}:{timeRemaining.Seconds:D2}";
     }
-    
+
     private void OnTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
     {
         MainThread.BeginInvokeOnMainThread(UpdateCountdown);
@@ -198,7 +175,7 @@ public partial class MainViewModel : ObservableObject
         _timer = new(1000);
         _timer.Elapsed += OnTimerElapsed;
         _timer.Start();
-        
+
         UpdateCountdown();
     }
 }

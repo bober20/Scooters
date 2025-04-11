@@ -21,14 +21,14 @@ public partial class RideViewModel : ObservableObject
     private readonly IMediator _mediator;
     private readonly INavigationService _navigationService;
     private readonly IPopupService _popupService;
-    
+
     public RideViewModel(IMediator mediator, INavigationService navigationService, IPopupService popupService)
     {
         _mediator = mediator;
         _navigationService = navigationService;
         _popupService = popupService;
     }
-    
+
     [RelayCommand]
     private async Task Appearing()
     {
@@ -54,11 +54,11 @@ public partial class RideViewModel : ObservableObject
 
         await _popupService.ClosePopupAsync();
     }
-    
+
     private void InitialiseTimer()
     {
         _timer = new System.Timers.Timer(1000);
-        _timer.Elapsed += OnTimerElapsed; 
+        _timer.Elapsed += OnTimerElapsed;
         _timer.AutoReset = true;
         _timer.Start();
     }

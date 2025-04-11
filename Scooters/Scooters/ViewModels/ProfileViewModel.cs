@@ -15,13 +15,12 @@ public partial class ProfileViewModel : ObservableObject
 {
     [ObservableProperty] private User _user;
     [ObservableProperty] private ImageSource _profileImage;
-    
+
     private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
-    
-    public ProfileViewModel(IMediator mediator, 
-        ICurrentUserProvider currentUserProvider, 
+
+    public ProfileViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider,
         INavigationService navigationService)
     {
         _mediator = mediator;
@@ -40,6 +39,7 @@ public partial class ProfileViewModel : ObservableObject
     {
         var output = await Shell.Current.DisplayActionSheet(
             "Upload Photo", "Cancel", null, "Gallery", "Delete");
+
         if (output == "Delete")
         {
             ProfileImage = null;
@@ -56,24 +56,25 @@ public partial class ProfileViewModel : ObservableObject
             {
                 return;
             }
+
             ImageService.RemoveImage(User.ImageName);
             User.ImageName = await ImageService.SaveImageAsync(result);
             await _mediator.Send(new UpdateUserCommand(User));
             ProfileImage = ImageService.GetImage(User.ImageName);
         }
     }
-    
+
     [RelayCommand]
     private async Task DeleteAccount()
     {
         var passwordConfirmation = await Shell.Current.DisplayPromptAsync("Confirmation",
             "Confirm your password to proceed", "Delete", "Cancel", "Password", 30);
-        
+
         if (passwordConfirmation is null)
         {
             return;
         }
-        
+
         var response = await _mediator.Send(new DeleteUserCommand(User.Id, passwordConfirmation));
         if (response.IsSuccessful)
         {
@@ -110,7 +111,7 @@ public partial class ProfileViewModel : ObservableObject
             await _navigationService.NavigateToAsync("//LoginPage");
             return;
         }
-        
+
         var response = await _mediator.Send(new GetUserQuery(guid.Value));
         if (response.IsSuccessful)
         {

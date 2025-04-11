@@ -34,7 +34,7 @@ public partial class QRScannerViewModel : ObservableObject
         }
         Guid.TryParse(barcode.Value, out var barcodeGuid);
         
-        MainThread.BeginInvokeOnMainThread(() =>
+        await MainThread.InvokeOnMainThreadAsync(() =>
         {
             _popupService.ShowPopupAsync<ReservationViewModel>(
                 onPresenting: viewModel => viewModel.ScooterId = barcodeGuid);

@@ -10,26 +10,24 @@ using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
 using MediatR;
 using Plugin.LocalNotification;
-using Scooters.Views;
 
 namespace Scooters.ViewModels;
 
-// [QueryProperty(nameof(ScooterId), "scooterId")]
 public partial class ReservationViewModel : ObservableObject
 {
     [ObservableProperty] private Reservation _reservation = new();
     [ObservableProperty] private ObservableCollection<int> _timeSlots = new();
     [ObservableProperty] private Guid _scooterId;
     [ObservableProperty] private Scooter _scooter;
-    
+
     private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
     private readonly INotificationService _notificationService;
     private readonly IPopupService _popupService;
-    
-    public ReservationViewModel(IMediator mediator, 
-        ICurrentUserProvider currentUserProvider, INavigationService navigationService, 
+
+    public ReservationViewModel(IMediator mediator,
+        ICurrentUserProvider currentUserProvider, INavigationService navigationService,
         INotificationService notificationService, IPopupService popupService)
     {
         _mediator = mediator;
@@ -43,7 +41,7 @@ public partial class ReservationViewModel : ObservableObject
     private async Task Reserve()
     {
         Reservation.StartTime = DateTime.Now;
-        
+
         var response = await _mediator.Send(new CreateReservationCommand(Reservation));
         if (response.IsSuccessful)
         {
@@ -52,10 +50,10 @@ public partial class ReservationViewModel : ObservableObject
             await _popupService.ClosePopupAsync();
             return;
         }
-        
+
         await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
     }
-    
+
     [RelayCommand]
     private async Task Appearing()
     {
@@ -71,6 +69,7 @@ public partial class ReservationViewModel : ObservableObject
         {
             return;
         }
+
         var ride = new Ride
         {
             StartTime = DateTime.Now,
@@ -83,11 +82,12 @@ public partial class ReservationViewModel : ObservableObject
             await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
             return;
         }
+
         await _popupService.ClosePopupAsync();
         await _popupService.ShowPopupAsync<RideViewModel>(
             onPresenting: viewModel => viewModel.RideId = response.Data);
     }
-    
+
     private void InitializeTimeSlots()
     {
         TimeSlots.Clear();
@@ -96,7 +96,7 @@ public partial class ReservationViewModel : ObservableObject
             TimeSlots.Add(i);
         }
     }
-    
+
     private void InitializeReservation()
     {
         Reservation.ScooterId = ScooterId;
@@ -104,6 +104,7 @@ public partial class ReservationViewModel : ObservableObject
         {
             return;
         }
+
         Reservation.UserId = userId;
     }
 
@@ -120,14 +121,14 @@ public partial class ReservationViewModel : ObservableObject
             await _popupService.ClosePopupAsync();
         }
     }
-    
+
     private async Task ShowNotification()
     {
         if (await _notificationService.AreNotificationsEnabled() == false)
         {
             await _notificationService.RequestNotificationPermission();
         }
-        
+
         var request = new NotificationRequest()
         {
             NotificationId = 3333,

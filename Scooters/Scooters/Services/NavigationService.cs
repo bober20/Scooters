@@ -8,15 +8,24 @@ public class NavigationService : INavigationService
     {
         if (parameters is null)
         {
-            await Shell.Current.GoToAsync(page);
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                await Shell.Current.GoToAsync(page);
+            });
             return;
         }
         
-        await Shell.Current.GoToAsync(page, parameters);
+        await MainThread.InvokeOnMainThreadAsync(async () =>
+        {
+            await Shell.Current.GoToAsync(page, parameters);
+        });
     }
 
     public async Task GoBackAsync()
     {
-        await Shell.Current.Navigation.PopAsync();
+        await MainThread.InvokeOnMainThreadAsync(async () =>
+        {
+            await Shell.Current.Navigation.PopAsync();
+        });
     }
 }

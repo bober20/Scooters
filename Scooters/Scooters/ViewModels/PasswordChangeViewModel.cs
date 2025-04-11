@@ -43,15 +43,15 @@ public partial class PasswordChangeViewModel : ObservableValidator
 
     [ObservableProperty] private string _newPasswordConfirmationErrors;
     [ObservableProperty] private bool _newPassConfirmHasErrors;
-    
+
     [ObservableProperty] private bool _isPasswordVisible = true;
 
     private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
 
-    public PasswordChangeViewModel(IMediator mediator, 
-        ICurrentUserProvider currentUserProvider, 
+    public PasswordChangeViewModel(IMediator mediator,
+        ICurrentUserProvider currentUserProvider,
         INavigationService navigationService)
     {
         _currentUserProvider = currentUserProvider;
@@ -64,14 +64,14 @@ public partial class PasswordChangeViewModel : ObservableValidator
     {
         DisplayErrors();
         if (HasErrors) return;
-        
+
         var guid = _currentUserProvider.GetCurrentUser();
-        var response = await _mediator.Send(new ChangePasswordCommand(
-            guid.Value, OldPassword, NewPassword, NewPasswordConfirmation));
+        var response = await _mediator.Send(new ChangePasswordCommand(guid.Value, OldPassword, NewPassword,
+            NewPasswordConfirmation));
         if (response.IsSuccessful)
         {
-            await Shell.Current.DisplayAlert(
-                "Success", "Password has been successfully changed", "OK");
+            await Shell.Current.DisplayAlert("Success", "Password has been successfully changed",
+                "OK");
             await _navigationService.NavigateToAsync("//ProfilePage");
         }
         else
@@ -79,7 +79,7 @@ public partial class PasswordChangeViewModel : ObservableValidator
             await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
         }
     }
-    
+
     [RelayCommand]
     private void TogglePasswordVisibility() => IsPasswordVisible = !IsPasswordVisible;
 
@@ -91,7 +91,7 @@ public partial class PasswordChangeViewModel : ObservableValidator
     private void DisplayErrors()
     {
         ValidateAllProperties();
-        
+
         if (PropertyHasErrors(nameof(OldPassword)))
         {
             OldPassHasErrors = true;
