@@ -4,6 +4,7 @@ using Application.Common.Interfaces.NavigationService;
 using Application.Reservations.Commands.CreateReservation;
 using Application.Rides.Commands.CreateRide;
 using Application.Scooters.Queries.GetScooterById;
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
@@ -13,7 +14,7 @@ using Scooters.Views;
 
 namespace Scooters.ViewModels;
 
-[QueryProperty(nameof(ScooterId), "scooterId")]
+// [QueryProperty(nameof(ScooterId), "scooterId")]
 public partial class ReservationViewModel : ObservableObject
 {
     [ObservableProperty] private Reservation _reservation = new();
@@ -25,15 +26,17 @@ public partial class ReservationViewModel : ObservableObject
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
     private readonly INotificationService _notificationService;
+    private readonly IPopupService _popupService;
     
     public ReservationViewModel(IMediator mediator, 
         ICurrentUserProvider currentUserProvider, INavigationService navigationService, 
-        INotificationService notificationService)
+        INotificationService notificationService, IPopupService popupService)
     {
         _mediator = mediator;
         _currentUserProvider = currentUserProvider;
         _navigationService = navigationService;
         _notificationService = notificationService;
+        _popupService = popupService;
     }
 
     [RelayCommand]
@@ -46,6 +49,7 @@ public partial class ReservationViewModel : ObservableObject
         {
             await ShowNotification();
             await _navigationService.NavigateToAsync("//MainPage");
+            await _popupService.ClosePopupAsync();
             return;
         }
         
@@ -79,12 +83,9 @@ public partial class ReservationViewModel : ObservableObject
             await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
             return;
         }
-        Dictionary<string, object> parameters = new()
-        {
-            { "rideId", response.Data }
-        };
-        
-        await _navigationService.NavigateToAsync("RidePage", parameters);
+        await _popupService.ClosePopupAsync();
+        await _popupService.ShowPopupAsync<RideViewModel>(
+            onPresenting: viewModel => viewModel.RideId = response.Data);
     }
     
     private void InitializeTimeSlots()
@@ -116,7 +117,7 @@ public partial class ReservationViewModel : ObservableObject
         }
         else
         {
-            await _navigationService.GoBackAsync();
+            await _popupService.ClosePopupAsync();
         }
     }
     

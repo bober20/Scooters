@@ -40,9 +40,11 @@ public static class MauiProgram
         builder.Services.AddTransient<ProfilePage, ProfileViewModel>();
         builder.Services.AddTransient<ScootersMapPage, ScootersMapViewModel>();
         
-        builder.Services.AddTransientWithShellRoute<ReservationPage, ReservationViewModel>("ReservationPage");
+        builder.Services.AddTransientPopup<ReservationPage, ReservationViewModel>();
+        builder.Services.AddTransientPopup<RidePage, RideViewModel>();
+        // builder.Services.AddTransientWithShellRoute<ReservationPage, ReservationViewModel>("ReservationPage");
         builder.Services.AddTransientWithShellRoute<PasswordChangePage, PasswordChangeViewModel>("PasswordChangePage");
-        builder.Services.AddTransientWithShellRoute<RidePage, RideViewModel>("RidePage");
+        // builder.Services.AddTransientWithShellRoute<RidePage, RideViewModel>("RidePage");
 #if DEBUG
         builder.Logging.AddDebug();
 #endif

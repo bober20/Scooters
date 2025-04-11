@@ -1,6 +1,7 @@
 using Application.Common.Interfaces.NavigationService;
 using Application.Rides.Commands.EndRide;
 using Application.Rides.Queries.GetRideById;
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
@@ -8,7 +9,7 @@ using MediatR;
 
 namespace Scooters.ViewModels;
 
-[QueryProperty(nameof(RideId), "rideId")]
+// [QueryProperty(nameof(RideId), "rideId")]
 public partial class RideViewModel : ObservableObject
 {
     [ObservableProperty] private Ride _ride;
@@ -19,11 +20,13 @@ public partial class RideViewModel : ObservableObject
 
     private readonly IMediator _mediator;
     private readonly INavigationService _navigationService;
+    private readonly IPopupService _popupService;
     
-    public RideViewModel(IMediator mediator, INavigationService navigationService)
+    public RideViewModel(IMediator mediator, INavigationService navigationService, IPopupService popupService)
     {
         _mediator = mediator;
         _navigationService = navigationService;
+        _popupService = popupService;
     }
     
     [RelayCommand]
@@ -37,7 +40,7 @@ public partial class RideViewModel : ObservableObject
     private async Task EndRide()
     {
         await _mediator.Send(new EndRideCommand(Ride.Id));
-        await _navigationService.GoBackAsync();
+        await _popupService.ClosePopupAsync();
     }
 
     private async Task InitializeRideAsync()
@@ -49,7 +52,7 @@ public partial class RideViewModel : ObservableObject
             return;
         }
 
-        await _navigationService.GoBackAsync();
+        await _popupService.ClosePopupAsync();
     }
     
     private void InitialiseTimer()
@@ -70,11 +73,5 @@ public partial class RideViewModel : ObservableObject
             var distance = timePassed.TotalSeconds * 4.1;
             Distance = $"{distance:F2}";
         });
-    }
-
-    public void StopTimer()
-    {
-        _timer.Stop();
-        _timer.Dispose();
     }
 }

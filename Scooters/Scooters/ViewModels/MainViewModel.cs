@@ -7,6 +7,7 @@ using Application.Rides.Commands.CreateRide;
 using Application.Rides.Queries.GetRidesByFilter;
 using Application.Scooters.Commands.CreateScooter;
 using Application.Scooters.Queries.GetAllScooters;
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
@@ -28,16 +29,17 @@ public partial class MainViewModel : ObservableObject
     private IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
+    private readonly IPopupService _popupService;
     
     private System.Timers.Timer? _timer;
 
-    public MainViewModel(IMediator mediator, 
-        ICurrentUserProvider currentUserProvider, 
-        INavigationService navigationService)
+    public MainViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider, 
+        INavigationService navigationService, IPopupService popupService)
     {
         _mediator = mediator;
         _currentUserProvider = currentUserProvider;
         _navigationService = navigationService;
+        _popupService = popupService;
     }
 
     [RelayCommand]
@@ -74,11 +76,10 @@ public partial class MainViewModel : ObservableObject
             var response = await _mediator.Send(new CreateRideCommand(ride));
             if (response.IsSuccessful)
             {
-                IDictionary<string, object> parameters = new Dictionary<string, object>
-                {
-                    { "rideId", response.Data }
-                };
-                await _navigationService.NavigateToAsync("RidePage", parameters);
+                await FetchReservation();
+                await FetchRides();
+                await _popupService.ShowPopupAsync<RideViewModel>(
+                    onPresenting: viewModel => viewModel.RideId = response.Data);
                 return;
             }
             
@@ -107,7 +108,10 @@ public partial class MainViewModel : ObservableObject
             { "rideId", ride.Id }
         };
         
-        await _navigationService.NavigateToAsync("RidePage", parameters);
+        await _popupService.ShowPopupAsync<RideViewModel>(
+            onPresenting: viewModel => viewModel.RideId = ride.Id);
+        await FetchReservation();
+        await FetchRides();
     }
     
     private async Task FetchScooters()
@@ -141,10 +145,7 @@ public partial class MainViewModel : ObservableObject
             return;
         }
         Rides = response.Data;
-        if (Rides is not null || Rides.Any())
-        {
-            HasRides = true;
-        }
+        HasRides = Rides?.Count > 0;
     }
 
     private async Task FetchUser()

@@ -1,5 +1,6 @@
 using Application.Common.Interfaces.NavigationService;
 using Application.Scooters.Queries.GetAllScooters;
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
@@ -17,11 +18,13 @@ public partial class ScootersMapViewModel : ObservableObject
     
     private readonly IMediator _mediator;
     private readonly INavigationService _navigationService;
+    private readonly IPopupService _popupService;
     
-    public ScootersMapViewModel(IMediator mediator, INavigationService navigationService)
+    public ScootersMapViewModel(IMediator mediator, INavigationService navigationService, IPopupService popupService)
     {
         _mediator = mediator;
         _navigationService = navigationService;
+        _popupService = popupService;
         AddPins();
     }
     
@@ -44,10 +47,13 @@ public partial class ScootersMapViewModel : ObservableObject
             { "scooterId", scooter.Id }
         };
         
-        await MainThread.InvokeOnMainThreadAsync(async () =>
-        {
-            await _navigationService.NavigateToAsync("ReservationPage", parameters);
-        });
+        _popupService.ShowPopup<ReservationViewModel>(onPresenting: viewModel => viewModel.ScooterId = scooter.Id);
+        
+
+        // await MainThread.InvokeOnMainThreadAsync(async () =>
+        // {
+        //     await _navigationService.NavigateToAsync("ReservationPage", parameters);
+        // });
     }
     
     private async Task AddPins()

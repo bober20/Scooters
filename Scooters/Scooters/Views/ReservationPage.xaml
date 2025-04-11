@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Scooters.Views.ReservationPage"
              xmlns:viewModels="clr-namespace:Scooters.ViewModels"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:DataType="viewModels:ReservationViewModel">
-    <ContentPage.Behaviors>
-        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}" />
-    </ContentPage.Behaviors>
+             x:DataType="viewModels:ReservationViewModel"
+             CanBeDismissedByTappingOutsideOfPopup="True"
+             Opened="ReservationPage_OnOpened"
+             HorizontalOptions="Fill"
+             VerticalOptions="End"
+             Size="500, 700"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             ios:Page.UseSafeArea="True"
+             Color="Transparent">
     <ScrollView>
         <VerticalStackLayout Spacing="10">
-            <Label
-                Text="Reserve scooter"
-                HorizontalTextAlignment="Center"
-                FontSize="32"
-                FontAttributes="Bold"
-                Margin="0,10" />
             <Border
                 BackgroundColor="White"
                 StrokeShape="RoundRectangle 40 40 0 0">
@@ -124,4 +123,4 @@
             </Border>
         </VerticalStackLayout>
     </ScrollView>
-</ContentPage>
+</toolkit:Popup>

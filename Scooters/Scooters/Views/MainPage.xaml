@@ -26,7 +26,7 @@
             HorizontalTextAlignment="Center"
             FontSize="32" />
         <Border
-            StrokeShape="RoundRectangle 20 20"
+            StrokeShape="RoundRectangle 40 40"
             Padding="10"
             BackgroundColor="White"
             StrokeThickness="0">
@@ -95,7 +95,8 @@
         <Label
             Text="Your current rides"
             HorizontalTextAlignment="Center"
-            FontSize="32">
+            FontSize="32"
+            IsVisible="False">
             <Label.Triggers>
                 <DataTrigger
                     TargetType="Label"
@@ -103,7 +104,7 @@
                     Value="True">
                     <Setter
                         Property="IsVisible"
-                        Value="False" />
+                        Value="True" />
                 </DataTrigger>
             </Label.Triggers>
         </Label>
@@ -113,7 +114,7 @@
                     <Border
                         Padding="10"
                         BackgroundColor="White"
-                        StrokeShape="RoundRectangle 40 40 40 40">
+                        StrokeShape="RoundRectangle 40 40">
                         <Border.Shadow>
                             <Shadow Brush="LightGrey" Offset="0,0" Radius="10" />
                         </Border.Shadow>
