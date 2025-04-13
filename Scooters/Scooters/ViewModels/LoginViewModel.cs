@@ -46,8 +46,10 @@ public partial class LoginViewModel : ObservableValidator
     private async Task LogIn()
     {
         DisplayErrors();
-
-        if (HasErrors) return;
+        if (HasErrors)
+        {
+            return;
+        }
 
         var response = await _mediator.Send(new AuthenticateUserQuery(Email, Password));
 
@@ -58,7 +60,7 @@ public partial class LoginViewModel : ObservableValidator
         }
         else
         {
-            await Shell.Current.DisplayAlert("Log in error", response.ErrorMessage, "OK");
+            await _navigationService.ShowAlertAsync("Log in error", response.ErrorMessage);
         }
     }
 
@@ -66,17 +68,13 @@ public partial class LoginViewModel : ObservableValidator
     private void TogglePasswordVisibility() => IsPasswordVisible = !IsPasswordVisible;
 
     [RelayCommand]
-    private async Task SignUpLink()
-    {
-        await _navigationService.NavigateToAsync("//SignUpPage");
-    }
+    private async Task SignUpLink() => await _navigationService.NavigateToAsync("//SignUpPage");
 
     [RelayCommand]
-    private async Task Appearing()
-    {
-        await GetCurrentUser();
-    }
+    private async Task Appearing() =>  await GetCurrentUser();
 
+    private bool PropertyHasErrors(string propertyName) =>  GetErrors(propertyName).Any();
+    
     private async Task GetCurrentUser()
     {
         var user = _currentUserProvider.GetCurrentUser();
@@ -84,11 +82,6 @@ public partial class LoginViewModel : ObservableValidator
         {
             await _navigationService.NavigateToAsync("//MainPage");
         }
-    }
-
-    private bool PropertyHasErrors(string propertyName)
-    {
-        return GetErrors(propertyName).Any();
     }
 
     private void DisplayErrors()

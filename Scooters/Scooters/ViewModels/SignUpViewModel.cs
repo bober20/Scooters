@@ -52,14 +52,13 @@ public partial class SignUpViewModel : ObservableValidator
     private async Task SignUp()
     {
         DisplayErrors();
-
         if (HasErrors) return;
 
         var response = await _mediator.Send(new RegisterUserCommand(Email, Password, PasswordConfirmation));
 
         if (!response.IsSuccessful)
         {
-            await Shell.Current.DisplayAlert("Sign up error", response.ErrorMessage, "OK");
+            await _navigationService.ShowAlertAsync("Sign up error", response.ErrorMessage, "OK");
         }
         else
         {
@@ -68,18 +67,14 @@ public partial class SignUpViewModel : ObservableValidator
     }
 
     [RelayCommand]
-    private async Task LogInLink()
-    {
-        await _navigationService.NavigateToAsync("//LoginPage");
-    }
+    private async Task LogInLink() => await _navigationService.NavigateToAsync("//LoginPage");
+    
 
     [RelayCommand]
     private void TogglePasswordVisibility() => IsPasswordVisible = !IsPasswordVisible;
 
-    private bool PropertyHasErrors(string propertyName)
-    {
-        return GetErrors(propertyName).Any();
-    }
+    private bool PropertyHasErrors(string propertyName) => GetErrors(propertyName).Any();
+    
 
     private void DisplayErrors()
     {

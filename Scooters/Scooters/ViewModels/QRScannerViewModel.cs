@@ -1,6 +1,4 @@
-using System.Net;
 using Application.Common.Interfaces.NavigationService;
-using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ZXing;
@@ -14,12 +12,10 @@ public partial class QRScannerViewModel : ObservableObject
     [ObservableProperty] private bool _isDetecting = true;
 
     private readonly INavigationService _navigationService;
-    private readonly IPopupService _popupService;
 
-    public QRScannerViewModel(INavigationService navigationService, IPopupService popupService)
+    public QRScannerViewModel(INavigationService navigationService)
     {
         _navigationService = navigationService;
-        _popupService = popupService;
     }
 
     [RelayCommand]
@@ -34,11 +30,8 @@ public partial class QRScannerViewModel : ObservableObject
         }
         Guid.TryParse(barcode.Value, out var barcodeGuid);
         
-        await MainThread.InvokeOnMainThreadAsync(() =>
-        {
-            _popupService.ShowPopupAsync<ReservationViewModel>(
-                onPresenting: viewModel => viewModel.ScooterId = barcodeGuid);
-        });
+        await _navigationService.ShowPopupAsync<ReservationViewModel>(
+            onPresenting: viewModel => viewModel.ScooterId = barcodeGuid);
         
         IsDetecting = true;
     }

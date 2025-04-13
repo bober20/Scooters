@@ -29,16 +29,13 @@ public partial class ProfileViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task ChangePasswordLink()
-    {
-        await _navigationService.NavigateToAsync("PasswordChangePage");
-    }
+    private async Task ChangePasswordLink() => await _navigationService.NavigateToAsync("PasswordChangePage");
 
     [RelayCommand]
     private async Task PhotoManagement()
     {
-        var output = await Shell.Current.DisplayActionSheet(
-            "Upload Photo", "Cancel", null, "Gallery", "Delete");
+        var output = await _navigationService.ShowOptionsAsync(
+            "Upload Photo", "Cancel", "Gallery", "Delete");
 
         if (output == "Delete")
         {
@@ -67,25 +64,26 @@ public partial class ProfileViewModel : ObservableObject
     [RelayCommand]
     private async Task DeleteAccount()
     {
-        var passwordConfirmation = await Shell.Current.DisplayPromptAsync("Confirmation",
-            "Confirm your password to proceed", "Delete", "Cancel", "Password", 30);
+        var passwordConfirmation = await _navigationService.PromptAsync("Confirmation",
+            "Confirm your password to proceed", "Delete", "Cancel", "Password", 
+            30);
 
         if (passwordConfirmation is null)
         {
             return;
         }
-
+        
         var response = await _mediator.Send(new DeleteUserCommand(User.Id, passwordConfirmation));
         if (response.IsSuccessful)
         {
             _currentUserProvider.RemoveCurrentUser();
             ImageService.RemoveImage(User.ImageName);
-            await Shell.Current.DisplayAlert("Success", "Your account has been deleted", "OK");
+            await _navigationService.ShowAlertAsync("Success", "Your account has been deleted", "OK");
             await _navigationService.NavigateToAsync("//LoginPage");
         }
         else
         {
-            await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
+            await _navigationService.ShowAlertAsync("Error", response.ErrorMessage, "OK");
         }
     }
 

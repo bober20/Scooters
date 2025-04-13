@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using Application.Common.Interfaces.CurrentUserProvider;
 using Application.Common.Interfaces.NavigationService;
 using Application.Users.Commands.ChangePassword;
-using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MediatR;
@@ -63,30 +62,29 @@ public partial class PasswordChangeViewModel : ObservableValidator
     private async Task ChangePassword()
     {
         DisplayErrors();
-        if (HasErrors) return;
+        if (HasErrors)
+        {
+            return;
+        }
 
         var guid = _currentUserProvider.GetCurrentUser();
         var response = await _mediator.Send(new ChangePasswordCommand(guid.Value, OldPassword, NewPassword,
             NewPasswordConfirmation));
         if (response.IsSuccessful)
         {
-            await Shell.Current.DisplayAlert("Success", "Password has been successfully changed",
-                "OK");
+            await _navigationService.ShowAlertAsync("Success", "Password has been successfully changed");
             await _navigationService.NavigateToAsync("//ProfilePage");
         }
         else
         {
-            await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
+            await _navigationService.ShowAlertAsync("Error", response.ErrorMessage);
         }
     }
 
     [RelayCommand]
     private void TogglePasswordVisibility() => IsPasswordVisible = !IsPasswordVisible;
 
-    private bool PropertyHasErrors(string propertyName)
-    {
-        return GetErrors(propertyName).Any();
-    }
+    private bool PropertyHasErrors(string propertyName) => GetErrors(propertyName).Any();
 
     private void DisplayErrors()
     {

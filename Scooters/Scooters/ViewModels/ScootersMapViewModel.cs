@@ -18,22 +18,17 @@ public partial class ScootersMapViewModel : ObservableObject
 
     private readonly IMediator _mediator;
     private readonly INavigationService _navigationService;
-    private readonly IPopupService _popupService;
 
-    public ScootersMapViewModel(IMediator mediator, INavigationService navigationService, IPopupService popupService)
+    public ScootersMapViewModel(IMediator mediator, INavigationService navigationService)
     {
         _mediator = mediator;
         _navigationService = navigationService;
-        _popupService = popupService;
         AddPins();
     }
 
     [RelayCommand]
-    private async Task Appearing()
-    {
-        await LoadScooters();
-    }
-
+    private async Task Appearing() => await LoadScooters();
+    
     [RelayCommand]
     private async Task PinClicked(Pin pin)
     {
@@ -42,18 +37,8 @@ public partial class ScootersMapViewModel : ObservableObject
             return;
         }
 
-        Dictionary<string, object> parameters = new()
-        {
-            { "scooterId", scooter.Id }
-        };
-
-        _popupService.ShowPopup<ReservationViewModel>(onPresenting: viewModel => viewModel.ScooterId = scooter.Id);
-
-
-        // await MainThread.InvokeOnMainThreadAsync(async () =>
-        // {
-        //     await _navigationService.NavigateToAsync("ReservationPage", parameters);
-        // });
+        await _navigationService.ShowPopupAsync<ReservationViewModel>(
+            onPresenting: viewModel => viewModel.ScooterId = scooter.Id);
     }
 
     private async Task AddPins()

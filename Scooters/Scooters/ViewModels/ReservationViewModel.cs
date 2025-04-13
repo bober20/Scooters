@@ -4,7 +4,6 @@ using Application.Common.Interfaces.NavigationService;
 using Application.Reservations.Commands.CreateReservation;
 using Application.Rides.Commands.CreateRide;
 using Application.Scooters.Queries.GetScooterById;
-using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
@@ -24,22 +23,25 @@ public partial class ReservationViewModel : ObservableObject
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
     private readonly INotificationService _notificationService;
-    private readonly IPopupService _popupService;
 
     public ReservationViewModel(IMediator mediator,
         ICurrentUserProvider currentUserProvider, INavigationService navigationService,
-        INotificationService notificationService, IPopupService popupService)
+        INotificationService notificationService)
     {
         _mediator = mediator;
         _currentUserProvider = currentUserProvider;
         _navigationService = navigationService;
         _notificationService = notificationService;
-        _popupService = popupService;
     }
 
     [RelayCommand]
     private async Task Reserve()
     {
+        if (Reservation.Duration == 0)
+        {
+            return;
+        }
+        
         Reservation.StartTime = DateTime.Now;
 
         var response = await _mediator.Send(new CreateReservationCommand(Reservation));
@@ -47,11 +49,11 @@ public partial class ReservationViewModel : ObservableObject
         {
             await ShowNotification();
             await _navigationService.NavigateToAsync("//MainPage");
-            await _popupService.ClosePopupAsync();
+            await _navigationService.ClosePopupAsync();
             return;
         }
 
-        await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
+        await _navigationService.ShowAlertAsync("Error", response.ErrorMessage, "OK");
     }
 
     [RelayCommand]
@@ -79,12 +81,12 @@ public partial class ReservationViewModel : ObservableObject
         var response = await _mediator.Send(new CreateRideCommand(ride));
         if (!response.IsSuccessful)
         {
-            await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
+            await _navigationService.ShowAlertAsync("Error", response.ErrorMessage, "OK");
             return;
         }
 
-        await _popupService.ClosePopupAsync();
-        await _popupService.ShowPopupAsync<RideViewModel>(
+        await _navigationService.ClosePopupAsync();
+        await _navigationService.ShowPopupAsync<RideViewModel>(
             onPresenting: viewModel => viewModel.RideId = response.Data);
     }
 
@@ -118,7 +120,7 @@ public partial class ReservationViewModel : ObservableObject
         }
         else
         {
-            await _popupService.ClosePopupAsync();
+            await _navigationService.ClosePopupAsync();
         }
     }
 

@@ -1,18 +1,13 @@
-using System.Collections.ObjectModel;
 using Application.Common.Interfaces.CurrentUserProvider;
 using Application.Common.Interfaces.NavigationService;
 using Application.Reservations.Commands.EndReservation;
 using Application.Reservations.Queries.GetReservationByUser;
 using Application.Rides.Commands.CreateRide;
 using Application.Rides.Queries.GetRidesByFilter;
-using Application.Scooters.Commands.CreateScooter;
-using Application.Scooters.Queries.GetAllScooters;
-using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
 using MediatR;
-using Scooters.Views;
 
 namespace Scooters.ViewModels;
 
@@ -28,17 +23,15 @@ public partial class MainViewModel : ObservableObject
     private IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
-    private readonly IPopupService _popupService;
 
     private System.Timers.Timer? _timer;
 
     public MainViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider,
-        INavigationService navigationService, IPopupService popupService)
+        INavigationService navigationService)
     {
         _mediator = mediator;
         _currentUserProvider = currentUserProvider;
         _navigationService = navigationService;
-        _popupService = popupService;
     }
 
     [RelayCommand]
@@ -58,7 +51,7 @@ public partial class MainViewModel : ObservableObject
             return;
         }
 
-        var result = await Shell.Current.DisplayActionSheet("Reservation", "Cancel", null,
+        var result = await _navigationService.ShowOptionsAsync("Reservation", "Cancel",
             "Start ride", "Cancel Reservation");
         if (result == "Cancel Reservation")
         {
@@ -76,27 +69,24 @@ public partial class MainViewModel : ObservableObject
             var response = await _mediator.Send(new CreateRideCommand(ride));
             if (response.IsSuccessful)
             {
+                await _navigationService.ShowPopupAsync<RideViewModel>(
+                    onPresenting: viewModel => viewModel.RideId = response.Data);
                 await FetchReservation();
                 await FetchRides();
-                await _popupService.ShowPopupAsync<RideViewModel>(
-                    onPresenting: viewModel => viewModel.RideId = response.Data);
                 return;
             }
-
-            await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
+            
+            await _navigationService.ShowAlertAsync("Error", response.ErrorMessage);
         }
     }
 
     [RelayCommand]
-    private async Task MapPageLink()
-    {
-        await _navigationService.NavigateToAsync("//MapPage");
-    }
+    private async Task MapPageLink() => await _navigationService.NavigateToAsync("//MapPage");
 
     [RelayCommand]
     private async Task RidePageLink(Ride ride)
     {
-        await _popupService.ShowPopupAsync<RideViewModel>(
+        await _navigationService.ShowPopupAsync<RideViewModel>(
             onPresenting: viewModel => viewModel.RideId = ride.Id);
         await FetchReservation();
         await FetchRides();
