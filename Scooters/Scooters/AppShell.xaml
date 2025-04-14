@@ -14,9 +14,9 @@
         ContentTemplate="{DataTemplate views:SignUpPage}"
         Route="SignUpPage" />
     <TabBar>
-        <ShellContent Title="Main" ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage" />
-        <ShellContent Title="Map" ContentTemplate="{DataTemplate views:ScootersMapPage}" Route="MapPage" />
-        <ShellContent Title="QR" ContentTemplate="{DataTemplate views:QRScannerPage}" Route="QRScannerPage" />
-        <ShellContent Title="Profile" ContentTemplate="{DataTemplate views:ProfilePage}" Route="ProfilePage" />
+        <ShellContent Title="Main" Icon="event.png" ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage" />
+        <ShellContent Title="Map" Icon="map.png" ContentTemplate="{DataTemplate views:ScootersMapPage}" Route="MapPage" />
+        <ShellContent Title="QR" Icon="qr.png" ContentTemplate="{DataTemplate views:QRScannerPage}" Route="QRScannerPage" />
+        <ShellContent Title="Profile" Icon="profile.png" ContentTemplate="{DataTemplate views:ProfilePage}" Route="ProfilePage" />
     </TabBar>
 </Shell>
