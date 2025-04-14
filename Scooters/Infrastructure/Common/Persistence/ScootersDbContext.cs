@@ -1,4 +1,5 @@
 using System.Reflection;
+using Infrastructure.CompiledModels;
 
 namespace Infrastructure.Common.Persistence;
 
@@ -24,15 +25,16 @@ public class ScootersDbContext : DbContext, IUnitOfWork
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        optionsBuilder.UseModel(ScootersDbContextModel.Instance);
         optionsBuilder.UseSqlite($"Data Source={_dbPath}");
         base.OnConfiguring(optionsBuilder);
     }
     
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        base.OnModelCreating(modelBuilder);
-    }
+    // protected override void OnModelCreating(ModelBuilder modelBuilder)
+    // {
+    //     modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    //     base.OnModelCreating(modelBuilder);
+    // }
     
     public async Task SaveChangesAsync()
     {

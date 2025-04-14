@@ -62,5 +62,7 @@
 	<true/>
 	<key>CFBundleExecutable</key>
 	<string></string>
+	<key>NSMetricKitEnabledAppDiagnostics</key>
+	<string>6.0</string>
 </dict>
 </plist>

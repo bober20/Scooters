@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces.CurrentUserProvider;
 using Application.Common.Interfaces.NavigationService;
 using CommunityToolkit.Maui;
+using CoreGraphics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Plugin.LocalNotification;

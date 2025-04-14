@@ -11,8 +11,6 @@ public static class DependencyInjection
             options.RegisterServicesFromAssemblyContaining(typeof(DependencyInjection));
         });
         
-        services.AddValidatorsFromAssemblyContaining(typeof(DependencyInjection));
-        
         return services;
     }
 }
