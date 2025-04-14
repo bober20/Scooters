@@ -53,7 +53,7 @@ public partial class ReservationViewModel : ObservableObject
             return;
         }
 
-        await _navigationService.ShowAlertAsync("Error", response.ErrorMessage, "OK");
+        await _navigationService.ShowAlertAsync("Error", response.ErrorMessage);
     }
 
     [RelayCommand]
@@ -81,7 +81,7 @@ public partial class ReservationViewModel : ObservableObject
         var response = await _mediator.Send(new CreateRideCommand(ride));
         if (!response.IsSuccessful)
         {
-            await _navigationService.ShowAlertAsync("Error", response.ErrorMessage, "OK");
+            await _navigationService.ShowAlertAsync("Error", response.ErrorMessage);
             return;
         }
 

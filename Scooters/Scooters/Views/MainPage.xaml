@@ -24,7 +24,19 @@
         <Label
             Text="Your current reservation"
             HorizontalTextAlignment="Center"
-            FontSize="32" />
+            FontSize="32"
+            IsVisible="False">
+            <Label.Triggers>
+                <DataTrigger
+                    TargetType="Label"
+                    Binding="{Binding HasReservation}"
+                    Value="True">
+                    <Setter
+                        Property="IsVisible"
+                        Value="True" />
+                </DataTrigger>
+            </Label.Triggers>
+        </Label>
         <Border
             StrokeShape="RoundRectangle 40 40"
             Padding="10"

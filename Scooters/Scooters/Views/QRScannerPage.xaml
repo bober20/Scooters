@@ -9,9 +9,6 @@
              xmlns:maui="clr-namespace:ZXing.Net.Maui;assembly=ZXing.Net.MAUI"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              x:DataType="viewModels:QRScannerViewModel">
-    <ContentPage.Behaviors>
-        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}" />
-    </ContentPage.Behaviors>
     <ContentPage.Content>
         <zxing:CameraBarcodeReaderView IsDetecting="{Binding IsDetecting}">
             <zxing:CameraBarcodeReaderView.Options>

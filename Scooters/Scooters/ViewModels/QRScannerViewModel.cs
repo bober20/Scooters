@@ -1,14 +1,12 @@
 using Application.Common.Interfaces.NavigationService;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ZXing;
 using ZXing.Net.Maui;
 
 namespace Scooters.ViewModels;
 
 public partial class QRScannerViewModel : ObservableObject
 {
-    [ObservableProperty] private Result _result;
     [ObservableProperty] private bool _isDetecting = true;
 
     private readonly INavigationService _navigationService;
@@ -28,6 +26,7 @@ public partial class QRScannerViewModel : ObservableObject
             IsDetecting = true;
             return;
         }
+        
         Guid.TryParse(barcode.Value, out var barcodeGuid);
         
         await _navigationService.ShowPopupAsync<ReservationViewModel>(

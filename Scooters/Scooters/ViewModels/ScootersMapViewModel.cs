@@ -1,12 +1,10 @@
 using Application.Common.Interfaces.NavigationService;
 using Application.Scooters.Queries.GetAllScooters;
-using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Maui.Controls.Maps;
-using Scooters.Views;
 
 namespace Scooters.ViewModels;
 

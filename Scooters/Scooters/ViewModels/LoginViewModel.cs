@@ -26,11 +26,11 @@ public partial class LoginViewModel : ObservableValidator
 
     [ObservableProperty] private string _passwordErrors;
     [ObservableProperty] private bool _passwordHasErrors;
-
+    
     [ObservableProperty] private bool _isPasswordVisible = true;
     [ObservableProperty] private string? _errors;
 
-    private IMediator _mediator;
+    private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
 

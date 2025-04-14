@@ -20,7 +20,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private bool _hasRides;
     [ObservableProperty] private string _countdown;
 
-    private IMediator _mediator;
+    private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
 
@@ -51,7 +51,7 @@ public partial class MainViewModel : ObservableObject
             return;
         }
 
-        var result = await _navigationService.ShowOptionsAsync("Reservation", "Cancel",
+        var result = await _navigationService.ShowOptionsAsync("Reservation", "Cancel", 
             "Start ride", "Cancel Reservation");
         if (result == "Cancel Reservation")
         {

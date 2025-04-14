@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Scooters.Views.ReservationPage"
-             xmlns:viewModels="clr-namespace:Scooters.ViewModels"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:DataType="viewModels:ReservationViewModel"
-             CanBeDismissedByTappingOutsideOfPopup="True"
-             Opened="ReservationPage_OnOpened"
-             HorizontalOptions="Fill"
-             VerticalOptions="End"
-             Size="500, 700"
-             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
-             ios:Page.UseSafeArea="True"
-             Color="Transparent">
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               x:Class="Scooters.Views.ReservationPage"
+               xmlns:viewModels="clr-namespace:Scooters.ViewModels"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               x:DataType="viewModels:ReservationViewModel"
+               CanBeDismissedByTappingOutsideOfPopup="True"
+               Opened="ReservationPage_OnOpened"
+               HorizontalOptions="Fill"
+               VerticalOptions="End"
+               Size="500, 700"
+               xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+               ios:Page.UseSafeArea="True"
+               Color="Transparent">
     <ScrollView>
         <VerticalStackLayout Spacing="10">
             <Border

@@ -1,7 +1,6 @@
 using Application.Common.Interfaces.NavigationService;
 using Application.Rides.Commands.EndRide;
 using Application.Rides.Queries.GetRideById;
-using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
@@ -9,13 +8,13 @@ using MediatR;
 
 namespace Scooters.ViewModels;
 
-// [QueryProperty(nameof(RideId), "rideId")]
 public partial class RideViewModel : ObservableObject
 {
     [ObservableProperty] private Ride _ride;
     [ObservableProperty] private Guid _rideId;
     [ObservableProperty] private string _countdown;
     [ObservableProperty] private string _distance = "0.00";
+    
     private System.Timers.Timer _timer;
 
     private readonly IMediator _mediator;

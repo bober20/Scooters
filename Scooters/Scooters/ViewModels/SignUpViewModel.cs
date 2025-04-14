@@ -3,7 +3,6 @@ using Application.Common.Interfaces.NavigationService;
 using Application.Users.Commands.RegisterUser;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
 using MediatR;
 using Scooters.ValidatorAttributes;
 
@@ -58,7 +57,7 @@ public partial class SignUpViewModel : ObservableValidator
 
         if (!response.IsSuccessful)
         {
-            await _navigationService.ShowAlertAsync("Sign up error", response.ErrorMessage, "OK");
+            await _navigationService.ShowAlertAsync("Sign up error", response.ErrorMessage);
         }
         else
         {
