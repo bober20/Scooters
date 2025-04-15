@@ -12,8 +12,7 @@ public class NavigationService : INavigationService
     {
         _popupService = popupService;
     }
-
-
+    
     public async Task NavigateToAsync(string page, IDictionary<string, object> parameters = null)
     {
         if (parameters is null)

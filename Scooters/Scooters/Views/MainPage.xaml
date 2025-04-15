@@ -69,13 +69,13 @@
                             FontSize="40" />
                         <VerticalStackLayout Spacing="5">
                             <Label
-                                Text="{Binding Reservation.StartTime, 
-                                        FallbackValue='Start time is not specified', 
+                                Text="{Binding Reservation.StartTime,
+                                        FallbackValue='Start time is not specified',
                                         StringFormat='{0:dd/MM/yyyy HH:mm}'}"
                                 FontSize="16" />
                             <Border />
                             <Label
-                                Text="{Binding Reservation.Scooter.ModelDescription, 
+                                Text="{Binding Reservation.Scooter.ModelDescription,
                                     FallbackValue='Scooter is not specified'}"
                                 FontSize="16" />
                         </VerticalStackLayout>

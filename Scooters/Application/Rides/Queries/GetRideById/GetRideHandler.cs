@@ -1,10 +1,10 @@
 namespace Application.Rides.Queries.GetRideById;
 
-public class GetRideHandle : IRequestHandler<GetRideQuery, ResponseData<Ride>>
+public class GetRideHandler : IRequestHandler<GetRideQuery, ResponseData<Ride>>
 {
     private readonly IRideRepository _rideRepository;
     
-    public GetRideHandle(IRideRepository repository)
+    public GetRideHandler(IRideRepository repository)
     {
         _rideRepository = repository;
     }
