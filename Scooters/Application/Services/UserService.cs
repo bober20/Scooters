@@ -81,7 +81,7 @@ public class UserService
         return ResponseData<bool>.Success(true);
     }
 
-    private async Task<ResponseData<bool>> DeleteUserAsync(Guid userId, string password)
+    public async Task<ResponseData<bool>> DeleteUserAsync(Guid userId, string password)
     {
         var user = await _userRepository.GetUserAsync(userId);
         if (user is null)

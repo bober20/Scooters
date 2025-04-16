@@ -33,7 +33,7 @@ public class ReservationService
         await _unitOfWork.SaveChangesAsync();
     }
     
-    public async Task<ResponseData<Reservation?>> GetReservationByUserIdAsync(Guid userId, CancellationToken cancellationToken)
+    public async Task<ResponseData<Reservation?>> GetReservationByUserIdAsync(Guid userId)
     {
         try
         {
@@ -48,7 +48,7 @@ public class ReservationService
         }
     }
     
-    public async Task<ResponseData<Reservation>> GetReservationByIdAsync(Guid reservationId, CancellationToken cancellationToken)
+    public async Task<ResponseData<Reservation>> GetReservationByIdAsync(Guid reservationId)
     {
         try
         {

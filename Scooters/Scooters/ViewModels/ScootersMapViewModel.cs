@@ -1,9 +1,8 @@
 using Application.Common.Interfaces.NavigationService;
-using Application.Scooters.Queries.GetAllScooters;
+using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
-using MediatR;
 using Microsoft.Maui.Controls.Maps;
 
 namespace Scooters.ViewModels;
@@ -14,13 +13,13 @@ public partial class ScootersMapViewModel : ObservableObject
     [ObservableProperty] private Scooter _selectedScooter;
     [ObservableProperty] private List<Pin> _pins;
 
-    private readonly IMediator _mediator;
+    private readonly ScooterService _scooterService;
     private readonly INavigationService _navigationService;
 
-    public ScootersMapViewModel(IMediator mediator, INavigationService navigationService)
+    public ScootersMapViewModel(INavigationService navigationService, ScooterService scooterService)
     {
-        _mediator = mediator;
         _navigationService = navigationService;
+        _scooterService = scooterService;
         AddPins();
     }
 
@@ -42,7 +41,7 @@ public partial class ScootersMapViewModel : ObservableObject
     private async Task AddPins()
     {
         Pins = new List<Pin>();
-        var response = await _mediator.Send(new GetAllScootersQuery());
+        var response = await _scooterService.GetAllScootersAsync();
         if (!response.IsSuccessful) return;
         foreach (var s in response.Data)
         {
@@ -67,7 +66,7 @@ public partial class ScootersMapViewModel : ObservableObject
 
     private async Task LoadScooters()
     {
-        var response = await _mediator.Send(new GetAllScootersQuery());
+        var response = await _scooterService.GetAllScootersAsync();
         Scooters = new List<Scooter>(response.Data);
     }
 }

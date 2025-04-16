@@ -1,9 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using Application.Common.Interfaces.NavigationService;
-using Application.Users.Commands.RegisterUser;
+using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using MediatR;
 using Scooters.ValidatorAttributes;
 
 namespace Scooters.ViewModels;
@@ -38,13 +37,13 @@ public partial class SignUpViewModel : ObservableValidator
 
     [ObservableProperty] private bool _isPasswordVisible = true;
 
-    private readonly IMediator _mediator;
+    private readonly UserService _userService;
     private readonly INavigationService _navigationService;
 
-    public SignUpViewModel(IMediator mediator, INavigationService navigationService)
+    public SignUpViewModel(INavigationService navigationService, UserService userService)
     {
-        _mediator = mediator;
         _navigationService = navigationService;
+        _userService = userService;
     }
 
     [RelayCommand]
@@ -53,7 +52,7 @@ public partial class SignUpViewModel : ObservableValidator
         DisplayErrors();
         if (HasErrors) return;
 
-        var response = await _mediator.Send(new RegisterUserCommand(Email, Password, PasswordConfirmation));
+        var response = await _userService.RegisterUserAsync(Email, Password, PasswordConfirmation);
 
         if (!response.IsSuccessful)
         {

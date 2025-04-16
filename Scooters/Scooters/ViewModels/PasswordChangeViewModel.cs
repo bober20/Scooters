@@ -1,10 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using Application.Common.Interfaces.CurrentUserProvider;
 using Application.Common.Interfaces.NavigationService;
-using Application.Users.Commands.ChangePassword;
+using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using MediatR;
 using Scooters.ValidatorAttributes;
 
 namespace Scooters.ViewModels;
@@ -45,17 +44,17 @@ public partial class PasswordChangeViewModel : ObservableValidator
 
     [ObservableProperty] private bool _isPasswordVisible = true;
 
-    private readonly IMediator _mediator;
+    private readonly UserService _userService;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
 
-    public PasswordChangeViewModel(IMediator mediator,
+    public PasswordChangeViewModel(
         ICurrentUserProvider currentUserProvider,
-        INavigationService navigationService)
+        INavigationService navigationService, UserService userService)
     {
         _currentUserProvider = currentUserProvider;
-        _mediator = mediator;
         _navigationService = navigationService;
+        _userService = userService;
     }
 
     [RelayCommand]
@@ -68,8 +67,12 @@ public partial class PasswordChangeViewModel : ObservableValidator
         }
 
         var guid = _currentUserProvider.GetCurrentUser();
-        var response = await _mediator.Send(new ChangePasswordCommand(guid.Value, OldPassword, NewPassword,
-            NewPasswordConfirmation));
+        if (guid is null)
+        {
+            await _navigationService.NavigateToAsync("//LoginPage");
+            return;
+        }
+        var response = await _userService.ChangePasswordAsync(guid.Value, OldPassword, NewPassword);
         if (response.IsSuccessful)
         {
             await _navigationService.ShowAlertAsync("Success", "Password has been successfully changed");

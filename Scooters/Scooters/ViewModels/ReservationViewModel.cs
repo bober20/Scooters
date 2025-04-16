@@ -1,13 +1,10 @@
 using System.Collections.ObjectModel;
 using Application.Common.Interfaces.CurrentUserProvider;
 using Application.Common.Interfaces.NavigationService;
-using Application.Reservations.Commands.CreateReservation;
-using Application.Rides.Commands.CreateRide;
-using Application.Scooters.Queries.GetScooterById;
+using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
-using MediatR;
 using Plugin.LocalNotification;
 
 namespace Scooters.ViewModels;
@@ -19,19 +16,23 @@ public partial class ReservationViewModel : ObservableObject
     [ObservableProperty] private Guid _scooterId;
     [ObservableProperty] private Scooter _scooter;
 
-    private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
     private readonly INotificationService _notificationService;
+    private readonly ReservationService _reservationService;
+    private readonly RideService _rideService;
+    private readonly ScooterService _scooterService;
 
-    public ReservationViewModel(IMediator mediator,
+    public ReservationViewModel(
         ICurrentUserProvider currentUserProvider, INavigationService navigationService,
-        INotificationService notificationService)
+        INotificationService notificationService, ReservationService reservationService, RideService rideService, ScooterService scooterService)
     {
-        _mediator = mediator;
         _currentUserProvider = currentUserProvider;
         _navigationService = navigationService;
         _notificationService = notificationService;
+        _reservationService = reservationService;
+        _rideService = rideService;
+        _scooterService = scooterService;
     }
 
     [RelayCommand]
@@ -44,7 +45,7 @@ public partial class ReservationViewModel : ObservableObject
         
         Reservation.StartTime = DateTime.Now;
 
-        var response = await _mediator.Send(new CreateReservationCommand(Reservation));
+        var response = await _reservationService.CreateReservationAsync(Reservation);
         if (response.IsSuccessful)
         {
             await ShowNotification();
@@ -78,7 +79,7 @@ public partial class ReservationViewModel : ObservableObject
             ScooterId = ScooterId,
             UserId = userId
         };
-        var response = await _mediator.Send(new CreateRideCommand(ride));
+        var response = await _rideService.CreateRideAsync(ride);
         if (!response.IsSuccessful)
         {
             await _navigationService.ShowAlertAsync("Error", response.ErrorMessage);
@@ -112,7 +113,7 @@ public partial class ReservationViewModel : ObservableObject
 
     private async Task InitializeScooter()
     {
-        var scooter = await _mediator.Send(new GetScooterQuery(ScooterId));
+        var scooter = await _scooterService.GetScooterByIdAsync(ScooterId);
         if (scooter.IsSuccessful)
         {
             Scooter = scooter.Data;

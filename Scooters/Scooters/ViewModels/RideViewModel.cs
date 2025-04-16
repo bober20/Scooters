@@ -1,10 +1,8 @@
 using Application.Common.Interfaces.NavigationService;
-using Application.Rides.Commands.EndRide;
-using Application.Rides.Queries.GetRideById;
+using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
-using MediatR;
 
 namespace Scooters.ViewModels;
 
@@ -17,13 +15,13 @@ public partial class RideViewModel : ObservableObject
     
     private System.Timers.Timer _timer;
 
-    private readonly IMediator _mediator;
+    private readonly RideService _rideService;
     private readonly INavigationService _navigationService;
 
-    public RideViewModel(IMediator mediator, INavigationService navigationService)
+    public RideViewModel(INavigationService navigationService, RideService rideService)
     {
-        _mediator = mediator;
         _navigationService = navigationService;
+        _rideService = rideService;
     }
 
     [RelayCommand]
@@ -36,13 +34,13 @@ public partial class RideViewModel : ObservableObject
     [RelayCommand]
     private async Task EndRide()
     {
-        await _mediator.Send(new EndRideCommand(Ride.Id));
+        await _rideService.EndRideAsync(Ride.Id);
         await _navigationService.ClosePopupAsync();
     }
 
     private async Task InitializeRideAsync()
     {
-        var response = await _mediator.Send(new GetRideQuery(RideId));
+        var response = await _rideService.GetRideByIdAsync(RideId);
         if (response.IsSuccessful)
         {
             Ride = response.Data;

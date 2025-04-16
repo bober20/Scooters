@@ -1,11 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using Application.Common.Interfaces.CurrentUserProvider;
 using Application.Common.Interfaces.NavigationService;
-using Application.Users.Queries.AuthenticateUser;
+using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using MediatR;
-
 namespace Scooters.ViewModels;
 
 public partial class LoginViewModel : ObservableValidator
@@ -30,14 +28,14 @@ public partial class LoginViewModel : ObservableValidator
     [ObservableProperty] private bool _isPasswordVisible = true;
     [ObservableProperty] private string? _errors;
 
-    private readonly IMediator _mediator;
+    private readonly UserService _userService;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
 
-    public LoginViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider,
+    public LoginViewModel(UserService userService, ICurrentUserProvider currentUserProvider,
         INavigationService navigationService)
     {
-        _mediator = mediator;
+        _userService = userService;
         _currentUserProvider = currentUserProvider;
         _navigationService = navigationService;
     }
@@ -51,7 +49,7 @@ public partial class LoginViewModel : ObservableValidator
             return;
         }
 
-        var response = await _mediator.Send(new AuthenticateUserQuery(Email, Password));
+        var response = await _userService.AuthenticateUserAsync(Email, Password);
 
         if (response.IsSuccessful)
         {

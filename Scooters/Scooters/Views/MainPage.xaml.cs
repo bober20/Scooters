@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Scooters.ViewModels;
+﻿using Scooters.ViewModels;
 
 namespace Scooters.Views;
 

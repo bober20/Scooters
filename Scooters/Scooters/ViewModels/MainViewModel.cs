@@ -1,13 +1,9 @@
 using Application.Common.Interfaces.CurrentUserProvider;
 using Application.Common.Interfaces.NavigationService;
-using Application.Reservations.Commands.EndReservation;
-using Application.Reservations.Queries.GetReservationByUser;
-using Application.Rides.Commands.CreateRide;
-using Application.Rides.Queries.GetRidesByFilter;
+using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
-using MediatR;
 
 namespace Scooters.ViewModels;
 
@@ -20,18 +16,20 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private bool _hasRides;
     [ObservableProperty] private string _countdown;
 
-    private readonly IMediator _mediator;
+    private readonly RideService _rideService;
+    private readonly ReservationService _reservationService;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
 
     private System.Timers.Timer? _timer;
 
-    public MainViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider,
-        INavigationService navigationService)
+    public MainViewModel(ICurrentUserProvider currentUserProvider,
+        INavigationService navigationService, RideService rideService, ReservationService reservationService)
     {
-        _mediator = mediator;
         _currentUserProvider = currentUserProvider;
         _navigationService = navigationService;
+        _rideService = rideService;
+        _reservationService = reservationService;
     }
 
     [RelayCommand]
@@ -55,7 +53,7 @@ public partial class MainViewModel : ObservableObject
             "Start ride", "Cancel Reservation");
         if (result == "Cancel Reservation")
         {
-            await _mediator.Send(new EndReservationCommand(Reservation.Id));
+            await _reservationService.EndReservationAsync(Reservation.Id);
             HasReservation = false;
         }
         else if (result == "Start ride")
@@ -66,7 +64,7 @@ public partial class MainViewModel : ObservableObject
                 UserId = CurrentUserId,
                 StartTime = DateTime.Now,
             };
-            var response = await _mediator.Send(new CreateRideCommand(ride));
+            var response = await _rideService.CreateRideAsync(ride);
             if (response.IsSuccessful)
             {
                 await _navigationService.ShowPopupAsync<RideViewModel>(
@@ -94,7 +92,8 @@ public partial class MainViewModel : ObservableObject
 
     private async Task FetchReservation()
     {
-        var reservation = await _mediator.Send(new GetReservationByUserQuery(CurrentUserId));
+        
+        var reservation = await _reservationService.GetReservationByUserIdAsync(CurrentUserId);
         if (!reservation.IsSuccessful)
         {
             HasReservation = false;
@@ -108,8 +107,8 @@ public partial class MainViewModel : ObservableObject
 
     private async Task FetchRides()
     {
-        var response = await _mediator.Send(new GetRidesQuery(
-            r => r.UserId == CurrentUserId && r.IsActive));
+        var response = await _rideService.GetRidesByFilterAsync(
+            r => r.UserId == CurrentUserId && r.IsActive);
         Rides = response.Data;
         HasRides = Rides?.Count > 0;
     }
@@ -139,7 +138,7 @@ public partial class MainViewModel : ObservableObject
 
         if (timeRemaining.TotalSeconds <= 0)
         {
-            _mediator.Send(new EndReservationCommand(Reservation.Id));
+            _reservationService.EndReservationAsync(Reservation.Id);
             Reservation = null;
             HasReservation = false;
             _timer?.Stop();

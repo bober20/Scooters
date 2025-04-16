@@ -1,12 +1,9 @@
 using Application.Common.Interfaces.CurrentUserProvider;
 using Application.Common.Interfaces.NavigationService;
-using Application.Users.Commands.DeleteUser;
-using Application.Users.Commands.UpdateImage;
-using Application.Users.Queries.GetUser;
+using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
-using MediatR;
 using Scooters.Services;
 
 namespace Scooters.ViewModels;
@@ -16,16 +13,16 @@ public partial class ProfileViewModel : ObservableObject
     [ObservableProperty] private User _user;
     [ObservableProperty] private ImageSource _profileImage;
 
-    private readonly IMediator _mediator;
+    private readonly UserService _userService;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
 
-    public ProfileViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider,
-        INavigationService navigationService)
+    public ProfileViewModel(ICurrentUserProvider currentUserProvider,
+        INavigationService navigationService, UserService userService)
     {
-        _mediator = mediator;
         _currentUserProvider = currentUserProvider;
         _navigationService = navigationService;
+        _userService = userService;
     }
 
     [RelayCommand]
@@ -56,7 +53,7 @@ public partial class ProfileViewModel : ObservableObject
 
             ImageService.RemoveImage(User.ImageName);
             User.ImageName = await ImageService.SaveImageAsync(result);
-            await _mediator.Send(new UpdateUserCommand(User));
+            await _userService.UpdateUser(User);
             ProfileImage = ImageService.GetImage(User.ImageName);
         }
     }
@@ -72,8 +69,8 @@ public partial class ProfileViewModel : ObservableObject
         {
             return;
         }
-        
-        var response = await _mediator.Send(new DeleteUserCommand(User.Id, passwordConfirmation));
+
+        var response = await _userService.DeleteUserAsync(User.Id, passwordConfirmation);
         if (response.IsSuccessful)
         {
             _currentUserProvider.RemoveCurrentUser();
@@ -110,7 +107,7 @@ public partial class ProfileViewModel : ObservableObject
             return;
         }
 
-        var response = await _mediator.Send(new GetUserQuery(guid.Value));
+        var response = await _userService.GetUserById(guid.Value);
         if (response.IsSuccessful)
         {
             User = response.Data;
