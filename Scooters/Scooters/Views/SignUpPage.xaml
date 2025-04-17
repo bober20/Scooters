@@ -5,7 +5,8 @@
              x:Class="Scooters.Views.SignUpPage"
              Shell.NavBarIsVisible="False"
              xmlns:vewModels="clr-namespace:Scooters.ViewModels"
-             x:DataType="vewModels:SignUpViewModel">
+             x:DataType="vewModels:SignUpViewModel"
+             HideSoftInputOnTapped="True">
     <ContentPage.Content>
         <Grid RowSpan="2"
               RowDefinitions="Auto, *"

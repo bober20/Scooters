@@ -120,6 +120,7 @@ public partial class ReservationViewModel : ObservableObject
         }
         else
         {
+            await _navigationService.ShowAlertAsync("Error", "There is no scooter with this ID");
             await _navigationService.ClosePopupAsync();
         }
     }
