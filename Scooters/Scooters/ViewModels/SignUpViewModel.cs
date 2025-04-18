@@ -61,20 +61,18 @@ public partial class SignUpViewModel : ObservableValidator
         }
         else
         {
-            await _navigationService.NavigateToAsync("//LoginPage");
+            await _navigationService.NavigateToLoginPageAsync();
         }
     }
 
     [RelayCommand]
-    private async Task LogInLink() => await _navigationService.NavigateToAsync("//LoginPage");
-    
+    private async Task LogInLink() => await _navigationService.NavigateToLoginPageAsync();
 
     [RelayCommand]
     private void TogglePasswordVisibility() => IsPasswordVisible = !IsPasswordVisible;
 
     private bool PropertyHasErrors(string propertyName) => GetErrors(propertyName).Any();
     
-
     private void DisplayErrors()
     {
         ValidateAllProperties();

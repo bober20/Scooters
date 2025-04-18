@@ -43,7 +43,7 @@
             Padding="10"
             StrokeThickness="0">
             <Border.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding ReservationDetailsCommand}" />
+                <TapGestureRecognizer Command="{Binding ScooterActionsCommand}" />
             </Border.GestureRecognizers>
             <Border.Triggers>
                 <DataTrigger

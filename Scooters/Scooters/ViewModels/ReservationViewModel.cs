@@ -19,6 +19,8 @@ public partial class ReservationViewModel : ObservableObject
     [ObservableProperty] private Guid _scooterId;
     [ObservableProperty] private Scooter _scooter;
 
+    private Guid _currentUserId;
+    
     private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
@@ -48,7 +50,7 @@ public partial class ReservationViewModel : ObservableObject
         if (response.IsSuccessful)
         {
             await ShowNotification();
-            await _navigationService.NavigateToAsync("//MainPage");
+            await _navigationService.NavigateToMainPageAsync();
             await _navigationService.ClosePopupAsync();
             return;
         }
@@ -59,6 +61,7 @@ public partial class ReservationViewModel : ObservableObject
     [RelayCommand]
     private async Task Appearing()
     {
+        await GetCurrentUserAsync();
         await InitializeScooter();
         InitializeTimeSlots();
         InitializeReservation();
@@ -67,16 +70,11 @@ public partial class ReservationViewModel : ObservableObject
     [RelayCommand]
     private async Task RideLink()
     {
-        if (_currentUserProvider.GetCurrentUser() is not Guid userId)
-        {
-            return;
-        }
-
         var ride = new Ride
         {
             StartTime = DateTime.Now,
             ScooterId = ScooterId,
-            UserId = userId
+            UserId = _currentUserId
         };
         var response = await _mediator.Send(new CreateRideCommand(ride));
         if (!response.IsSuccessful)
@@ -88,6 +86,16 @@ public partial class ReservationViewModel : ObservableObject
         await _navigationService.ClosePopupAsync();
         await _navigationService.ShowPopupAsync<RideViewModel>(
             onPresenting: viewModel => viewModel.RideId = response.Data);
+    }
+    
+    private async Task GetCurrentUserAsync()
+    {
+        if (_currentUserProvider.GetCurrentUser() is not Guid userId)
+        {
+            await _navigationService.NavigateToLoginPageAsync();
+            return;
+        }
+        _currentUserId = userId;
     }
 
     private void InitializeTimeSlots()
@@ -102,12 +110,7 @@ public partial class ReservationViewModel : ObservableObject
     private void InitializeReservation()
     {
         Reservation.ScooterId = ScooterId;
-        if (_currentUserProvider.GetCurrentUser() is not Guid userId)
-        {
-            return;
-        }
-
-        Reservation.UserId = userId;
+        Reservation.UserId = _currentUserId;
     }
 
     private async Task InitializeScooter()
@@ -132,11 +135,11 @@ public partial class ReservationViewModel : ObservableObject
             await _notificationService.RequestNotificationPermission();
         }
 
-        var request = new NotificationRequest()
+        var request = new NotificationRequest
         {
             NotificationId = 3333,
             Title = "Reservation",
-            Description = $"You have created a reservation for {Reservation.Duration} mins",
+            Description = $"You have created a reservation for {Reservation.Duration} mins"
         };
 
         await _notificationService.Show(request);

@@ -13,7 +13,7 @@
         <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}" />
     </ContentPage.Behaviors>
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout IgnoreSafeArea="True">
             <maps:Map
                 x:Name="ScootersMap"
                 IsShowingUser="true">

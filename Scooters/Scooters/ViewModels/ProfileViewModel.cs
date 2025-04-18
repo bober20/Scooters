@@ -29,7 +29,7 @@ public partial class ProfileViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task ChangePasswordLink() => await _navigationService.NavigateToAsync("PasswordChangePage");
+    private async Task ChangePasswordLink() => await _navigationService.NavigateToPasswordChangePageAsync();
 
     [RelayCommand]
     private async Task PhotoManagement()
@@ -60,7 +60,7 @@ public partial class ProfileViewModel : ObservableObject
             ProfileImage = ImageService.GetImage(User.ImageName);
         }
     }
-
+    
     [RelayCommand]
     private async Task DeleteAccount()
     {
@@ -72,14 +72,14 @@ public partial class ProfileViewModel : ObservableObject
         {
             return;
         }
-        
+
         var response = await _mediator.Send(new DeleteUserCommand(User.Id, passwordConfirmation));
         if (response.IsSuccessful)
         {
             _currentUserProvider.RemoveCurrentUser();
             ImageService.RemoveImage(User.ImageName);
             await _navigationService.ShowAlertAsync("Success", "Your account has been deleted", "OK");
-            await _navigationService.NavigateToAsync("//LoginPage");
+            await _navigationService.NavigateToLoginPageAsync();
         }
         else
         {
@@ -91,7 +91,7 @@ public partial class ProfileViewModel : ObservableObject
     private async Task LogOut()
     {
         _currentUserProvider.RemoveCurrentUser();
-        await _navigationService.NavigateToAsync("//LoginPage");
+        await _navigationService.NavigateToLoginPageAsync();
     }
 
     [RelayCommand]
@@ -106,7 +106,7 @@ public partial class ProfileViewModel : ObservableObject
         var guid = _currentUserProvider.GetCurrentUser();
         if (guid is null)
         {
-            await _navigationService.NavigateToAsync("//LoginPage");
+            await _navigationService.NavigateToLoginPageAsync();
             return;
         }
 
@@ -117,7 +117,7 @@ public partial class ProfileViewModel : ObservableObject
         }
         else
         {
-            await _navigationService.NavigateToAsync("//LoginPage");
+            await _navigationService.NavigateToLoginPageAsync();
         }
     }
 }

@@ -1,6 +1,6 @@
-using System.Linq.Expressions;
 using Application.Common.Interfaces.NavigationService;
 using CommunityToolkit.Maui.Core;
+using Scooters.Views;
 
 namespace Scooters.Services;
 
@@ -12,22 +12,35 @@ public class NavigationService : INavigationService
     {
         _popupService = popupService;
     }
-
-
-    public async Task NavigateToAsync(string page, IDictionary<string, object> parameters = null)
+    
+    public Task NavigateToMainPageAsync()
     {
-        if (parameters is null)
-        {
-            await MainThread.InvokeOnMainThreadAsync(async () => { await Shell.Current.GoToAsync(page); });
-            return;
-        }
-
-        await MainThread.InvokeOnMainThreadAsync(async () => { await Shell.Current.GoToAsync(page, parameters); });
+        return NavigateToAsync($"//{nameof(MainPage)}");
     }
 
-    public async Task GoBackAsync()
+    public Task NavigateToLoginPageAsync()
     {
-        await MainThread.InvokeOnMainThreadAsync(async () => { await Shell.Current.Navigation.PopAsync(); });
+        return NavigateToAsync($"//{nameof(LoginPage)}");
+    }
+
+    public Task NavigateToSignUpPageAsync()
+    {
+        return NavigateToAsync($"//{nameof(SignUpPage)}");
+    }
+
+    public Task NavigateToPasswordChangePageAsync()
+    {
+        return NavigateToAsync($"{nameof(PasswordChangePage)}");
+    }
+
+    public Task NavigateToProfilePageAsync()
+    {
+        return NavigateToAsync($"//{nameof(ProfilePage)}");
+    }
+
+    public Task NavigateToMapPageAsync()
+    {
+        return NavigateToAsync($"//{nameof(ScootersMapPage)}");
     }
 
     public async Task ShowPopupAsync<TViewModel>(Action<TViewModel> onPresenting)
@@ -61,5 +74,16 @@ public class NavigationService : INavigationService
     public async Task ClosePopupAsync()
     {
         await MainThread.InvokeOnMainThreadAsync(() => _popupService.ClosePopupAsync());
+    }
+    
+    private async Task NavigateToAsync(string page, IDictionary<string, object> parameters = null)
+    {
+        if (parameters is null)
+        {
+            await MainThread.InvokeOnMainThreadAsync(async () => { await Shell.Current.GoToAsync(page); });
+            return;
+        }
+
+        await MainThread.InvokeOnMainThreadAsync(async () => { await Shell.Current.GoToAsync(page, parameters); });
     }
 }

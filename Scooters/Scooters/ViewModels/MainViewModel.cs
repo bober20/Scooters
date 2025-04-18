@@ -38,13 +38,12 @@ public partial class MainViewModel : ObservableObject
     private async Task Appearing()
     {
         await FetchUser();
-        await FetchReservation();
-        await FetchRides();
+        Task.WaitAll(FetchReservation(), FetchRides());
         InitiateTimer();
     }
 
     [RelayCommand]
-    private async Task ReservationDetails()
+    private async Task ScooterActions()
     {
         if (Reservation is null)
         {
@@ -71,8 +70,7 @@ public partial class MainViewModel : ObservableObject
             {
                 await _navigationService.ShowPopupAsync<RideViewModel>(
                     onPresenting: viewModel => viewModel.RideId = response.Data);
-                await FetchReservation();
-                await FetchRides();
+                Task.WaitAll(FetchReservation(), FetchRides());
                 return;
             }
             
@@ -81,15 +79,14 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task MapPageLink() => await _navigationService.NavigateToAsync("//MapPage");
+    private async Task MapPageLink() => await _navigationService.NavigateToMapPageAsync();
 
     [RelayCommand]
     private async Task RidePageLink(Ride ride)
     {
         await _navigationService.ShowPopupAsync<RideViewModel>(
             onPresenting: viewModel => viewModel.RideId = ride.Id);
-        await FetchReservation();
-        await FetchRides();
+        Task.WaitAll(FetchReservation(), FetchRides());
     }
 
     private async Task FetchReservation()
@@ -108,8 +105,7 @@ public partial class MainViewModel : ObservableObject
 
     private async Task FetchRides()
     {
-        var response = await _mediator.Send(new GetRidesQuery(
-            r => r.UserId == CurrentUserId && r.IsActive));
+        var response = await _mediator.Send(new GetRidesQuery(r => r.UserId == CurrentUserId && r.IsActive));
         Rides = response.Data;
         HasRides = Rides?.Count > 0;
     }
@@ -118,7 +114,7 @@ public partial class MainViewModel : ObservableObject
     {
         if (_currentUserProvider.GetCurrentUser() is not Guid userId)
         {
-            await _navigationService.NavigateToAsync("//LoginPage");
+            await _navigationService.NavigateToLoginPageAsync();
             return;
         }
 

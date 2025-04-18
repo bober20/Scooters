@@ -5,7 +5,6 @@ using Application.Users.Queries.AuthenticateUser;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MediatR;
-using Scooters.Services;
 
 namespace Scooters.ViewModels;
 
@@ -42,7 +41,7 @@ public partial class LoginViewModel : ObservableValidator
         _currentUserProvider = currentUserProvider;
         _navigationService = navigationService;
     }
-
+    
     [RelayCommand]
     private async Task LogIn()
     {
@@ -57,7 +56,7 @@ public partial class LoginViewModel : ObservableValidator
         if (response.IsSuccessful)
         {
             _currentUserProvider.SetCurrentUser(response.Data);
-            await _navigationService.NavigateToAsync("//MainPage");
+            await _navigationService.NavigateToMainPageAsync();
         }
         else
         {
@@ -65,18 +64,11 @@ public partial class LoginViewModel : ObservableValidator
         }
     }
 
-    // [RelayCommand]
-    // private async Task LoginUsingApple()
-    // {
-    //     var auth = new Authenticator();
-    //     await auth.AuthenticateAsync();
-    // }
-
     [RelayCommand]
     private void TogglePasswordVisibility() => IsPasswordVisible = !IsPasswordVisible;
 
     [RelayCommand]
-    private async Task SignUpLink() => await _navigationService.NavigateToAsync("//SignUpPage");
+    private async Task SignUpLink() => await _navigationService.NavigateToSignUpPageAsync();
 
     [RelayCommand]
     private async Task Appearing() =>  await GetCurrentUser();
@@ -88,7 +80,7 @@ public partial class LoginViewModel : ObservableValidator
         var user = _currentUserProvider.GetCurrentUser();
         if (user != null)
         {
-            await _navigationService.NavigateToAsync("//MainPage");
+            await _navigationService.NavigateToMainPageAsync();
         }
     }
 

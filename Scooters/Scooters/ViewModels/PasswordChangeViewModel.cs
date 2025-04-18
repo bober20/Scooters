@@ -57,7 +57,7 @@ public partial class PasswordChangeViewModel : ObservableValidator
         _mediator = mediator;
         _navigationService = navigationService;
     }
-
+    
     [RelayCommand]
     private async Task ChangePassword()
     {
@@ -68,12 +68,17 @@ public partial class PasswordChangeViewModel : ObservableValidator
         }
 
         var guid = _currentUserProvider.GetCurrentUser();
+        if (guid is null)
+        {
+            await _navigationService.NavigateToLoginPageAsync();
+            return;
+        }
         var response = await _mediator.Send(new ChangePasswordCommand(guid.Value, OldPassword, NewPassword,
             NewPasswordConfirmation));
         if (response.IsSuccessful)
         {
             await _navigationService.ShowAlertAsync("Success", "Password has been successfully changed");
-            await _navigationService.NavigateToAsync("//ProfilePage");
+            await _navigationService.NavigateToProfilePageAsync();
         }
         else
         {
