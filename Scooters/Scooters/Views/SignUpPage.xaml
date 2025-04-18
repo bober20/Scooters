@@ -11,31 +11,30 @@
         <Grid RowSpan="2"
               RowDefinitions="Auto, *"
               IgnoreSafeArea="True">
-            <Label Grid.Row="0"
-                   Padding="20,80,20,40"
-                   Text="Scooters"
-                   HorizontalTextAlignment="Center"
-                   FontSize="72"
-                   FontAttributes="Bold" />
+            <Image
+                Source="scooterslogo.png"
+                Grid.Row="0"
+                Margin="20,55,20,35" />
             <Border
                 Grid.Row="1"
-                BackgroundColor="White"
                 StrokeShape="RoundRectangle 40 40 0 0">
                 <VerticalStackLayout
                     Spacing="20"
-                    Padding="20,40,20,10">
+                    Padding="20,30,20,10">
+                    <Label
+                        HorizontalTextAlignment="Center"
+                        Text="Sign up"
+                        FontSize="32"
+                        FontAttributes="Bold" />
                     <VerticalStackLayout Spacing="5">
-                        <Label
-                            HorizontalTextAlignment="Center"
-                            Text="Sign up"
-                            FontSize="32"
-                            FontAttributes="Bold" />
                         <Label
                             Text="Email"
                             TextColor="DimGrey" />
                         <Entry
+                            Keyboard="Email"
+                            IsTextPredictionEnabled="False"
+                            IsSpellCheckEnabled="False"
                             Placeholder="Email"
-                            BackgroundColor="White"
                             Text="{Binding Email}">
                             <Entry.Triggers>
                                 <DataTrigger
@@ -58,8 +57,9 @@
                             TextColor="DimGrey" />
                         <FlexLayout>
                             <Entry
+                                IsTextPredictionEnabled="False"
+                                IsSpellCheckEnabled="False"
                                 Placeholder="Password"
-                                BackgroundColor="White"
                                 FlexLayout.Basis="0"
                                 FlexLayout.Grow="1"
                                 IsPassword="{Binding IsPasswordVisible}"
@@ -94,6 +94,10 @@
                             </Button>
                         </FlexLayout>
                         <Label
+                            Text="Use uppercase letters, numbers and special characters"
+                            TextColor="DimGrey"
+                            FontSize="10" />
+                        <Label
                             Text="{Binding PasswordErrors}"
                             TextColor="{StaticResource ErrorText}" />
                     </VerticalStackLayout>
@@ -103,11 +107,12 @@
                             TextColor="DimGrey" />
                         <FlexLayout>
                             <Entry
+                                IsTextPredictionEnabled="False"
+                                IsSpellCheckEnabled="False"
                                 FlexLayout.Basis="0"
                                 FlexLayout.Grow="1"
                                 Placeholder="Password confirmation"
                                 IsPassword="{Binding IsPasswordVisible}"
-                                BackgroundColor="White"
                                 Text="{Binding PasswordConfirmation}">
                                 <Entry.Triggers>
                                     <DataTrigger
@@ -139,6 +144,10 @@
                             </Button>
                         </FlexLayout>
                         <Label
+                            Text="Password confirmation must match password"
+                            TextColor="DimGrey"
+                            FontSize="10" />
+                        <Label
                             Text="{Binding PasswordConfirmErrors}"
                             TextColor="{StaticResource ErrorText}" />
                     </VerticalStackLayout>
@@ -151,8 +160,7 @@
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span
-                                    Text="Already have an account? "
-                                    TextColor="Black" />
+                                    Text="Already have an account? " />
                                 <Span
                                     Text="Sign in"
                                     TextColor="DarkCyan">

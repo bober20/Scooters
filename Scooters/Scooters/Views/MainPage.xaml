@@ -6,12 +6,13 @@
              xmlns:viewModels="clr-namespace:Scooters.ViewModels"
              x:DataType="viewModels:MainViewModel"
              x:Name="MainPageView"
+             Shell.NavBarIsVisible="False"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:entities="clr-namespace:Domain.Entities;assembly=Domain">
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}" />
     </ContentPage.Behaviors>
-    <VerticalStackLayout Padding="10" Spacing="30">
+    <VerticalStackLayout Padding="10,40,10,10" Spacing="30">
         <Label
             Text="Scooters"
             HorizontalTextAlignment="Center"
@@ -40,11 +41,7 @@
         <Border
             StrokeShape="RoundRectangle 40 40"
             Padding="10"
-            BackgroundColor="White"
             StrokeThickness="0">
-            <Border.Shadow>
-                <Shadow Brush="LightGrey" Offset="0,0" Radius="10" />
-            </Border.Shadow>
             <Border.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding ReservationDetailsCommand}" />
             </Border.GestureRecognizers>
@@ -73,7 +70,17 @@
                                         FallbackValue='Start time is not specified', 
                                         StringFormat='{0:dd/MM/yyyy HH:mm}'}"
                                 FontSize="16" />
-                            <Border />
+                            <Border StrokeThickness="0.5">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter
+                                            Property="BackgroundColor"
+                                            Value="{AppThemeBinding 
+                                            Light={StaticResource Black}, 
+                                            Dark={StaticResource White}}" />
+                                    </Style>
+                                </Border.Style>
+                            </Border>
                             <Label
                                 Text="{Binding Reservation.Scooter.ModelDescription, 
                                     FallbackValue='Scooter is not specified'}"
@@ -125,11 +132,7 @@
                 <DataTemplate x:DataType="entities:Ride">
                     <Border
                         Padding="10"
-                        BackgroundColor="White"
                         StrokeShape="RoundRectangle 40 40">
-                        <Border.Shadow>
-                            <Shadow Brush="LightGrey" Offset="0,0" Radius="10" />
-                        </Border.Shadow>
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer
                                 Command="{Binding
@@ -152,7 +155,17 @@
                                         FallbackValue='Start time is not specified',
                                         StringFormat='{0:dd/MM/yyyy HH:mm}'}"
                                             FontSize="16" />
-                                        <Border />
+                                        <Border StrokeThickness="0.5">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter
+                                                        Property="BackgroundColor"
+                                                        Value="{AppThemeBinding 
+                                                        Light={StaticResource Black}, 
+                                                        Dark={StaticResource White}}" />
+                                                </Style>
+                                            </Border.Style>
+                                        </Border>
                                         <Label
                                             Text="{Binding Scooter.ModelDescription,
                                         FallbackValue='Scooter is not specified'}"

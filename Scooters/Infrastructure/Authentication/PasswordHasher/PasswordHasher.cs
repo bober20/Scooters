@@ -4,20 +4,18 @@ namespace Infrastructure.Authentication.PasswordHasher;
 
 public partial class PasswordHasher : IPasswordHasher
 {
-    private static readonly Regex PasswordRegex = StrongPasswordRegex();
-    
     public ResponseData<string> HashPassword(string password)
     {
-        return PasswordRegex.IsMatch(password)
-            ? ResponseData<string>.Success(BCrypt.Net.BCrypt.EnhancedHashPassword(password))
-            : ResponseData<string>.Failure("Password is too weak.");
+        if (string.IsNullOrWhiteSpace(password) || password.Length < 8)
+        {
+            return ResponseData<string>.Failure("Password must be at least 8 characters long");
+        }
+        
+        return ResponseData<string>.Success(BCrypt.Net.BCrypt.EnhancedHashPassword(password));
     }
 
     public bool IsCorrectPassword(string password, string hash)
     {
         return BCrypt.Net.BCrypt.EnhancedVerify(password, hash);
     }
-    
-    [GeneratedRegex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", RegexOptions.Compiled)]
-    private static partial Regex StrongPasswordRegex();
 }

@@ -15,7 +15,6 @@
                ios:Page.UseSafeArea="True">
     <Border
         Padding="10"
-        BackgroundColor="White"
         StrokeShape="RoundRectangle 40 40 0 0">
         <FlexLayout
             JustifyContent="SpaceBetween"
@@ -24,7 +23,7 @@
             <VerticalStackLayout Spacing="5">
                 <Label
                     HorizontalTextAlignment="Center"
-                    Text="{Binding Ride.Scooter.ModelDescription,  
+                    Text="{Binding Ride.Scooter.ModelDescription,
                                 FallbackValue='Scooter is not specified'}"
                     FontSize="28"
                     FontAttributes="Bold" />
@@ -41,11 +40,7 @@
                 <Border
                     Padding="10"
                     StrokeShape="RoundRectangle 40 40"
-                    BackgroundColor="White"
                     StrokeThickness="0">
-                    <Border.Shadow>
-                        <Shadow Brush="LightGrey" Offset="0,0" Radius="10" />
-                    </Border.Shadow>
                     <VerticalStackLayout Spacing="15">
                         <Grid
                             ColumnDefinitions="*, *"

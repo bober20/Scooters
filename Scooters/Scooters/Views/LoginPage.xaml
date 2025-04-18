@@ -19,20 +19,16 @@
             IgnoreSafeArea="True"
             RowSpan="2"
             RowDefinitions="Auto, *">
-            <Label
+            <Image
+                Source="scooterslogo.png"
                 Grid.Row="0"
-                Padding="20,80,20,40"
-                Text="Scooters"
-                HorizontalTextAlignment="Center"
-                FontSize="72"
-                FontAttributes="Bold" />
+                Margin="20,55,20,35" />
             <Border
                 Grid.Row="1"
-                BackgroundColor="White"
                 StrokeShape="RoundRectangle 40 40 0 0">
                 <VerticalStackLayout
                     Spacing="20"
-                    Padding="20,40,20,10">
+                    Padding="20,30,20,10">
                     <Label
                         Text="Sign in"
                         FontSize="32"
@@ -43,8 +39,10 @@
                             Text="Email"
                             TextColor="DimGrey" />
                         <Entry
+                            Keyboard="Email"
+                            IsTextPredictionEnabled="False"
+                            IsSpellCheckEnabled="False"
                             Placeholder="Email"
-                            BackgroundColor="White"
                             Text="{Binding Email}">
                             <Entry.Triggers>
                                 <DataTrigger
@@ -67,10 +65,11 @@
                             TextColor="DimGrey" />
                         <FlexLayout>
                             <Entry
+                                IsTextPredictionEnabled="False"
+                                IsSpellCheckEnabled="False"
                                 Placeholder="Password"
                                 FlexLayout.Grow="1"
                                 FlexLayout.Basis="0"
-                                BackgroundColor="White"
                                 Text="{Binding Password}"
                                 IsPassword="{Binding IsPasswordVisible}">
                                 <Entry.Triggers>
@@ -114,7 +113,7 @@
                         HorizontalTextAlignment="Center">
                         <Label.FormattedText>
                             <FormattedString>
-                                <Span Text="Don't have an account? " TextColor="Black" />
+                                <Span Text="Don't have an account? " />
                                 <Span Text="Sign up"
                                       TextColor="DarkCyan">
                                     <Span.GestureRecognizers>

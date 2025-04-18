@@ -5,6 +5,7 @@ using Application.Users.Queries.AuthenticateUser;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MediatR;
+using Scooters.Services;
 
 namespace Scooters.ViewModels;
 
@@ -63,6 +64,13 @@ public partial class LoginViewModel : ObservableValidator
             await _navigationService.ShowAlertAsync("Log in error", response.ErrorMessage);
         }
     }
+
+    // [RelayCommand]
+    // private async Task LoginUsingApple()
+    // {
+    //     var auth = new Authenticator();
+    //     await auth.AuthenticateAsync();
+    // }
 
     [RelayCommand]
     private void TogglePasswordVisibility() => IsPasswordVisible = !IsPasswordVisible;
