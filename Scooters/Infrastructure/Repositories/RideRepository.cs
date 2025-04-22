@@ -30,7 +30,7 @@ public class RideRepository : IRideRepository
         return ride;
     }
 
-    public async Task<List<Ride>?> GetRidesAsync(Expression<Func<Ride, bool>> filter)
+    public async Task<List<Ride>> GetRidesAsync(Expression<Func<Ride, bool>> filter)
     {
         var rides = await _dbContext.Rides
             .Where(filter)

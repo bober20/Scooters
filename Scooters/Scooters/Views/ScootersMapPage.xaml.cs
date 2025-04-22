@@ -1,21 +1,26 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Scooters.ViewModels;
 
 namespace Scooters.Views;
 
 public partial class ScootersMapPage : ContentPage
 {
+    private readonly ScootersMapViewModel _viewModel;
+    
     public ScootersMapPage(ScootersMapViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;
-        foreach (var scooter in viewModel.Pins)
+        _viewModel = viewModel;
+    }
+
+    private void OnAppearing(object sender, EventArgs e)
+    {
+        _viewModel.AppearingCommand.Execute(null);
+        
+        ScootersMap.Pins.Clear();
+        foreach (var pin in _viewModel.Pins)
         {
-            ScootersMap.Pins.Add(scooter);
+            ScootersMap.Pins.Add(pin);
         }
     }
 }

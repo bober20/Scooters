@@ -21,12 +21,15 @@ public partial class ScootersMapViewModel : ObservableObject
     {
         _mediator = mediator;
         _navigationService = navigationService;
-        AddPins();
     }
 
     [RelayCommand]
-    private async Task Appearing() => await LoadScooters();
-    
+    private async Task Appearing()
+    {
+        await LoadScooters();
+        await AddPins();
+    }
+
     [RelayCommand]
     private async Task PinClicked(Pin pin)
     {
@@ -42,9 +45,7 @@ public partial class ScootersMapViewModel : ObservableObject
     private async Task AddPins()
     {
         Pins = new List<Pin>();
-        var response = await _mediator.Send(new GetAllScootersQuery());
-        if (!response.IsSuccessful) return;
-        foreach (var s in response.Data)
+        foreach (var s in Scooters)
         {
             var pin = new Pin
             {
@@ -67,7 +68,7 @@ public partial class ScootersMapViewModel : ObservableObject
 
     private async Task LoadScooters()
     {
-        var response = await _mediator.Send(new GetAllScootersQuery());
+        var response = await _mediator.Send(new GetAvailableScootersQuery());
         Scooters = new List<Scooter>(response.Data);
     }
 }

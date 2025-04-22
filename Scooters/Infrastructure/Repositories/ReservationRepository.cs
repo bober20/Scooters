@@ -23,7 +23,7 @@ public class ReservationRepository : IReservationRepository
         return reservation;
     }
 
-    public async Task<List<Reservation>?> GetReservationsAsync(Expression<Func<Reservation, bool>> filter)
+    public async Task<List<Reservation>> GetReservationsAsync(Expression<Func<Reservation, bool>> filter)
     {
         var reservations = await _dbContext.Reservations
             .Where(filter)

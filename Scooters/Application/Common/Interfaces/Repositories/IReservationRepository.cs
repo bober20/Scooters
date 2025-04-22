@@ -5,7 +5,7 @@ namespace Application.Common.Interfaces.Repositories;
 public interface IReservationRepository
 {
     Task<Reservation?> GetReservationAsync(Guid id);
-    Task<List<Reservation>?> GetReservationsAsync(Expression<Func<Reservation, bool>> filter);
+    Task<List<Reservation>> GetReservationsAsync(Expression<Func<Reservation, bool>> filter);
     Task<Reservation?> GetReservationAsync(Guid userId, Guid scooterId);
     Task<Reservation?> GetReservationByScooterAsync(Guid scooterId);
     Task<Reservation?> GetReservationByUserAsync(Guid scooterId);
