@@ -10,8 +10,14 @@
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              x:DataType="viewModels:QRScannerViewModel"
              Shell.NavBarIsVisible="False">
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}" />
+        <toolkit:EventToCommandBehavior EventName="Disappearing" Command="{Binding DisappearingCommand}" />
+    </ContentPage.Behaviors>
     <ContentPage.Content>
-        <zxing:CameraBarcodeReaderView IsDetecting="{Binding IsDetecting}">
+        <zxing:CameraBarcodeReaderView 
+            x:Name="Scanner"
+            IsDetecting="{Binding IsDetecting}">
             <zxing:CameraBarcodeReaderView.Options>
                 <maui:BarcodeReaderOptions
                     Formats="QrCode"

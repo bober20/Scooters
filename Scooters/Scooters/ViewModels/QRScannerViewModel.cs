@@ -34,4 +34,16 @@ public partial class QRScannerViewModel : ObservableObject
         
         IsDetecting = true;
     }
+
+    [RelayCommand]
+    private void Appearing()
+    {
+        IsDetecting = true;
+    }
+    
+    [RelayCommand]
+    private void Disappearing()
+    {
+        IsDetecting = false;
+    }
 }
