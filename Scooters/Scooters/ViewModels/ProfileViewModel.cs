@@ -34,7 +34,7 @@ public partial class ProfileViewModel : ObservableObject
     [RelayCommand]
     private async Task PhotoManagement()
     {
-        var output = await _navigationService.ShowOptionsAsync(
+        var output = await Shell.Current.DisplayActionSheet(
             "Upload Photo", "Cancel", "Gallery", "Delete");
 
         if (output == "Delete")
@@ -64,32 +64,27 @@ public partial class ProfileViewModel : ObservableObject
     [RelayCommand]
     private async Task DeleteAccount()
     {
-        var passwordConfirmation = await _navigationService.PromptAsync("Confirmation",
-            "Confirm your password to proceed", "Delete", "Cancel", "Password", 
-            30);
+        var result =
+            await Shell.Current.DisplayAlert("Delete account", "Are you sure you want to delete account?", "Yes", "No");
 
-        if (passwordConfirmation is null)
+        if (!result)
         {
             return;
         }
-
-        var response = await _mediator.Send(new DeleteUserCommand(User.Id, passwordConfirmation));
-        if (response.IsSuccessful)
-        {
-            _currentUserProvider.RemoveCurrentUser();
-            ImageService.RemoveImage(User.ImageName);
-            await _navigationService.ShowAlertAsync("Success", "Your account has been deleted", "OK");
-            await _navigationService.NavigateToLoginPageAsync();
-        }
-        else
-        {
-            await _navigationService.ShowAlertAsync("Error", response.ErrorMessage, "OK");
-        }
+        _currentUserProvider.RemoveCurrentUser();
+        ImageService.RemoveImage(User.ImageName);
+        await Shell.Current.DisplayAlert("Success", "Your account has been deleted", "OK");
+        await _navigationService.NavigateToLoginPageAsync();
     }
 
     [RelayCommand]
     private async Task LogOut()
     {
+        var result = await Shell.Current.DisplayAlert("Log out", "Are you sure you want to log out?", "Yes", "No");
+        if (!result)
+        {
+            return;
+        }
         _currentUserProvider.RemoveCurrentUser();
         await _navigationService.NavigateToLoginPageAsync();
     }

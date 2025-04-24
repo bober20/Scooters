@@ -67,6 +67,27 @@
                             </Border.Style>
                         </Border>
                         <Label
+                            Text="Log out"
+                            TextColor="Red"
+                            VerticalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding LogOutCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Border
+                            StrokeThickness="0.5"
+                            Margin="-10,0">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter
+                                        Property="BackgroundColor"
+                                        Value="{AppThemeBinding 
+                                                        Light={StaticResource Black}, 
+                                                        Dark={StaticResource White}}" />
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                        <Label
                             Text="Delete account"
                             TextColor="Red"
                             VerticalTextAlignment="Center">
@@ -88,9 +109,6 @@
                             </Border.Style>
                         </Border>
                     </VerticalStackLayout>
-                    <Button
-                        Text="Log out"
-                        Command="{Binding LogOutCommand}" />
                 </FlexLayout>
             </Border>
         </Grid>

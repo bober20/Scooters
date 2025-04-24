@@ -55,7 +55,7 @@ public partial class ReservationViewModel : ObservableObject
             return;
         }
 
-        await _navigationService.ShowAlertAsync("Error", response.ErrorMessage);
+        await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
     }
 
     [RelayCommand]
@@ -79,7 +79,7 @@ public partial class ReservationViewModel : ObservableObject
         var response = await _mediator.Send(new CreateRideCommand(ride));
         if (!response.IsSuccessful)
         {
-            await _navigationService.ShowAlertAsync("Error", response.ErrorMessage);
+            await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
             return;
         }
 
@@ -123,7 +123,7 @@ public partial class ReservationViewModel : ObservableObject
         }
         else
         {
-            await _navigationService.ShowAlertAsync("Error", "There is no scooter with this ID");
+            await Shell.Current.DisplayAlert("Error", "There is no scooter with this ID", "OK");
             await _navigationService.ClosePopupAsync();
         }
     }

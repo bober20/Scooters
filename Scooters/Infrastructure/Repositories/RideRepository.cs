@@ -30,6 +30,13 @@ public class RideRepository : IRideRepository
         return ride;
     }
 
+    public async Task<Ride?> GetRideByUserAsync(Guid userId)
+    {
+        var ride = await _dbContext.Rides
+            .FirstOrDefaultAsync(r => r.UserId == userId && r.IsActive);
+        return ride;
+    }
+
     public async Task<List<Ride>> GetRidesAsync(Expression<Func<Ride, bool>> filter)
     {
         var rides = await _dbContext.Rides

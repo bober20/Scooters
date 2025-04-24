@@ -50,8 +50,8 @@ public partial class MainViewModel : ObservableObject
             return;
         }
 
-        var result = await _navigationService.ShowOptionsAsync("Reservation", "Cancel", 
-            "Start ride", "Cancel Reservation");
+        var result = await Shell.Current.DisplayActionSheet("Reservation", "Cancel", 
+            "Cancel Reservation", "Start ride");
         if (result == "Cancel Reservation")
         {
             await _mediator.Send(new EndReservationCommand(Reservation.Id));
@@ -74,7 +74,7 @@ public partial class MainViewModel : ObservableObject
                 return;
             }
             
-            await _navigationService.ShowAlertAsync("Error", response.ErrorMessage);
+            await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
         }
     }
 

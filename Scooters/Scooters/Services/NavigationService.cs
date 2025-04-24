@@ -52,25 +52,6 @@ public class NavigationService : INavigationService
         });
     }
 
-    public Task ShowAlertAsync(string title, string message, string cancel = "OK")
-    {
-        return MainThread.InvokeOnMainThreadAsync(() =>
-            Shell.Current.DisplayAlert(title, message, cancel));
-    }
-
-    public Task<string?> ShowOptionsAsync(string title, string cancel, params string[] options)
-    {
-        return MainThread.InvokeOnMainThreadAsync(() =>
-            Shell.Current.DisplayActionSheet(title, cancel, null, options));
-    }
-
-    public Task<string?> PromptAsync(string title, string message, string accept = "OK", string cancel = "Cancel",
-        string placeholder = "", int maxLength = -1)
-    {
-        return MainThread.InvokeOnMainThreadAsync(async () =>
-            await Shell.Current.DisplayPromptAsync(title, message, accept, cancel, placeholder, maxLength));
-    }
-
     public async Task ClosePopupAsync()
     {
         await MainThread.InvokeOnMainThreadAsync(() => _popupService.ClosePopupAsync());

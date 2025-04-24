@@ -57,7 +57,7 @@ public partial class SignUpViewModel : ObservableValidator
 
         if (!response.IsSuccessful)
         {
-            await _navigationService.ShowAlertAsync("Sign up error", response.ErrorMessage);
+            await Shell.Current.DisplayAlert("Sign up error", response.ErrorMessage, "OK");
         }
         else
         {

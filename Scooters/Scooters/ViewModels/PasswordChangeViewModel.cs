@@ -77,12 +77,12 @@ public partial class PasswordChangeViewModel : ObservableValidator
             NewPasswordConfirmation));
         if (response.IsSuccessful)
         {
-            await _navigationService.ShowAlertAsync("Success", "Password has been successfully changed");
+            await Shell.Current.DisplayAlert("Success", "Password has been successfully changed", "OK");
             await _navigationService.NavigateToProfilePageAsync();
         }
         else
         {
-            await _navigationService.ShowAlertAsync("Error", response.ErrorMessage);
+            await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
         }
     }
 

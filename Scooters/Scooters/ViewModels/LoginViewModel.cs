@@ -60,7 +60,7 @@ public partial class LoginViewModel : ObservableValidator
         }
         else
         {
-            await _navigationService.ShowAlertAsync("Log in error", response.ErrorMessage);
+            await Shell.Current.DisplayAlert("Log in error", response.ErrorMessage, "OK");
         }
     }
 
