@@ -9,10 +9,12 @@
                CanBeDismissedByTappingOutsideOfPopup="True"
                Opened="ReservationPage_OnOpened"
                HorizontalOptions="Fill"
-               VerticalOptions="End"
+               VerticalOptions="Fill"
                Size="500, 700"
                xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
                ios:Page.UseSafeArea="True"
+               Shell.TabBarIsVisible="False"
+               Shell.FlyoutItemIsVisible="False"
                Color="Transparent">
     <ScrollView>
         <VerticalStackLayout Spacing="10">
@@ -102,9 +104,9 @@
                         Margin="0,20,0,0"
                         Spacing="5">
                         <Label
-                            Text="Select time interval for reservation"
+                            Text="Select time interval for reservation (min)"
                             FontAttributes="Bold"
-                            FontSize="20" />
+                            FontSize="18" />
                             <Picker
                                 Title="Select time interval"
                                 ItemsSource="{Binding TimeSlots}"

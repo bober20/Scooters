@@ -19,6 +19,14 @@ public class CreateRideHandler : IRequestHandler<CreateRideCommand, ResponseData
     {
         try
         {
+            var existingRide = await _rideRepository
+                .GetRideByUserAsync(request.Ride.UserId);
+            
+            if (existingRide is not null)
+            {
+                return ResponseData<Guid>.Failure("Cancel current ride to start a new one");
+            }
+            
             var reservation = await _reservationRepository
                 .GetReservationByScooterAsync(request.Ride.ScooterId);
             
