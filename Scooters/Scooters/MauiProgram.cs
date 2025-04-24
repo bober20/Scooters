@@ -10,6 +10,7 @@ using Scooters.Services;
 using Scooters.ViewModels;
 using Scooters.Views;
 using Microsoft.Maui.Hosting;
+using Mopups.Hosting;
 using Plugin.LocalNotification;
 using ZXing.Net.Maui.Controls;
 
@@ -24,6 +25,7 @@ public static class MauiProgram
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
             .UseMauiMaps()
+            .ConfigureMopups()
             .UseBarcodeReader()
             .UseLocalNotification();
 

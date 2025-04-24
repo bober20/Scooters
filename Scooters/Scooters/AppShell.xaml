@@ -7,6 +7,7 @@
     xmlns:views="clr-namespace:Scooters.Views"
     FlyoutBehavior="Disabled"
     Title="Scooters">
+    <!-- <ShellContent ContentTemplate="{DataTemplate views:Test}" Route="Test" /> -->
     <ShellContent
         ContentTemplate="{DataTemplate views:LoginPage}"
         Route="LoginPage" />
