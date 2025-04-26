@@ -1,4 +1,5 @@
 using System.Reflection;
+using Application.Interfaces;
 
 namespace Infrastructure.Common.Persistence;
 

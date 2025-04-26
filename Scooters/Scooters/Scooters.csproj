@@ -81,19 +81,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <MauiXaml Update="Views\MainPage.xaml">
-        <SubType>Designer</SubType>
-      </MauiXaml>
       <MauiXaml Update="Views\ScootersMapPage.xaml">
         <SubType>Designer</SubType>
       </MauiXaml>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Views\MainPage.xaml.cs">
-        <DependentUpon>MainPage.xaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
       <Compile Update="Views\ScootersMapPage.xaml.cs">
         <DependentUpon>ScootersMapPage.xaml</DependentUpon>
         <SubType>Code</SubType>
@@ -111,5 +104,9 @@
       <EmbeddedResource Include="appsettings.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Common\Interfaces\" />
     </ItemGroup>
 </Project>

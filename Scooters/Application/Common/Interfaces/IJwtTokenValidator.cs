@@ -1,4 +1,4 @@
-namespace Application.Common.Interfaces.JwtTokenValidator;
+namespace Application.Common.Interfaces;
 
 public interface IJwtTokenValidator
 {

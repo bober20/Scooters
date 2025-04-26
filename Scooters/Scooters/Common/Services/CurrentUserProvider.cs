@@ -1,8 +1,6 @@
-using Application.Common.Interfaces.CurrentUserProvider;
-using Application.Common.Interfaces.JwtTokenValidator;
-using Domain.Entities;
+using Application.Common.Interfaces;
 
-namespace Scooters.Services;
+namespace Scooters.Common.Services;
 
 public class CurrentUserProvider : ICurrentUserProvider
 {

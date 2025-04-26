@@ -1,8 +1,8 @@
-using Application.Common.Interfaces.NavigationService;
+using Application.Common.Interfaces;
 using CommunityToolkit.Maui.Core;
 using Scooters.Views;
 
-namespace Scooters.Services;
+namespace Scooters.Common.Services;
 
 public class NavigationService : INavigationService
 {
@@ -13,11 +13,6 @@ public class NavigationService : INavigationService
         _popupService = popupService;
     }
     
-    public Task NavigateToMainPageAsync()
-    {
-        return NavigateToAsync($"//{nameof(MainPage)}");
-    }
-
     public Task NavigateToLoginPageAsync()
     {
         return NavigateToAsync($"//{nameof(LoginPage)}");

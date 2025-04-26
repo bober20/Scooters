@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
-using Application.Common.Interfaces.CurrentUserProvider;
-using Application.Common.Interfaces.NavigationService;
+using Application.Common.Interfaces;
 using Application.Reservations.Commands.CreateReservation;
 using Application.Rides.Commands.CreateRide;
 using Application.Scooters.Queries.GetScooterById;
@@ -16,7 +15,6 @@ public partial class ReservationViewModel : ObservableObject
 {
     [ObservableProperty] private Reservation _reservation = new();
     [ObservableProperty] private ObservableCollection<int> _timeSlots = new();
-    [ObservableProperty] private Guid _scooterId;
     [ObservableProperty] private Scooter _scooter;
 
     private Guid _currentUserId;
@@ -26,9 +24,8 @@ public partial class ReservationViewModel : ObservableObject
     private readonly INavigationService _navigationService;
     private readonly INotificationService _notificationService;
 
-    public ReservationViewModel(IMediator mediator,
-        ICurrentUserProvider currentUserProvider, INavigationService navigationService,
-        INotificationService notificationService)
+    public ReservationViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider, 
+        INavigationService navigationService, INotificationService notificationService)
     {
         _mediator = mediator;
         _currentUserProvider = currentUserProvider;
@@ -37,7 +34,7 @@ public partial class ReservationViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task Reserve()
+    private async Task ReserveScooter()
     {
         if (Reservation.Duration == 0)
         {
@@ -50,7 +47,6 @@ public partial class ReservationViewModel : ObservableObject
         if (response.IsSuccessful)
         {
             await ShowNotification();
-            await _navigationService.NavigateToMainPageAsync();
             await _navigationService.ClosePopupAsync();
             return;
         }
@@ -62,7 +58,6 @@ public partial class ReservationViewModel : ObservableObject
     private async Task Appearing()
     {
         await GetCurrentUserAsync();
-        await InitializeScooter();
         InitializeTimeSlots();
         InitializeReservation();
     }
@@ -73,7 +68,7 @@ public partial class ReservationViewModel : ObservableObject
         var ride = new Ride
         {
             StartTime = DateTime.Now,
-            ScooterId = ScooterId,
+            ScooterId = Scooter.Id,
             UserId = _currentUserId
         };
         var response = await _mediator.Send(new CreateRideCommand(ride));
@@ -82,10 +77,10 @@ public partial class ReservationViewModel : ObservableObject
             await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
             return;
         }
-
-        await _navigationService.ClosePopupAsync();
+        
         await _navigationService.ShowPopupAsync<RideViewModel>(
-            onPresenting: viewModel => viewModel.RideId = response.Data);
+            onPresenting: viewModel => viewModel.Ride = response.Data);
+        await _navigationService.ClosePopupAsync();
     }
     
     private async Task GetCurrentUserAsync()
@@ -109,25 +104,10 @@ public partial class ReservationViewModel : ObservableObject
 
     private void InitializeReservation()
     {
-        Reservation.ScooterId = ScooterId;
+        Reservation.ScooterId = Scooter.Id;
         Reservation.UserId = _currentUserId;
     }
-
-    private async Task InitializeScooter()
-    {
-        var scooter = await _mediator.Send(new GetScooterQuery(ScooterId));
-        if (scooter.IsSuccessful)
-        {
-            Scooter = scooter.Data;
-            Reservation.Scooter = scooter.Data;
-        }
-        else
-        {
-            await Shell.Current.DisplayAlert("Error", "There is no scooter with this ID", "OK");
-            await _navigationService.ClosePopupAsync();
-        }
-    }
-
+    
     private async Task ShowNotification()
     {
         if (await _notificationService.AreNotificationsEnabled() == false)

@@ -1,4 +1,4 @@
-using Application.Common.Interfaces.NavigationService;
+using Application.Common.Interfaces;
 using Application.Rides.Commands.EndRide;
 using Application.Rides.Queries.GetRideById;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -11,7 +11,6 @@ namespace Scooters.ViewModels;
 public partial class RideViewModel : ObservableObject
 {
     [ObservableProperty] private Ride _ride;
-    [ObservableProperty] private Guid _rideId;
     [ObservableProperty] private string _countdown;
     [ObservableProperty] private string _distance = "0.00";
     
@@ -29,7 +28,6 @@ public partial class RideViewModel : ObservableObject
     [RelayCommand]
     private async Task Appearing()
     {
-        await InitializeRideAsync();
         InitialiseTimer();
     }
 
@@ -37,18 +35,6 @@ public partial class RideViewModel : ObservableObject
     private async Task EndRide()
     {
         await _mediator.Send(new EndRideCommand(Ride.Id));
-        await _navigationService.ClosePopupAsync();
-    }
-
-    private async Task InitializeRideAsync()
-    {
-        var response = await _mediator.Send(new GetRideQuery(RideId));
-        if (response.IsSuccessful)
-        {
-            Ride = response.Data;
-            return;
-        }
-
         await _navigationService.ClosePopupAsync();
     }
 

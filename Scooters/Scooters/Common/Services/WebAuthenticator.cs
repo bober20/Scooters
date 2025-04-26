@@ -3,7 +3,7 @@ using Microsoft.Maui.Authentication;
 using Microsoft.Maui.Storage;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace Scooters.Services;
+namespace Scooters.Common.Services;
 
 public class Authenticator
 {

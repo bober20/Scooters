@@ -7,13 +7,17 @@
              x:DataType="viewModels:ScootersMapViewModel"
              xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
              xmlns:sensors="clr-namespace:Microsoft.Maui.Devices.Sensors;assembly=Microsoft.Maui.Essentials"
-             Shell.NavBarIsVisible="False"
-             Appearing="OnAppearing">
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Shell.NavBarIsVisible="False">
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}" />
+    </ContentPage.Behaviors>
     <ContentPage.Content>
-        <StackLayout IgnoreSafeArea="True">
-            <maps:Map
-                x:Name="ScootersMap"
-                IsShowingUser="true">
+        <Grid RowDefinitions="*, Auto" IgnoreSafeArea="True">
+            <maps:Map Grid.Row="0"
+                      ItemsSource="{Binding Pins}"
+                      x:Name="ScootersMap"
+                      IsShowingUser="true">
                 <x:Arguments>
                     <maps:MapSpan>
                         <x:Arguments>
@@ -29,6 +33,127 @@
                     </maps:MapSpan>
                 </x:Arguments>
             </maps:Map>
-        </StackLayout>
+            <VerticalStackLayout Grid.Row="1" IgnoreSafeArea="False">
+                <VerticalStackLayout HeightRequest="150">
+                    <VerticalStackLayout.Triggers>
+                        <DataTrigger
+                            TargetType="VerticalStackLayout"
+                            Binding="{Binding HasReservation}"
+                            Value="False">
+                            <Setter
+                                Property="IsVisible"
+                                Value="False" />
+                        </DataTrigger>
+                    </VerticalStackLayout.Triggers>
+                    <Border
+                        Margin="0"
+                        StrokeShape="Rectangle"
+                        Padding="10"
+                        StrokeThickness="0">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ScooterActionsCommand}" />
+                        </Border.GestureRecognizers>
+                        <FlexLayout JustifyContent="SpaceBetween">
+                            <VerticalStackLayout>
+                                <FlexLayout>
+                                    <Label
+                                        VerticalTextAlignment="Center"
+                                        Margin="5,0"
+                                        Text="&#xe71d;"
+                                        FontFamily="MauiMaterialAssets"
+                                        FontSize="40" />
+                                    <VerticalStackLayout Spacing="5">
+                                        <Label
+                                            Text="{Binding Reservation.StartTime, 
+                                        FallbackValue='Start time is not specified', 
+                                        StringFormat='{0:dd/MM/yyyy HH:mm}'}"
+                                            FontSize="16" />
+                                        <Border StrokeThickness="0.5">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter
+                                                        Property="BackgroundColor"
+                                                        Value="{AppThemeBinding 
+                                            Light={StaticResource Black}, 
+                                            Dark={StaticResource White}}" />
+                                                </Style>
+                                            </Border.Style>
+                                        </Border>
+                                        <Label
+                                            Text="{Binding Reservation.Scooter.ModelDescription, 
+                                    FallbackValue='Scooter is not specified'}"
+                                            FontSize="16" />
+                                    </VerticalStackLayout>
+                                </FlexLayout>
+                            </VerticalStackLayout>
+                            <Label
+                                VerticalTextAlignment="Center"
+                                Text="{Binding Countdown}"
+                                FontSize="32" />
+                        </FlexLayout>
+                    </Border>
+                </VerticalStackLayout>
+                <VerticalStackLayout HeightRequest="150">
+                    <VerticalStackLayout.Triggers>
+                        <DataTrigger
+                            TargetType="VerticalStackLayout"
+                            Binding="{Binding HasRide}"
+                            Value="False">
+                            <Setter
+                                Property="IsVisible"
+                                Value="False" />
+                        </DataTrigger>
+                    </VerticalStackLayout.Triggers>
+                    <Border
+                        Padding="10"
+                        StrokeShape="Rectangle">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding RidePageLinkCommand}" />
+                        </Border.GestureRecognizers>
+                        <FlexLayout JustifyContent="SpaceBetween">
+                            <VerticalStackLayout>
+                                <FlexLayout>
+                                    <Label
+                                        VerticalTextAlignment="Center"
+                                        Margin="5,0"
+                                        Text="&#xe71d;"
+                                        FontFamily="MauiMaterialAssets"
+                                        FontSize="40" />
+                                    <VerticalStackLayout Spacing="5">
+                                        <Label
+                                            Text="{Binding Ride.StartTime,
+                                        FallbackValue='Start time is not specified',
+                                        StringFormat='{0:dd/MM/yyyy HH:mm}'}"
+                                            FontSize="16" />
+                                        <Border StrokeThickness="0.5">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter
+                                                        Property="BackgroundColor"
+                                                        Value="{AppThemeBinding 
+                                                        Light={StaticResource Black}, 
+                                                        Dark={StaticResource White}}" />
+                                                </Style>
+                                            </Border.Style>
+                                        </Border>
+                                        <Label
+                                            Text="{Binding Ride.Scooter.ModelDescription,
+                                        FallbackValue='Scooter is not specified'}"
+                                            FontSize="16" />
+                                    </VerticalStackLayout>
+                                </FlexLayout>
+                            </VerticalStackLayout>
+                            <Label
+                                VerticalTextAlignment="Center"
+                                Margin="5,0"
+                                Text="&#xe706;"
+                                FontFamily="MauiMaterialAssets"
+                                FontSize="40" />
+                        </FlexLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -1,4 +1,4 @@
-namespace Scooters.Services;
+namespace Scooters.Common.Services;
 
 public static class ImageService
 {

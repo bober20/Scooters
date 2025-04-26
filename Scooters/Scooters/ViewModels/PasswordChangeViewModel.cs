@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Application.Common.Interfaces.CurrentUserProvider;
-using Application.Common.Interfaces.NavigationService;
+using Application.Common.Interfaces;
 using Application.Users.Commands.ChangePassword;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -45,6 +44,7 @@ public partial class PasswordChangeViewModel : ObservableValidator
 
     [ObservableProperty] private bool _isPasswordVisible = true;
 
+    private Guid _userId;
     private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
@@ -57,6 +57,9 @@ public partial class PasswordChangeViewModel : ObservableValidator
         _mediator = mediator;
         _navigationService = navigationService;
     }
+
+    [RelayCommand]
+    private async Task Appearing() => await GetCurrentUserAsync();
     
     [RelayCommand]
     private async Task ChangePassword()
@@ -66,15 +69,8 @@ public partial class PasswordChangeViewModel : ObservableValidator
         {
             return;
         }
-
-        var guid = _currentUserProvider.GetCurrentUser();
-        if (guid is null)
-        {
-            await _navigationService.NavigateToLoginPageAsync();
-            return;
-        }
-        var response = await _mediator.Send(new ChangePasswordCommand(guid.Value, OldPassword, NewPassword,
-            NewPasswordConfirmation));
+        
+        var response = await _mediator.Send(new ChangePasswordCommand(_userId, OldPassword, NewPassword));
         if (response.IsSuccessful)
         {
             await Shell.Current.DisplayAlert("Success", "Password has been successfully changed", "OK");
@@ -90,6 +86,16 @@ public partial class PasswordChangeViewModel : ObservableValidator
     private void TogglePasswordVisibility() => IsPasswordVisible = !IsPasswordVisible;
 
     private bool PropertyHasErrors(string propertyName) => GetErrors(propertyName).Any();
+    
+    private async Task GetCurrentUserAsync()
+    {
+        if (_currentUserProvider.GetCurrentUser() is Guid guid)
+        {
+            _userId = guid;
+            return;
+        }
+        await _navigationService.NavigateToLoginPageAsync();
+    }
 
     private void DisplayErrors()
     {

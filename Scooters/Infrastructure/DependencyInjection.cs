@@ -1,4 +1,4 @@
-using Application.Common.Interfaces.JwtTokenValidator;
+using Application.Interfaces;
 using Infrastructure.Authentication.JwtTokenGenerator;
 using Infrastructure.Authentication.PasswordHasher;
 using Infrastructure.Common.Persistence;

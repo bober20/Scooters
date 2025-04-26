@@ -1,7 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
-using Application.Common.Interfaces.JwtTokenValidator;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 

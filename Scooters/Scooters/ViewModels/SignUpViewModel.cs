@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Application.Common.Interfaces.NavigationService;
+using Application.Common.Interfaces;
 using Application.Users.Commands.RegisterUser;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;

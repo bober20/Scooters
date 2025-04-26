@@ -21,8 +21,7 @@ public class GetAvailableScootersHandler : IRequestHandler<GetAvailableScootersQ
         var reservations = await _reservationRepository.GetReservationsAsync(r => r.IsActive);
         
         var availableScooters = scooters.Where(
-            s => !rides.Any(r => r.ScooterId == s.Id) && 
-                 !reservations.Any(r => r.ScooterId == s.Id)).ToList();
+            s => rides.All(r => r.ScooterId != s.Id) && reservations.All(r => r.ScooterId != s.Id)).ToList();
         return ResponseData<List<Scooter>>.Success(availableScooters);
     }
 }

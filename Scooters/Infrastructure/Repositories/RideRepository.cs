@@ -33,7 +33,11 @@ public class RideRepository : IRideRepository
     public async Task<Ride?> GetRideByUserAsync(Guid userId)
     {
         var ride = await _dbContext.Rides
-            .FirstOrDefaultAsync(r => r.UserId == userId && r.IsActive);
+            .SingleOrDefaultAsync(r => r.UserId == userId && r.IsActive);
+        if (ride is not null)
+        {
+            await _dbContext.Entry(ride).Reference(r => r.Scooter).LoadAsync();
+        }
         return ride;
     }
 

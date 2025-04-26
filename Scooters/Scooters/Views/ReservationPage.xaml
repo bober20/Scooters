@@ -113,7 +113,7 @@
                                 SelectedItem="{Binding Reservation.Duration}" />
                         <Button
                             Text="Reserve"
-                            Command="{Binding ReserveCommand}">
+                            Command="{Binding ReserveScooterCommand}">
                         </Button>
                         <Button
                             Text="Ride straight away"

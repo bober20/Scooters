@@ -1,4 +1,4 @@
-using Application.Common.Interfaces.CurrentUserProvider;
+using Application.Common.Interfaces;
 
 namespace Application.Users.Queries.AuthenticateUser;
 

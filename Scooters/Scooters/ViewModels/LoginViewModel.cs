@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Application.Common.Interfaces.CurrentUserProvider;
-using Application.Common.Interfaces.NavigationService;
+using Application.Common.Interfaces;
 using Application.Users.Queries.AuthenticateUser;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -46,21 +45,19 @@ public partial class LoginViewModel : ObservableValidator
     private async Task LogIn()
     {
         DisplayErrors();
-        if (HasErrors)
+        if (!HasErrors)
         {
-            return;
-        }
+            var response = await _mediator.Send(new AuthenticateUserQuery(Email, Password));
 
-        var response = await _mediator.Send(new AuthenticateUserQuery(Email, Password));
-
-        if (response.IsSuccessful)
-        {
-            _currentUserProvider.SetCurrentUser(response.Data);
-            await _navigationService.NavigateToMainPageAsync();
-        }
-        else
-        {
-            await Shell.Current.DisplayAlert("Log in error", response.ErrorMessage, "OK");
+            if (response.IsSuccessful)
+            {
+                _currentUserProvider.SetCurrentUser(response.Data);
+                await _navigationService.NavigateToMapPageAsync();
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Log in error", response.ErrorMessage, "OK");
+            }
         }
     }
 
@@ -71,16 +68,16 @@ public partial class LoginViewModel : ObservableValidator
     private async Task SignUpLink() => await _navigationService.NavigateToSignUpPageAsync();
 
     [RelayCommand]
-    private async Task Appearing() =>  await GetCurrentUser();
+    private async Task Appearing() =>  await GetCurrentUserAsync();
 
     private bool PropertyHasErrors(string propertyName) =>  GetErrors(propertyName).Any();
     
-    private async Task GetCurrentUser()
+    private async Task GetCurrentUserAsync()
     {
         var user = _currentUserProvider.GetCurrentUser();
         if (user != null)
         {
-            await _navigationService.NavigateToMainPageAsync();
+            await _navigationService.NavigateToMapPageAsync();
         }
     }
 

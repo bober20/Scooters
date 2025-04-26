@@ -1,8 +1,7 @@
-namespace Application.Common.Interfaces.NavigationService;
+namespace Application.Common.Interfaces;
 
 public interface INavigationService
 {
-    public Task NavigateToMainPageAsync();
     public Task NavigateToLoginPageAsync();
     public Task NavigateToSignUpPageAsync();
     public Task NavigateToPasswordChangePageAsync();

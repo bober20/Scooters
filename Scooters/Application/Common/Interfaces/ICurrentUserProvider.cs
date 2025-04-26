@@ -1,4 +1,4 @@
-namespace Application.Common.Interfaces.CurrentUserProvider;
+namespace Application.Common.Interfaces;
 
 public interface ICurrentUserProvider
 {

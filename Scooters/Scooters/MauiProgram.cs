@@ -1,16 +1,11 @@
-﻿using System.Reflection;
-using Application.Common.Interfaces.CurrentUserProvider;
-using Application.Common.Interfaces.NavigationService;
+﻿using Application.Common.Interfaces;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Controls.Hosting;
-using Scooters.Services;
 using Scooters.ViewModels;
 using Scooters.Views;
-using Microsoft.Maui.Hosting;
 using Plugin.LocalNotification;
+using Scooters.Common.Services;
 using ZXing.Net.Maui.Controls;
 
 namespace Scooters;
@@ -47,7 +42,6 @@ public static class MauiProgram
         builder.Services.AddSingleton<ICurrentUserProvider, CurrentUserProvider>();
         builder.Services.AddSingleton<INavigationService, NavigationService>();
 
-        builder.Services.AddTransient<MainPage, MainViewModel>();
         builder.Services.AddTransient<QRScannerPage, QRScannerViewModel>();
         builder.Services.AddTransient<LoginPage, LoginViewModel>();
         builder.Services.AddTransient<SignUpPage, SignUpViewModel>();
