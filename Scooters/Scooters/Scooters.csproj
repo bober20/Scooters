@@ -74,6 +74,7 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0"/>
         <PackageReference Include="Microsoft.Maui.Controls.Maps" Version="9.0.50" />
         <PackageReference Include="Microsoft.Maui.Maps" Version="9.0.50" />
+        <PackageReference Include="Mopups" Version="1.3.2" />
         <PackageReference Include="Plugin.LocalNotification" Version="11.1.4" />
         <PackageReference Include="Syncfusion.Maui.Gauges" Version="29.1.35" />
         <PackageReference Include="ZXing.Net.Maui" Version="0.4.0" />
@@ -104,9 +105,5 @@
       <EmbeddedResource Include="appsettings.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Common\Interfaces\" />
     </ItemGroup>
 </Project>

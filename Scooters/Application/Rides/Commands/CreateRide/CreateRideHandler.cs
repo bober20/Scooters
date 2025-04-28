@@ -27,20 +27,28 @@ public class CreateRideHandler : IRequestHandler<CreateRideCommand, ResponseData
                 return ResponseData<Ride>.Failure("Cancel current ride to start a new one");
             }
             
-            var reservation = await _reservationRepository
+            var scooterReservation = await _reservationRepository
                 .GetReservationByScooterAsync(request.Ride.ScooterId);
+            
+            var userReservation = await _reservationRepository
+                .GetReservationByUserAsync(request.Ride.UserId);
+
+            if (userReservation is not null && (scooterReservation is null || userReservation?.Id != scooterReservation?.Id))
+            {
+                return ResponseData<Ride>.Failure("You already have the reservation. Cancel it to start a ride or choose other scooter");
+            }
             
             var ride = await _rideRepository
                 .GetRideByScooterAsync(request.Ride.ScooterId);
             
-            if (ride is not null || reservation is not null && reservation.UserId != request.Ride.UserId)
+            if (ride is not null || scooterReservation is not null && scooterReservation.UserId != request.Ride.UserId)
             {
                 return ResponseData<Ride>.Failure("Scooter is reserved");
             }
 
-            if (reservation is not null)
+            if (scooterReservation is not null)
             {
-                await _reservationRepository.EndReservationAsync(reservation.Id);
+                await _reservationRepository.EndReservationAsync(scooterReservation.Id);
             }
             
             var newRide = await _rideRepository.CreateRideAsync(request.Ride);

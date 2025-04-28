@@ -47,6 +47,15 @@ public class NavigationService : INavigationService
         });
     }
 
+    public async Task ShowPopupAsync<TViewModel>()
+        where TViewModel : System.ComponentModel.INotifyPropertyChanged
+    {
+        await MainThread.InvokeOnMainThreadAsync(async () =>
+        {
+            await _popupService.ShowPopupAsync<TViewModel>();
+        });
+    }
+
     public async Task ClosePopupAsync()
     {
         await MainThread.InvokeOnMainThreadAsync(() => _popupService.ClosePopupAsync());

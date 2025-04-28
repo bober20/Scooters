@@ -11,4 +11,7 @@ public interface INavigationService
 
     public Task ShowPopupAsync<TViewModel>(Action<TViewModel> onPresenting)
         where TViewModel : System.ComponentModel.INotifyPropertyChanged;
+
+    public Task ShowPopupAsync<TViewModel>()
+        where TViewModel : System.ComponentModel.INotifyPropertyChanged;
 }

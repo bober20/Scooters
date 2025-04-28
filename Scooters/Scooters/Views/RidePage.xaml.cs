@@ -20,8 +20,8 @@ public partial class RidePage : Popup
         _viewModel = viewModel;
     }
 
-    private void RidePage_OnOpened(object? sender, PopupOpenedEventArgs e)
+    private async void RidePage_OnOpened(object? sender, PopupOpenedEventArgs e)
     {
-        _viewModel.AppearingCommand.Execute(null);
+        await _viewModel.AppearingCommand.ExecuteAsync(null);
     }
 }

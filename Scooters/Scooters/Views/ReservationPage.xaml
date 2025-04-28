@@ -70,12 +70,12 @@
                             <Label
                                 HorizontalTextAlignment="Center"
                                 TextColor="DimGrey"
-                                Text="Max. Speed" />
+                                Text="Distance to the scooter" />
                             <Label
                                 FontAttributes="Bold"
                                 FontSize="26"
                                 HorizontalTextAlignment="Center"
-                                Text="40km." />
+                                Text="{Binding Distance}" />
                         </VerticalStackLayout>
                         <VerticalStackLayout>
                             <Label
@@ -86,18 +86,7 @@
                                 FontAttributes="Bold"
                                 FontSize="26"
                                 HorizontalTextAlignment="Center"
-                                Text="110kg." />
-                        </VerticalStackLayout>
-                        <VerticalStackLayout>
-                            <Label
-                                TextColor="DimGrey"
-                                HorizontalTextAlignment="Center"
-                                Text="Max. Distance" />
-                            <Label
-                                FontAttributes="Bold"
-                                FontSize="26"
-                                HorizontalTextAlignment="Center"
-                                Text="100km." />
+                                Text="110 kg" />
                         </VerticalStackLayout>
                     </FlexLayout>
                     <VerticalStackLayout
@@ -107,10 +96,10 @@
                             Text="Select time interval for reservation (min)"
                             FontAttributes="Bold"
                             FontSize="18" />
-                            <Picker
-                                Title="Select time interval"
-                                ItemsSource="{Binding TimeSlots}"
-                                SelectedItem="{Binding Reservation.Duration}" />
+                        <Picker
+                            Title="Select time interval"
+                            ItemsSource="{Binding TimeSlots}"
+                            SelectedItem="{Binding Reservation.Duration}" />
                         <Button
                             Text="Reserve"
                             Command="{Binding ReserveScooterCommand}">

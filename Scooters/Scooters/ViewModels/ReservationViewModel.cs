@@ -16,8 +16,10 @@ public partial class ReservationViewModel : ObservableObject
     [ObservableProperty] private Reservation _reservation = new();
     [ObservableProperty] private ObservableCollection<int> _timeSlots = new();
     [ObservableProperty] private Scooter _scooter;
+    [ObservableProperty] private string _distance;
 
     private Guid _currentUserId;
+    private Location _userLocation;
     
     private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
@@ -60,6 +62,8 @@ public partial class ReservationViewModel : ObservableObject
         await GetCurrentUserAsync();
         InitializeTimeSlots();
         InitializeReservation();
+        _userLocation = await GetUserLocationAsync();
+        GetDistance();
     }
 
     [RelayCommand]
@@ -81,6 +85,52 @@ public partial class ReservationViewModel : ObservableObject
         await _navigationService.ShowPopupAsync<RideViewModel>(
             onPresenting: viewModel => viewModel.Ride = response.Data);
         await _navigationService.ClosePopupAsync();
+    }
+    
+    private void GetDistance()
+    {
+        if (_userLocation is null || Scooter is null)
+        {
+            Distance = "Enable location service";
+            return;
+        }
+
+        var scooterLocation = new Location(Scooter.Coordinates.Latitude, Scooter.Coordinates.Longitude);
+        var distance = Location.CalculateDistance(_userLocation, scooterLocation, DistanceUnits.Kilometers);
+        Distance = $"{Math.Round(distance, 3)} km";
+    }
+    
+    private async Task<Location> GetUserLocationAsync()
+    {
+        try
+        {
+            var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+            if (status != PermissionStatus.Granted)
+            {
+                status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+                if (status != PermissionStatus.Granted)
+                    return null;
+            }
+
+            var location = await Geolocation.GetLocationAsync(new GeolocationRequest
+            {
+                DesiredAccuracy = GeolocationAccuracy.Medium,
+                Timeout = TimeSpan.FromSeconds(10)
+            });
+
+            if (location != null)
+            {
+                _userLocation = new Location(location.Latitude, location.Longitude);
+                return _userLocation;
+            }
+        }
+        catch (Exception ex)
+        {
+            Shell.Current.DisplayAlert("Error", 
+                "Could not fetch user's location. Distance to the scooter won't be displayed", "OK");
+        }
+
+        return null;
     }
     
     private async Task GetCurrentUserAsync()

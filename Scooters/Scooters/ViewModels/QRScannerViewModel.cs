@@ -3,14 +3,17 @@ using Application.Scooters.Queries.GetScooterById;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MediatR;
+using Scooters.Common.Interfaces;
 using ZXing.Net.Maui;
 
 namespace Scooters.ViewModels;
 
 public partial class QRScannerViewModel : ObservableObject
 {
-    [ObservableProperty] private bool _isDetecting = true;
+    [ObservableProperty] private bool _isDetecting;
+    [ObservableProperty] private bool _isEnabled;
 
+    private IQrUpdaterService _qrUpdaterService;
     private readonly INavigationService _navigationService;
     private readonly IMediator _mediator;
 
@@ -43,8 +46,22 @@ public partial class QRScannerViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void Appearing() => IsDetecting = true;
-    
+    private void Appearing()
+    {
+        _qrUpdaterService?.ConnectQrHandler();
+        
+        IsDetecting = true;
+        IsEnabled = true;
+    }
+
     [RelayCommand]
-    private void Disappearing() => IsDetecting = false;
+    private void Disappearing()
+    {
+        _qrUpdaterService?.DisconnectQrHandler();
+    }
+
+    public void SetQrUpdateService(IQrUpdaterService service)
+    {
+        _qrUpdaterService = service;
+    }
 }

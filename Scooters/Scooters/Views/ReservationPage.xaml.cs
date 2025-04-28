@@ -15,8 +15,8 @@ public partial class ReservationPage : Popup
         _viewModel = viewModel;
     }
 
-    private void ReservationPage_OnOpened(object? sender, PopupOpenedEventArgs e)
+    private async void ReservationPage_OnOpened(object? sender, PopupOpenedEventArgs e)
     {
-        _viewModel.AppearingCommand.Execute(null);
+        await _viewModel.AppearingCommand.ExecuteAsync(null);
     }
 }

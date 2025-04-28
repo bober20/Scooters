@@ -10,7 +10,8 @@ using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Maui.Controls.Maps;
-using Scooters.Common.Services;
+using Scooters.Common.Interfaces;
+using Scooters.Views;
 using Map = Microsoft.Maui.Controls.Maps.Map;
 
 namespace Scooters.ViewModels;
@@ -53,6 +54,7 @@ public partial class ScootersMapViewModel : ObservableObject
             InitiateTimer();
         }
         AddPins();
+        await _navigationService.ShowPopupAsync<InstructionsViewModel>();
     }
     
     [RelayCommand]

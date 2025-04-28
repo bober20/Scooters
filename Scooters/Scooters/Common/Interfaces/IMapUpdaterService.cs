@@ -1,6 +1,6 @@
 using Microsoft.Maui.Controls.Maps;
 
-namespace Scooters.Common.Services;
+namespace Scooters.Common.Interfaces;
 
 public interface IMapUpdaterService
 {

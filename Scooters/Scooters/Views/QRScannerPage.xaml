@@ -15,7 +15,8 @@
         <toolkit:EventToCommandBehavior EventName="Disappearing" Command="{Binding DisappearingCommand}" />
     </ContentPage.Behaviors>
     <ContentPage.Content>
-        <zxing:CameraBarcodeReaderView 
+        <zxing:CameraBarcodeReaderView
+            IsEnabled="{Binding IsEnabled}"
             x:Name="Scanner"
             IsDetecting="{Binding IsDetecting}">
             <zxing:CameraBarcodeReaderView.Options>

@@ -13,7 +13,9 @@
         <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}" />
     </ContentPage.Behaviors>
     <ContentPage.Content>
-        <Grid RowDefinitions="*, Auto" IgnoreSafeArea="True">
+        <Grid 
+            RowDefinitions="*, Auto" 
+            IgnoreSafeArea="True">
             <maps:Map Grid.Row="0"
                       ItemsSource="{Binding Pins}"
                       x:Name="ScootersMap"
@@ -33,7 +35,10 @@
                     </maps:MapSpan>
                 </x:Arguments>
             </maps:Map>
-            <VerticalStackLayout Grid.Row="1" IgnoreSafeArea="False">
+            <VerticalStackLayout
+                Grid.Row="1" 
+                IgnoreSafeArea="False"
+                Spacing="0">
                 <VerticalStackLayout HeightRequest="150">
                     <VerticalStackLayout.Triggers>
                         <DataTrigger

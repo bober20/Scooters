@@ -1,6 +1,6 @@
 using Microsoft.Maui.Controls.Maps;
 using Microsoft.Maui.Maps;
-using Scooters.Common.Services;
+using Scooters.Common.Interfaces;
 using Scooters.ViewModels;
 
 namespace Scooters.Views;
