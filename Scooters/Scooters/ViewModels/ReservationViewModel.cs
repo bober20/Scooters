@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
 using MediatR;
 using Plugin.LocalNotification;
+using Scooters.Common.Interfaces;
 
 namespace Scooters.ViewModels;
 
@@ -20,19 +21,36 @@ public partial class ReservationViewModel : ObservableObject
 
     private Guid _currentUserId;
     private Location _userLocation;
-    
+
+    private IBottomSheetService _bottomSheetService;
     private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly INavigationService _navigationService;
     private readonly INotificationService _notificationService;
 
-    public ReservationViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider, 
+    public ReservationViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider,
         INavigationService navigationService, INotificationService notificationService)
     {
         _mediator = mediator;
         _currentUserProvider = currentUserProvider;
         _navigationService = navigationService;
         _notificationService = notificationService;
+    }
+
+    public void SetBottomSheetService(IBottomSheetService bottomSheetService)
+    {
+        _bottomSheetService = bottomSheetService;
+    }
+
+    public void SetScooter(Scooter scooter)
+    {
+        Scooter = scooter;
+    }
+
+    [RelayCommand]
+    private void Loaded()
+    {
+        _bottomSheetService.ShowBottomSheetCall();
     }
 
     [RelayCommand]
@@ -42,14 +60,15 @@ public partial class ReservationViewModel : ObservableObject
         {
             return;
         }
-        
+
         Reservation.StartTime = DateTime.Now;
 
         var response = await _mediator.Send(new CreateReservationCommand(Reservation));
         if (response.IsSuccessful)
         {
             await ShowNotification();
-            await _navigationService.ClosePopupAsync();
+            _bottomSheetService.CloseBottomSheetCall();
+            await _navigationService.GoBackAsync();
             return;
         }
 
@@ -81,12 +100,12 @@ public partial class ReservationViewModel : ObservableObject
             await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
             return;
         }
-        
-        await _navigationService.ShowPopupAsync<RideViewModel>(
-            onPresenting: viewModel => viewModel.Ride = response.Data);
-        await _navigationService.ClosePopupAsync();
+
+        _bottomSheetService.CloseBottomSheetCall();
+        _navigationService.GoBackAsync();
+        await _navigationService.NavigateToRidePageAsync(response.Data);
     }
-    
+
     private void GetDistance()
     {
         if (_userLocation is null || Scooter is null)
@@ -99,7 +118,7 @@ public partial class ReservationViewModel : ObservableObject
         var distance = Location.CalculateDistance(_userLocation, scooterLocation, DistanceUnits.Kilometers);
         Distance = $"{Math.Round(distance, 3)} km";
     }
-    
+
     private async Task<Location> GetUserLocationAsync()
     {
         try
@@ -126,20 +145,22 @@ public partial class ReservationViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Shell.Current.DisplayAlert("Error", 
+            Shell.Current.DisplayAlert("Error",
                 "Could not fetch user's location. Distance to the scooter won't be displayed", "OK");
         }
 
         return null;
     }
-    
+
     private async Task GetCurrentUserAsync()
     {
         if (_currentUserProvider.GetCurrentUser() is not Guid userId)
         {
-            await _navigationService.NavigateToLoginPageAsync();
+            _bottomSheetService.CloseBottomSheetCall();
+            await _navigationService.GoBackAsync();
             return;
         }
+
         _currentUserId = userId;
     }
 
@@ -157,7 +178,7 @@ public partial class ReservationViewModel : ObservableObject
         Reservation.ScooterId = Scooter.Id;
         Reservation.UserId = _currentUserId;
     }
-    
+
     private async Task ShowNotification()
     {
         if (await _notificationService.AreNotificationsEnabled() == false)

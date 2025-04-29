@@ -8,18 +8,61 @@
              xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
              xmlns:sensors="clr-namespace:Microsoft.Maui.Devices.Sensors;assembly=Microsoft.Maui.Essentials"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             ios:Page.UseSafeArea="False">
     <ContentPage.Behaviors>
-        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}" />
+        <toolkit:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}" />
+        <toolkit:EventToCommandBehavior
+            EventName="Loaded"
+            Command="{Binding LoadedCommand}" />
     </ContentPage.Behaviors>
+    <ContentPage.Resources>
+        <DataTemplate x:Name="BottomSheetTemplate" x:Key="BottomSheetTemplate">
+            <Border
+                StrokeShape="RoundRectangle 40 40">
+                <VerticalStackLayout>
+                    <BoxView
+                        BackgroundColor="Transparent"
+                        HeightRequest="5"
+                        WidthRequest="38"
+                        CornerRadius="2.5"
+                        HorizontalOptions="Center"
+                        Margin="0,10,0,5"
+                        Color="{AppThemeBinding Light=#CCCCCC, Dark=#666666}" />
+                    <VerticalStackLayout
+                        Padding="20"
+                        Spacing="10">
+                        <Label
+                            HorizontalTextAlignment="Justify"
+                            FontSize="30"
+                            Text="App manual"
+                            FontAttributes="Bold"
+                            HorizontalOptions="Center" />
+                        <Label
+                            HorizontalTextAlignment="Justify"
+                            Text="To reserve a scooter simply click on a pin. Then choose reservation duration and click on the 'Reserve' button."
+                            FontSize="20" />
+                        <Label
+                            HorizontalTextAlignment="Justify"
+                            Text="To ride a scooter scan its QR code, then click  on the 'Ride straight away' button."
+                            FontSize="20" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </DataTemplate>
+    </ContentPage.Resources>
     <ContentPage.Content>
-        <Grid 
-            RowDefinitions="*, Auto" 
+        <Grid
+            RowDefinitions="*, Auto"
             IgnoreSafeArea="True">
-            <maps:Map Grid.Row="0"
-                      ItemsSource="{Binding Pins}"
-                      x:Name="ScootersMap"
-                      IsShowingUser="true">
+            <maps:Map
+                Grid.Row="0"
+                ItemsSource="{Binding Pins}"
+                x:Name="ScootersMap"
+                IsShowingUser="true">
                 <x:Arguments>
                     <maps:MapSpan>
                         <x:Arguments>
@@ -36,7 +79,7 @@
                 </x:Arguments>
             </maps:Map>
             <VerticalStackLayout
-                Grid.Row="1" 
+                Grid.Row="1"
                 IgnoreSafeArea="False"
                 Spacing="0">
                 <VerticalStackLayout HeightRequest="150">
@@ -62,8 +105,8 @@
                             <VerticalStackLayout>
                                 <FlexLayout>
                                     <Label
-                                        VerticalTextAlignment="Center"
                                         Margin="5,0"
+                                        VerticalTextAlignment="Center"
                                         Text="&#xe71d;"
                                         FontFamily="MauiMaterialAssets"
                                         FontSize="40" />
@@ -91,10 +134,18 @@
                                     </VerticalStackLayout>
                                 </FlexLayout>
                             </VerticalStackLayout>
-                            <Label
-                                VerticalTextAlignment="Center"
-                                Text="{Binding Countdown}"
-                                FontSize="32" />
+                            <HorizontalStackLayout
+                                Spacing="5">
+                                <Label
+                                    VerticalTextAlignment="Center"
+                                    Text="{Binding Countdown}"
+                                    FontSize="32" />
+                                <Label
+                                    VerticalTextAlignment="Center"
+                                    Text="&#xe708;"
+                                    FontFamily="MauiMaterialAssets"
+                                    FontSize="40" />
+                            </HorizontalStackLayout>
                         </FlexLayout>
                     </Border>
                 </VerticalStackLayout>
@@ -152,7 +203,7 @@
                             <Label
                                 VerticalTextAlignment="Center"
                                 Margin="5,0"
-                                Text="&#xe706;"
+                                Text="&#xe708;"
                                 FontFamily="MauiMaterialAssets"
                                 FontSize="40" />
                         </FlexLayout>

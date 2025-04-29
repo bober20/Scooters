@@ -3,16 +3,27 @@ using Microsoft.Maui.Maps;
 using Scooters.Common.Interfaces;
 using Scooters.ViewModels;
 
+#if ANDROID
+using BottomSheetView = Google.Android.Material.BottomSheet.BottomSheetDialog;
+#elif IOS || MACCATALYST
+using BottomSheetView = UIKit.UIViewController;
+
+#else
+using BottomSheetView = Microsoft.UI.Xaml.Controls.Primitives.Popup;
+#endif
+
 namespace Scooters.Views;
 
-public partial class ScootersMapPage : ContentPage, IMapUpdaterService
+public partial class ScootersMapPage : ContentPage, IMapUpdaterService, IBottomSheetService
 {
+    BottomSheetView? bottomSheet;
+
     public ScootersMapPage(ScootersMapViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;
-        
         viewModel.SetMapService(this);
+        viewModel.SetBottomSheetService(this);
     }
 
     public void SetPins(IEnumerable<Pin> pins)
@@ -26,39 +37,21 @@ public partial class ScootersMapPage : ContentPage, IMapUpdaterService
     {
         ScootersMap.MoveToRegion(MapSpan.FromCenterAndRadius(center, Distance.FromKilometers(latSpan)));
     }
-}
+    
+    private View GetBottomSheetView()
+    {
+        var view = (View)BottomSheetTemplate.CreateContent();
+        view.BindingContext = BindingContext;
+        return view;
+    }
 
-// public partial class ScootersMapPage : ContentPage
-// {
-//     private readonly ScootersMapViewModel _viewModel;
-//     
-//     public ScootersMapPage(ScootersMapViewModel viewModel)
-//     {
-//         InitializeComponent();
-//         BindingContext = viewModel;
-//         _viewModel = viewModel;
-//     }
-//
-     // private async void OnAppearing(object sender, EventArgs e)
-     // {
-     //     // await _viewModel.AppearingCommand.ExecuteAsync(null);
-     //     // UpdatePins();
-     // }
-//
-//     private async void OnPinTapped(object sender, PinClickedEventArgs e)
-//     {
-//         e.HideInfoWindow = true;
-//         await _viewModel.PinClickedCommand.ExecuteAsync(sender);
-//         UpdatePins();
-//     }
-//
-//     private void UpdatePins()
-//     {
-//         ScootersMap.Pins.Clear();
-//         foreach (var pin in _viewModel.Pins)
-//         {
-//             pin.MarkerClicked += OnPinTapped;
-//             ScootersMap.Pins.Add(pin);
-//         }
-//     }
-// }
+    public void CloseBottomSheetCall()
+    {
+        bottomSheet?.CloseBottomSheet();
+    }
+
+    public void ShowBottomSheetCall()
+    {
+        this.ShowBottomSheet(GetBottomSheetView(), true);
+    }
+}

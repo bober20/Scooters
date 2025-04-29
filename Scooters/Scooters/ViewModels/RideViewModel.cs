@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
 using MediatR;
+using Scooters.Common.Interfaces;
 
 namespace Scooters.ViewModels;
 
@@ -13,9 +14,10 @@ public partial class RideViewModel : ObservableObject
     [ObservableProperty] private Ride _ride;
     [ObservableProperty] private string _countdown;
     [ObservableProperty] private string _distance = "0.00";
-    
+
     private System.Timers.Timer _timer;
 
+    private IBottomSheetService _bottomSheetService;
     private readonly IMediator _mediator;
     private readonly INavigationService _navigationService;
 
@@ -23,6 +25,22 @@ public partial class RideViewModel : ObservableObject
     {
         _mediator = mediator;
         _navigationService = navigationService;
+    }
+
+    public void SetBottomSheetService(IBottomSheetService bottomSheetService)
+    {
+        _bottomSheetService = bottomSheetService;
+    }
+
+    public void SetRide(Ride ride)
+    {
+        Ride = ride;
+    }
+
+    [RelayCommand]
+    private void Loaded()
+    {
+        _bottomSheetService.ShowBottomSheetCall();
     }
 
     [RelayCommand]
@@ -35,7 +53,9 @@ public partial class RideViewModel : ObservableObject
     private async Task EndRide()
     {
         await _mediator.Send(new EndRideCommand(Ride.Id));
-        await _navigationService.ClosePopupAsync();
+
+        _bottomSheetService.CloseBottomSheetCall();
+        await _navigationService.GoBackAsync();
     }
 
     private void InitialiseTimer()

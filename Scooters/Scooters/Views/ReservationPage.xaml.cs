@@ -1,22 +1,42 @@
-using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Maui.Views;
+using Scooters.Common.Interfaces;
 using Scooters.ViewModels;
+
+#if ANDROID
+using BottomSheetView = Google.Android.Material.BottomSheet.BottomSheetDialog;
+#elif IOS || MACCATALYST
+using BottomSheetView = UIKit.UIViewController;
+
+#else
+using BottomSheetView = Microsoft.UI.Xaml.Controls.Primitives.Popup;
+#endif
 
 namespace Scooters.Views;
 
-public partial class ReservationPage : Popup
+public partial class ReservationPage : ContentPage, IBottomSheetService
 {
-    private ReservationViewModel _viewModel;
-    
+    BottomSheetView? bottomSheet;
+
     public ReservationPage(ReservationViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;
-        _viewModel = viewModel;
+        viewModel.SetBottomSheetService(this);
     }
 
-    private async void ReservationPage_OnOpened(object? sender, PopupOpenedEventArgs e)
+    private View GetBottomSheetView()
     {
-        await _viewModel.AppearingCommand.ExecuteAsync(null);
+        var view = (View)BottomSheetTemplate.CreateContent();
+        view.BindingContext = BindingContext;
+        return view;
+    }
+
+    public void CloseBottomSheetCall()
+    {
+        bottomSheet?.CloseBottomSheet();
+    }
+
+    public void ShowBottomSheetCall()
+    {
+        this.ShowBottomSheet(GetBottomSheetView(), true);
     }
 }

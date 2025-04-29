@@ -7,11 +7,7 @@ public interface INavigationService
     public Task NavigateToPasswordChangePageAsync();
     public Task NavigateToProfilePageAsync();
     public Task NavigateToMapPageAsync();
-    Task ClosePopupAsync();
-
-    public Task ShowPopupAsync<TViewModel>(Action<TViewModel> onPresenting)
-        where TViewModel : System.ComponentModel.INotifyPropertyChanged;
-
-    public Task ShowPopupAsync<TViewModel>()
-        where TViewModel : System.ComponentModel.INotifyPropertyChanged;
+    public Task NavigateToReservationPageAsync(Scooter scooter);
+    public Task NavigateToRidePageAsync(Ride ride);
+    public Task GoBackAsync();
 }

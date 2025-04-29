@@ -33,15 +33,14 @@ public partial class QRScannerViewModel : ObservableObject
             IsDetecting = true;
             return;
         }
-        
+
         Guid.TryParse(barcode.Value, out var barcodeGuid);
         var response = await _mediator.Send(new GetScooterQuery(barcodeGuid));
         if (response.IsSuccessful)
         {
-            await _navigationService.ShowPopupAsync<ReservationViewModel>(
-                onPresenting: viewModel => viewModel.Scooter = response.Data);
+            await _navigationService.NavigateToReservationPageAsync(response.Data);
         }
-        
+
         IsDetecting = true;
     }
 
@@ -49,7 +48,7 @@ public partial class QRScannerViewModel : ObservableObject
     private void Appearing()
     {
         _qrUpdaterService?.ConnectQrHandler();
-        
+
         IsDetecting = true;
         IsEnabled = true;
     }

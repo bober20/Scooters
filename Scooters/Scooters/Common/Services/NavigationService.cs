@@ -1,16 +1,19 @@
 using Application.Common.Interfaces;
 using CommunityToolkit.Maui.Core;
+using Domain.Entities;
+using Scooters.ViewModels;
 using Scooters.Views;
 
 namespace Scooters.Common.Services;
 
 public class NavigationService : INavigationService
 {
-    private IPopupService _popupService;
+    private IServiceProvider _serviceProvider;
+    private TaskCompletionSource<bool>? _popupCompletionSource;
 
-    public NavigationService(IPopupService popupService)
+    public NavigationService(IServiceProvider serviceProvider)
     {
-        _popupService = popupService;
+        _serviceProvider = serviceProvider;
     }
     
     public Task NavigateToLoginPageAsync()
@@ -38,29 +41,29 @@ public class NavigationService : INavigationService
         return NavigateToAsync($"//{nameof(ScootersMapPage)}");
     }
 
-    public async Task ShowPopupAsync<TViewModel>(Action<TViewModel> onPresenting)
-        where TViewModel : System.ComponentModel.INotifyPropertyChanged
+    public Task NavigateToReservationPageAsync(Scooter scooter)
     {
-        await MainThread.InvokeOnMainThreadAsync(async () =>
-        {
-            await _popupService.ShowPopupAsync<TViewModel>(onPresenting);
-        });
-    }
-
-    public async Task ShowPopupAsync<TViewModel>()
-        where TViewModel : System.ComponentModel.INotifyPropertyChanged
-    {
-        await MainThread.InvokeOnMainThreadAsync(async () =>
-        {
-            await _popupService.ShowPopupAsync<TViewModel>();
-        });
-    }
-
-    public async Task ClosePopupAsync()
-    {
-        await MainThread.InvokeOnMainThreadAsync(() => _popupService.ClosePopupAsync());
-    }
+        var viewModel = _serviceProvider.GetRequiredService<ReservationViewModel>();
+        viewModel.SetScooter(scooter);
+        var page = new ReservationPage(viewModel);
     
+        return Shell.Current.Navigation.PushModalAsync(page, true);
+    }
+
+    public Task NavigateToRidePageAsync(Ride ride)
+    {
+        var viewModel = _serviceProvider.GetRequiredService<RideViewModel>();
+        viewModel.SetRide(ride);
+        var page = new RidePage(viewModel);
+    
+        return Shell.Current.Navigation.PushModalAsync(page, true);
+    }
+
+    public async Task GoBackAsync()
+    {
+        await Shell.Current.Navigation.PopModalAsync();
+    }
+
     private async Task NavigateToAsync(string page, IDictionary<string, object> parameters = null)
     {
         if (parameters is null)

@@ -1,8 +1,10 @@
-﻿using Application.Common.Interfaces;
+﻿#if ANDROID
+using System.Reflection;
+#endif
+using Application.Common.Interfaces;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Mopups.Hosting;
 using Scooters.ViewModels;
 using Scooters.Views;
 using Plugin.LocalNotification;
@@ -18,7 +20,6 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            .ConfigureMopups()
             .UseMauiCommunityToolkit()
             .UseMauiMaps()
             .UseBarcodeReader()
@@ -49,11 +50,9 @@ public static class MauiProgram
         builder.Services.AddTransient<SignUpPage, SignUpViewModel>();
         builder.Services.AddTransient<ProfilePage, ProfileViewModel>();
         builder.Services.AddTransient<ScootersMapPage, ScootersMapViewModel>();
-
-        builder.Services.AddTransientPopup<ReservationPage, ReservationViewModel>();
-        builder.Services.AddTransientPopup<RidePage, RideViewModel>();
-        builder.Services.AddTransientPopup<InstructionsPopUp, InstructionsViewModel>();
         
+        builder.Services.AddTransientWithShellRoute<RidePage, RideViewModel>("RidePage");
+        builder.Services.AddTransientWithShellRoute<ReservationPage, ReservationViewModel>("ReservationPage");
         builder.Services.AddTransientWithShellRoute<PasswordChangePage, PasswordChangeViewModel>("PasswordChangePage");
 #if DEBUG
         builder.Logging.AddDebug();
