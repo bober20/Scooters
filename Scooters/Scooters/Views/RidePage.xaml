@@ -59,7 +59,7 @@
                                 StrokeThickness="0">
                                 <VerticalStackLayout Spacing="15">
                                     <Grid
-                                        ColumnDefinitions="*, *"
+                                        ColumnDefinitions="*,*"
                                         ColumnSpacing="5"
                                         Padding="20,0">
                                         <HorizontalStackLayout

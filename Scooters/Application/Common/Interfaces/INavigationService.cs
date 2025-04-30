@@ -9,5 +9,6 @@ public interface INavigationService
     public Task NavigateToMapPageAsync();
     public Task NavigateToReservationPageAsync(Scooter scooter);
     public Task NavigateToRidePageAsync(Ride ride);
+    public Task GoBackAndNavigateToRidePageAsync(Ride ride);
     public Task GoBackAsync();
 }

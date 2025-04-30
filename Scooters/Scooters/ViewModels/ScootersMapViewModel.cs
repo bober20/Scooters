@@ -54,7 +54,7 @@ public partial class ScootersMapViewModel : ObservableObject
     private async Task Appearing()
     {
         await FetchUser();
-        Task.WaitAll(FetchReservation(), FetchRide(), FetchScooters());
+        await Task.WhenAll(FetchReservation(), FetchRide(), FetchScooters());
         if (Reservation is not null)
         {
             InitiateTimer();
@@ -68,20 +68,8 @@ public partial class ScootersMapViewModel : ObservableObject
     {
         await _navigationService.NavigateToRidePageAsync(Ride);
 
-        Task.WaitAll(FetchReservation(), FetchRide(), FetchScooters());
+        await Task.WhenAll(FetchReservation(), FetchRide(), FetchScooters());
         AddPins();
-    }
-
-    [RelayCommand]
-    private async Task PinClicked(Pin pin)
-    {
-        if (pin.BindingContext is Scooter scooter)
-        {
-            await _navigationService.NavigateToReservationPageAsync(scooter);
-
-            Task.WaitAll(FetchReservation(), FetchRide(), FetchScooters());
-            AddPins();
-        }
     }
 
     [RelayCommand]
@@ -103,7 +91,7 @@ public partial class ScootersMapViewModel : ObservableObject
         await FetchScooters();
         AddPins();
     }
-    
+
     public void SetBottomSheetService(IBottomSheetService bottomSheetService)
     {
         _bottomSheetService = bottomSheetService;
@@ -159,14 +147,7 @@ public partial class ScootersMapViewModel : ObservableObject
                 BindingContext = s
             };
             Pins.Add(pin);
-            pin.MarkerClicked += async (s, e) =>
-            {
-                e.HideInfoWindow = true;
-                if (PinClickedCommand.CanExecute(s))
-                {
-                    PinClickedCommand.Execute(s);
-                }
-            };
+            pin.MarkerClicked += OnPinMarkerClicked;
         }
 
         if (Reservation?.Scooter is not null)
@@ -179,14 +160,7 @@ public partial class ScootersMapViewModel : ObservableObject
                     Reservation.Scooter.Coordinates.Longitude),
                 BindingContext = Reservation.Scooter,
             };
-            pin.MarkerClicked += async (s, e) =>
-            {
-                e.HideInfoWindow = true;
-                if (PinClickedCommand.CanExecute(s))
-                {
-                    PinClickedCommand.Execute(s);
-                }
-            };
+            pin.MarkerClicked += OnPinMarkerClicked;
             _mapUpdaterService.MoveTo(new Location(Reservation.Scooter.Coordinates.Latitude,
                 Reservation.Scooter.Coordinates.Longitude));
             Pins.Add(pin);
@@ -201,20 +175,25 @@ public partial class ScootersMapViewModel : ObservableObject
                 Location = new Location(Ride.Scooter.Coordinates.Latitude, Ride.Scooter.Coordinates.Longitude),
                 BindingContext = Ride.Scooter
             };
-            pin.MarkerClicked += async (s, e) =>
-            {
-                e.HideInfoWindow = true;
-                if (PinClickedCommand.CanExecute(s))
-                {
-                    PinClickedCommand.Execute(s);
-                }
-            };
+            pin.MarkerClicked += OnPinMarkerClicked;
             _mapUpdaterService.MoveTo(new Location(Ride.Scooter.Coordinates.Latitude,
                 Ride.Scooter.Coordinates.Longitude));
             Pins.Add(pin);
         }
 
         _mapUpdaterService.SetPins(Pins);
+    }
+
+    private async void OnPinMarkerClicked(object sender, PinClickedEventArgs e)
+    {
+        e.HideInfoWindow = true;
+
+        if (sender is Pin pin && pin.BindingContext is Scooter scooter)
+        {
+            await _navigationService.NavigateToReservationPageAsync(scooter);
+            await Task.WhenAll(FetchReservation(), FetchRide(), FetchScooters());
+            AddPins();
+        }
     }
 
     public void SetMapService(IMapUpdaterService mapUpdaterService)

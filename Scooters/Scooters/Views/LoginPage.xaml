@@ -18,7 +18,7 @@
         <Grid
             IgnoreSafeArea="True"
             RowSpan="2"
-            RowDefinitions="Auto, *">
+            RowDefinitions="Auto,*">
             <Image
                 Source="scooterslogo.png"
                 Grid.Row="0"

@@ -2,17 +2,18 @@ namespace Application.Rides.Commands.CreateRide;
 
 public class CreateRideHandler : IRequestHandler<CreateRideCommand, ResponseData<Ride>>
 {
+    private readonly IScooterRepository _scooterRepository;
     private readonly IRideRepository _rideRepository;
     private readonly IReservationRepository _reservationRepository;
     private readonly IUnitOfWork _unitOfWork;
     
-    public CreateRideHandler(IRideRepository repository, 
-        IReservationRepository reservationRepository, 
-        IUnitOfWork unitOfWork)
+    public CreateRideHandler(IRideRepository repository, IReservationRepository reservationRepository, 
+        IScooterRepository scooterRepository, IUnitOfWork unitOfWork)
     {
         _rideRepository = repository;
         _reservationRepository = reservationRepository;
         _unitOfWork = unitOfWork;
+        _scooterRepository = scooterRepository;
     }
     
     public async Task<ResponseData<Ride>> Handle(CreateRideCommand request, CancellationToken cancellationToken)
@@ -53,6 +54,7 @@ public class CreateRideHandler : IRequestHandler<CreateRideCommand, ResponseData
             
             var newRide = await _rideRepository.CreateRideAsync(request.Ride);
             await _unitOfWork.SaveChangesAsync();
+            newRide.Scooter = await _scooterRepository.GetScooterAsync(request.Ride.ScooterId);
             return ResponseData<Ride>.Success(newRide);
         }
         catch(Exception ex)

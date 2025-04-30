@@ -9,7 +9,7 @@
              HideSoftInputOnTapped="True">
     <ContentPage.Content>
         <Grid RowSpan="2"
-              RowDefinitions="Auto, *"
+              RowDefinitions="Auto,*"
               IgnoreSafeArea="True">
             <Image
                 Source="scooterslogo.png"

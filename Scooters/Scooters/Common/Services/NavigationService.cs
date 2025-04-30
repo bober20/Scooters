@@ -15,7 +15,7 @@ public class NavigationService : INavigationService
     {
         _serviceProvider = serviceProvider;
     }
-    
+
     public Task NavigateToLoginPageAsync()
     {
         return NavigateToAsync($"//{nameof(LoginPage)}");
@@ -41,27 +41,44 @@ public class NavigationService : INavigationService
         return NavigateToAsync($"//{nameof(ScootersMapPage)}");
     }
 
-    public Task NavigateToReservationPageAsync(Scooter scooter)
+    public async Task NavigateToReservationPageAsync(Scooter scooter)
     {
         var viewModel = _serviceProvider.GetRequiredService<ReservationViewModel>();
         viewModel.SetScooter(scooter);
         var page = new ReservationPage(viewModel);
-    
-        return Shell.Current.Navigation.PushModalAsync(page, true);
+
+        await MainThread.InvokeOnMainThreadAsync(async () =>
+        {
+            await Shell.Current.Navigation.PushModalAsync(page, true);
+        });
     }
 
-    public Task NavigateToRidePageAsync(Ride ride)
+    public async Task NavigateToRidePageAsync(Ride ride)
     {
         var viewModel = _serviceProvider.GetRequiredService<RideViewModel>();
         viewModel.SetRide(ride);
         var page = new RidePage(viewModel);
-    
-        return Shell.Current.Navigation.PushModalAsync(page, true);
+
+        await MainThread.InvokeOnMainThreadAsync(async () =>
+        {
+            await Shell.Current.Navigation.PushModalAsync(page, true);
+        });
+    }
+
+    public async Task GoBackAndNavigateToRidePageAsync(Ride ride)
+    {
+#if IOS
+        await GoBackAsync();
+        await NavigateToRidePageAsync(ride);
+#elif ANDROID
+        await NavigateToRidePageAsync(ride);
+        await GoBackAsync();
+#endif
     }
 
     public async Task GoBackAsync()
     {
-        await Shell.Current.Navigation.PopModalAsync();
+        await MainThread.InvokeOnMainThreadAsync(async () => { await Shell.Current.Navigation.PopModalAsync(); });
     }
 
     private async Task NavigateToAsync(string page, IDictionary<string, object> parameters = null)

@@ -99,8 +99,7 @@ public partial class ReservationViewModel : ObservableObject
         }
 
         _bottomSheetService.CloseBottomSheetCall();
-        await _navigationService.GoBackAsync();
-        await _navigationService.NavigateToRidePageAsync(response.Data);
+        await _navigationService.GoBackAndNavigateToRidePageAsync(response.Data);
     }
     
     public void SetBottomSheetService(IBottomSheetService bottomSheetService)

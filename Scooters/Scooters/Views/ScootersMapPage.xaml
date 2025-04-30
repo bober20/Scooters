@@ -53,7 +53,7 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <Grid
-            RowDefinitions="*, Auto"
+            RowDefinitions="*,Auto"
             IgnoreSafeArea="True">
             <maps:Map
                 Grid.Row="0"
@@ -79,10 +79,10 @@
                 HeightRequest="150"
                 HorizontalOptions="Fill"
                 VerticalOptions="End"
-                Margin="10, 25">
+                Margin="10,25">
                 <VerticalStackLayout
                     HorizontalOptions="Fill"
-                    AbsoluteLayout.LayoutBounds="0, 0, 1, 150"
+                    AbsoluteLayout.LayoutBounds="0,0,1,150"
                     AbsoluteLayout.LayoutFlags="WidthProportional">
                     <VerticalStackLayout HorizontalOptions="Fill">
                         <VerticalStackLayout.Triggers>
@@ -103,7 +103,7 @@
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding ScooterActionsCommand}" />
                             </Border.GestureRecognizers>
-                            <FlexLayout 
+                            <FlexLayout
                                 JustifyContent="SpaceBetween">
                                 <VerticalStackLayout>
                                     <FlexLayout>
@@ -170,7 +170,7 @@
                                 <TapGestureRecognizer
                                     Command="{Binding RidePageLinkCommand}" />
                             </Border.GestureRecognizers>
-                            <FlexLayout 
+                            <FlexLayout
                                 JustifyContent="SpaceBetween">
                                 <VerticalStackLayout>
                                     <FlexLayout>
@@ -232,7 +232,7 @@
                     BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#000000}"
                     TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
                     Command="{Binding ShowAppManualCommand}"
-                    AbsoluteLayout.LayoutBounds="0, 0, 40, 40"
+                    AbsoluteLayout.LayoutBounds="0,0,40,40"
                     AbsoluteLayout.LayoutFlags="None" />
             </AbsoluteLayout>
         </Grid>
