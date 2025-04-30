@@ -43,14 +43,9 @@ public partial class ScootersMapViewModel : ObservableObject
         _navigationService = navigationService;
         _currentUserProvider = currentUserProvider;
     }
-    
-    public void SetBottomSheetService(IBottomSheetService bottomSheetService)
-    {
-        _bottomSheetService = bottomSheetService;
-    }
 
     [RelayCommand]
-    private void Loaded()
+    private void ShowAppManual()
     {
         _bottomSheetService.ShowBottomSheetCall();
     }
@@ -107,6 +102,11 @@ public partial class ScootersMapViewModel : ObservableObject
 
         await FetchScooters();
         AddPins();
+    }
+    
+    public void SetBottomSheetService(IBottomSheetService bottomSheetService)
+    {
+        _bottomSheetService = bottomSheetService;
     }
 
     private async Task EndReservation()

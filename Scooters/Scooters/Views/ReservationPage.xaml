@@ -27,7 +27,7 @@
                     Padding="20,0,20,30"
                     IgnoreSafeArea="True"
                     HorizontalOptions="Fill"
-                    VerticalOptions="End">
+                    VerticalOptions="Fill">
                     <BoxView
                         BackgroundColor="Transparent"
                         HeightRequest="5"
@@ -103,22 +103,47 @@
                     <VerticalStackLayout
                         Margin="0,20,0,0"
                         Spacing="5">
+                        <Button
+                            Text="Reserve"
+                            Command="{Binding ShowMinutesBottomSheetCommand}">
+                        </Button>
+                        <Button
+                            Text="Ride straight away"
+                            Command="{Binding RideLinkCommand}">
+                        </Button>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Name="MinutesBottomSheetTemplate" x:Key="MinutesBottomSheetTemplate">
+            <Border
+                Padding="10"
+                StrokeShape="RoundRectangle 40 40 0 0">
+                <VerticalStackLayout
+                    Padding="10,0,10,25">
+                    <BoxView
+                        BackgroundColor="Transparent"
+                        HeightRequest="5"
+                        WidthRequest="38"
+                        CornerRadius="2.5"
+                        HorizontalOptions="Center"
+                        Margin="0,5,0,25"
+                        Color="{AppThemeBinding Light=#CCCCCC, Dark=#666666}" />
+                    <VerticalStackLayout
+                        Spacing="5">
                         <Label
                             Text="Select time interval for reservation (min)"
                             FontAttributes="Bold"
-                            FontSize="18" />
+                            HorizontalTextAlignment="Center"
+                            FontSize="26"
+                            Margin="0,0,0,5" />
                         <Picker
                             Title="Select time interval"
                             ItemsSource="{Binding TimeSlots}"
                             SelectedItem="{Binding Reservation.Duration}" />
                         <Button
                             Text="Reserve"
-                            Command="{Binding ReserveScooterCommand}">
-                        </Button>
-                        <Button
-                            Text="Ride straight away"
-                            Command="{Binding RideLinkCommand}">
-                        </Button>
+                            Command="{Binding ReserveScooterCommand}" />
                     </VerticalStackLayout>
                 </VerticalStackLayout>
             </Border>

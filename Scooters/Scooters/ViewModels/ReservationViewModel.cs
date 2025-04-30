@@ -22,6 +22,7 @@ public partial class ReservationViewModel : ObservableObject
     private Guid _currentUserId;
     private Location _userLocation;
 
+    private IMinutesSheetService _minutesSheetService;
     private IBottomSheetService _bottomSheetService;
     private readonly IMediator _mediator;
     private readonly ICurrentUserProvider _currentUserProvider;
@@ -37,22 +38,18 @@ public partial class ReservationViewModel : ObservableObject
         _notificationService = notificationService;
     }
 
-    public void SetBottomSheetService(IBottomSheetService bottomSheetService)
-    {
-        _bottomSheetService = bottomSheetService;
-    }
-
-    public void SetScooter(Scooter scooter)
-    {
-        Scooter = scooter;
-    }
-
     [RelayCommand]
     private void Loaded()
     {
         _bottomSheetService.ShowBottomSheetCall();
     }
-
+    
+    [RelayCommand]
+    private void ShowMinutesBottomSheet()
+    {
+        _minutesSheetService.ShowMinutesBottomSheetCall();
+    }
+        
     [RelayCommand]
     private async Task ReserveScooter()
     {
@@ -102,8 +99,23 @@ public partial class ReservationViewModel : ObservableObject
         }
 
         _bottomSheetService.CloseBottomSheetCall();
-        _navigationService.GoBackAsync();
+        await _navigationService.GoBackAsync();
         await _navigationService.NavigateToRidePageAsync(response.Data);
+    }
+    
+    public void SetBottomSheetService(IBottomSheetService bottomSheetService)
+    {
+        _bottomSheetService = bottomSheetService;
+    }
+    
+    public void SetMinutesBottomSheetService(IMinutesSheetService minutesSheetService)
+    {
+        _minutesSheetService = minutesSheetService;
+    }
+
+    public void SetScooter(Scooter scooter)
+    {
+        Scooter = scooter;
     }
 
     private void GetDistance()
@@ -145,7 +157,7 @@ public partial class ReservationViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Shell.Current.DisplayAlert("Error",
+            await Shell.Current.DisplayAlert("Error",
                 "Could not fetch user's location. Distance to the scooter won't be displayed", "OK");
         }
 

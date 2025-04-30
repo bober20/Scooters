@@ -1,3 +1,4 @@
+using Microsoft.Maui.Controls.Platform.Compatibility;
 using Microsoft.Maui.Platform;
 using Scooters.ViewModels;
 using Scooters.Views;
@@ -7,7 +8,7 @@ namespace Scooters;
 
 public static partial class PageExtensions
 {
-    public static void ShowBottomSheet(this Page page, IView bottomSheetContent, bool dimDismiss)
+    public static UIViewController ShowBottomSheet(this Page page, IView bottomSheetContent, bool dimDismiss, bool largeDetent = false)
     {
         var mauiContext = page.Handler?.MauiContext ?? throw new Exception("MauiContext is null");
         var viewController = page.ToUIViewController(mauiContext);
@@ -15,11 +16,20 @@ public static partial class PageExtensions
         var sheet = viewControllerToPresent.SheetPresentationController;
         if (sheet is not null)
         {
-            sheet.Detents = new[]
+            if (largeDetent)
             {
-                UISheetPresentationControllerDetent.CreateMediumDetent(),
-                UISheetPresentationControllerDetent.CreateLargeDetent(),
-            };
+                sheet.Detents = new[]
+                {
+                    UISheetPresentationControllerDetent.CreateLargeDetent(),
+                };
+            }
+            else
+            {
+                sheet.Detents = new[]
+                {
+                    UISheetPresentationControllerDetent.CreateMediumDetent()
+                };
+            }
             sheet.LargestUndimmedDetentIdentifier = dimDismiss ? UISheetPresentationControllerDetentIdentifier.Unknown : UISheetPresentationControllerDetentIdentifier.Medium;
             sheet.PrefersScrollingExpandsWhenScrolledToEdge = false;
             sheet.PrefersEdgeAttachedInCompactHeight = true;
@@ -28,6 +38,7 @@ public static partial class PageExtensions
             viewControllerToPresent.PresentationController.Delegate = new SheetDismissalDelegate(page);
         }
         viewController.PresentViewController(viewControllerToPresent, animated: true, null);
+        return viewControllerToPresent;
     }
     
     public static void CloseBottomSheet(this UIViewController bottomSheet)

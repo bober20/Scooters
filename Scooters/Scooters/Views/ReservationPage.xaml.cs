@@ -3,6 +3,7 @@ using Scooters.ViewModels;
 
 #if ANDROID
 using BottomSheetView = Google.Android.Material.BottomSheet.BottomSheetDialog;
+
 #elif IOS || MACCATALYST
 using BottomSheetView = UIKit.UIViewController;
 
@@ -12,15 +13,17 @@ using BottomSheetView = Microsoft.UI.Xaml.Controls.Primitives.Popup;
 
 namespace Scooters.Views;
 
-public partial class ReservationPage : ContentPage, IBottomSheetService
+public partial class ReservationPage : ContentPage, IBottomSheetService, IMinutesSheetService
 {
     BottomSheetView? bottomSheet;
+    BottomSheetView? minutesBottomSheet;
 
     public ReservationPage(ReservationViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;
         viewModel.SetBottomSheetService(this);
+        viewModel.SetMinutesBottomSheetService(this);
     }
 
     private View GetBottomSheetView()
@@ -37,6 +40,28 @@ public partial class ReservationPage : ContentPage, IBottomSheetService
 
     public void ShowBottomSheetCall()
     {
-        this.ShowBottomSheet(GetBottomSheetView(), true);
+#if IOS || MACCATALYST
+        bottomSheet = this.ShowBottomSheet(GetBottomSheetView(), true, true);
+#elif ANDROID
+        bottomSheet = this.ShowBottomSheet(GetBottomSheetView(), true);
+#endif
+    }
+
+    private View GetMinutesBottomSheetView()
+    {
+        var view = (View)MinutesBottomSheetTemplate.CreateContent();
+        view.BindingContext = BindingContext;
+        return view;
+    }
+
+    public void CloseMinutesBottomSheetCall()
+    {
+        minutesBottomSheet?.CloseBottomSheet();
+    }
+
+    public void ShowMinutesBottomSheetCall()
+    {
+        CloseBottomSheetCall();
+        minutesBottomSheet = this.ShowBottomSheet(GetMinutesBottomSheetView(), true);
     }
 }

@@ -37,7 +37,7 @@ public partial class ScootersMapPage : ContentPage, IMapUpdaterService, IBottomS
     {
         ScootersMap.MoveToRegion(MapSpan.FromCenterAndRadius(center, Distance.FromKilometers(latSpan)));
     }
-    
+
     private View GetBottomSheetView()
     {
         var view = (View)BottomSheetTemplate.CreateContent();
@@ -52,6 +52,6 @@ public partial class ScootersMapPage : ContentPage, IMapUpdaterService, IBottomS
 
     public void ShowBottomSheetCall()
     {
-        this.ShowBottomSheet(GetBottomSheetView(), true);
+        bottomSheet = this.ShowBottomSheet(GetBottomSheetView(), true);
     }
 }
