@@ -15,8 +15,8 @@ namespace Scooters.Views;
 
 public partial class ReservationPage : ContentPage, IBottomSheetService, IMinutesSheetService
 {
-    BottomSheetView? bottomSheet;
-    BottomSheetView? minutesBottomSheet;
+    BottomSheetView? _bottomSheet;
+    BottomSheetView? _minutesBottomSheet;
 
     public ReservationPage(ReservationViewModel viewModel)
     {
@@ -35,15 +35,15 @@ public partial class ReservationPage : ContentPage, IBottomSheetService, IMinute
 
     public void CloseBottomSheetCall()
     {
-        bottomSheet?.CloseBottomSheet();
+        _bottomSheet?.CloseBottomSheet();
     }
 
     public void ShowBottomSheetCall()
     {
 #if IOS || MACCATALYST
-        bottomSheet = this.ShowBottomSheet(GetBottomSheetView(), true, true);
+        _bottomSheet = this.ShowBottomSheet(GetBottomSheetView(), true, true);
 #elif ANDROID
-        bottomSheet = this.ShowBottomSheet(GetBottomSheetView(), true);
+        _bottomSheet = this.ShowBottomSheet(GetBottomSheetView(), true);
 #endif
     }
 
@@ -56,12 +56,12 @@ public partial class ReservationPage : ContentPage, IBottomSheetService, IMinute
 
     public void CloseMinutesBottomSheetCall()
     {
-        minutesBottomSheet?.CloseBottomSheet();
+        _minutesBottomSheet?.CloseBottomSheet();
     }
 
     public void ShowMinutesBottomSheetCall()
     {
         CloseBottomSheetCall();
-        minutesBottomSheet = this.ShowBottomSheet(GetMinutesBottomSheetView(), true);
+        _minutesBottomSheet = this.ShowBottomSheet(GetMinutesBottomSheetView(), true);
     }
 }

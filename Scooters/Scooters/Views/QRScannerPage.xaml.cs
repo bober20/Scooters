@@ -4,9 +4,9 @@ using ZXing.Net.Maui.Controls;
 
 namespace Scooters.Views;
 
-public partial class QRScannerPage : ContentPage, IQrUpdaterService
+public partial class QrScannerPage : ContentPage, IQrUpdaterService
 {
-    public QRScannerPage(QRScannerViewModel viewModel)
+    public QrScannerPage(QrScannerViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;

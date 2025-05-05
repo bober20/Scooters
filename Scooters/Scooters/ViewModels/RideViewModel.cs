@@ -1,6 +1,5 @@
 using Application.Common.Interfaces;
 using Application.Rides.Commands.EndRide;
-using Application.Rides.Queries.GetRideById;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
@@ -9,23 +8,15 @@ using Scooters.Common.Interfaces;
 
 namespace Scooters.ViewModels;
 
-public partial class RideViewModel : ObservableObject
+public partial class RideViewModel(IMediator mediator, INavigationService navigationService) : ObservableObject
 {
-    [ObservableProperty] private Ride _ride;
-    [ObservableProperty] private string _countdown;
+    [ObservableProperty] private Ride? _ride;
+    [ObservableProperty] private string _countdown = string.Empty;
     [ObservableProperty] private string _distance = "0.00";
 
-    private System.Timers.Timer _timer;
+    private System.Timers.Timer? _timer;
 
-    private IBottomSheetService _bottomSheetService;
-    private readonly IMediator _mediator;
-    private readonly INavigationService _navigationService;
-
-    public RideViewModel(IMediator mediator, INavigationService navigationService)
-    {
-        _mediator = mediator;
-        _navigationService = navigationService;
-    }
+    private IBottomSheetService? _bottomSheetService;
 
     public void SetBottomSheetService(IBottomSheetService bottomSheetService)
     {
@@ -40,11 +31,11 @@ public partial class RideViewModel : ObservableObject
     [RelayCommand]
     private void Loaded()
     {
-        _bottomSheetService.ShowBottomSheetCall();
+        _bottomSheetService?.ShowBottomSheetCall();
     }
 
     [RelayCommand]
-    private async Task Appearing()
+    private void Appearing()
     {
         InitialiseTimer();
     }
@@ -52,10 +43,11 @@ public partial class RideViewModel : ObservableObject
     [RelayCommand]
     private async Task EndRide()
     {
-        await _mediator.Send(new EndRideCommand(Ride.Id));
+        if (Ride is null) return;
+        await mediator.Send(new EndRideCommand(Ride.Id));
 
-        _bottomSheetService.CloseBottomSheetCall();
-        await _navigationService.GoBackAsync();
+        _bottomSheetService?.CloseBottomSheetCall();
+        await navigationService.GoBackAsync();
     }
 
     private void InitialiseTimer()
@@ -66,8 +58,14 @@ public partial class RideViewModel : ObservableObject
         _timer.Start();
     }
 
-    private void OnTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
+    private void OnTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
     {
+        if (Ride is null)
+        {
+            Shell.Current.DisplayAlert("Ride error", "Ride is not specified", "OK");
+            return;
+        }
+
         MainThread.InvokeOnMainThreadAsync(() =>
         {
             var timePassed = DateTime.Now - Ride.StartTime;

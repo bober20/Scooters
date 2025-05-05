@@ -9,7 +9,6 @@ namespace Scooters.Common.Services;
 public class NavigationService : INavigationService
 {
     private IServiceProvider _serviceProvider;
-    private TaskCompletionSource<bool>? _popupCompletionSource;
 
     public NavigationService(IServiceProvider serviceProvider)
     {
@@ -81,7 +80,7 @@ public class NavigationService : INavigationService
         await MainThread.InvokeOnMainThreadAsync(async () => { await Shell.Current.Navigation.PopModalAsync(); });
     }
 
-    private async Task NavigateToAsync(string page, IDictionary<string, object> parameters = null)
+    private async Task NavigateToAsync(string page, IDictionary<string, object>? parameters = null)
     {
         if (parameters is null)
         {

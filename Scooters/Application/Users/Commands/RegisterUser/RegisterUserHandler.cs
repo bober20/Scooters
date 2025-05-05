@@ -33,7 +33,7 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Response
 
             if (!passwordHashResult.IsSuccessful)
             {
-                return ResponseData<Guid>.Failure(passwordHashResult.ErrorMessage);
+                return ResponseData<Guid>.Failure(passwordHashResult.ErrorMessage ?? "Password is too weak");
             }
             
             var user = new User(request.Email, passwordHashResult.Data);

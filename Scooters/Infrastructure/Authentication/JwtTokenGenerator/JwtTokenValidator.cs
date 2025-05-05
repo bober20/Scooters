@@ -33,6 +33,11 @@ public class JwtTokenValidator : IJwtTokenValidator
 
         var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
         var userId = principal.FindFirst(c => c.Type == "id")?.Value;
+        
+        if (string.IsNullOrEmpty(userId))
+        {
+            return null;
+        }
 
         return Guid.Parse(userId);
     }

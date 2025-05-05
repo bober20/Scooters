@@ -28,10 +28,10 @@
                     <ImageButton
                         Aspect="AspectFill"
                         Source="{Binding ProfileImage}"
-                        Command="{Binding PhotoManagementCommand}" />
+                        Command="{Binding ManagePictureCommand}" />
                 </Border>
                 <Label
-                    Text="{Binding User.Email}"
+                    Text="{Binding User.Email, FallbackValue='User is not specified'}"
                     FontSize="22"
                     HorizontalTextAlignment="Center"
                     VerticalTextAlignment="Center" />

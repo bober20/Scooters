@@ -34,8 +34,11 @@ public static partial class PageExtensions
             sheet.PrefersScrollingExpandsWhenScrolledToEdge = false;
             sheet.PrefersEdgeAttachedInCompactHeight = true;
             sheet.WidthFollowsPreferredContentSizeWhenEdgeAttached = true;
-            
-            viewControllerToPresent.PresentationController.Delegate = new SheetDismissalDelegate(page);
+
+            if (viewControllerToPresent.PresentationController is not null)
+            {
+                viewControllerToPresent.PresentationController.Delegate = new SheetDismissalDelegate(page);
+            }
         }
         viewController.PresentViewController(viewControllerToPresent, animated: true, null);
         return viewControllerToPresent;

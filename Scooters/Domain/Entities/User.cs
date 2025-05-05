@@ -9,8 +9,8 @@ public class User
     public string PasswordHash { get; set; }
     public string ImageName { get; set; }
     
-    public List<Reservation> Reservations { get; set; }
-    public List<Ride> Rides { get; set; }
+    public List<Reservation>? Reservations { get; set; }
+    public List<Ride>? Rides { get; set; }
     
     public User() { }
     

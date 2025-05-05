@@ -9,29 +9,27 @@ using Scooters.Common.Services;
 
 namespace Scooters.ViewModels;
 
-public partial class ProfileViewModel : ObservableObject
+public partial class ProfileViewModel(
+    IMediator mediator,
+    ICurrentUserProvider currentUserProvider,
+    INavigationService navigationService)
+    : ObservableObject
 {
-    [ObservableProperty] private User _user;
-    [ObservableProperty] private ImageSource _profileImage;
-
-    private readonly IMediator _mediator;
-    private readonly ICurrentUserProvider _currentUserProvider;
-    private readonly INavigationService _navigationService;
-
-    public ProfileViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider,
-        INavigationService navigationService)
-    {
-        _mediator = mediator;
-        _currentUserProvider = currentUserProvider;
-        _navigationService = navigationService;
-    }
+    [ObservableProperty] private User? _user;
+    [ObservableProperty] private ImageSource? _profileImage;
 
     [RelayCommand]
-    private async Task ChangePasswordLink() => await _navigationService.NavigateToPasswordChangePageAsync();
+    private async Task ChangePasswordLink() => await navigationService.NavigateToPasswordChangePageAsync();
 
     [RelayCommand]
-    private async Task PhotoManagement()
+    private async Task ManagePicture()
     {
+        if (User is null)
+        {
+            await navigationService.NavigateToLoginPageAsync();
+            return;
+        }
+
         var output = await Shell.Current.DisplayActionSheet(
             "Upload Photo", "Cancel", "Gallery", "Delete");
 
@@ -51,24 +49,30 @@ public partial class ProfileViewModel : ObservableObject
             {
                 ImageService.RemoveImage(User.ImageName);
                 User.ImageName = await ImageService.SaveImageAsync(result);
-                await _mediator.Send(new UpdateUserCommand(User));
+                await mediator.Send(new UpdateUserCommand(User));
                 ProfileImage = ImageService.GetImage(User.ImageName);
             }
         }
     }
-    
+
     [RelayCommand]
     private async Task DeleteAccount()
     {
+        if (User is null)
+        {
+            await navigationService.NavigateToLoginPageAsync();
+            return;
+        }
+
         var result =
             await Shell.Current.DisplayAlert("Delete account", "Are you sure you want to delete account?", "Yes", "No");
 
         if (result)
         {
-            _currentUserProvider.RemoveCurrentUser();
+            currentUserProvider.RemoveCurrentUser();
             ImageService.RemoveImage(User.ImageName);
             await Shell.Current.DisplayAlert("Success", "Your account has been deleted", "OK");
-            await _navigationService.NavigateToLoginPageAsync();
+            await navigationService.NavigateToLoginPageAsync();
         }
     }
 
@@ -78,8 +82,8 @@ public partial class ProfileViewModel : ObservableObject
         var result = await Shell.Current.DisplayAlert("Log out", "Are you sure you want to log out?", "Yes", "No");
         if (result)
         {
-            _currentUserProvider.RemoveCurrentUser();
-            await _navigationService.NavigateToLoginPageAsync();
+            currentUserProvider.RemoveCurrentUser();
+            await navigationService.NavigateToLoginPageAsync();
         }
     }
 
@@ -87,26 +91,33 @@ public partial class ProfileViewModel : ObservableObject
     private async Task Appearing()
     {
         await GetCurrentUserAsync();
+
+        if (User is null)
+        {
+            await navigationService.NavigateToLoginPageAsync();
+            return;
+        }
+
         ProfileImage = ImageService.GetImage(User.ImageName);
     }
 
     private async Task GetCurrentUserAsync()
     {
-        var guid = _currentUserProvider.GetCurrentUser();
+        var guid = currentUserProvider.GetCurrentUser();
         if (guid is null)
         {
-            await _navigationService.NavigateToLoginPageAsync();
+            await navigationService.NavigateToLoginPageAsync();
             return;
         }
 
-        var response = await _mediator.Send(new GetUserQuery(guid.Value));
+        var response = await mediator.Send(new GetUserQuery(guid.Value));
         if (response.IsSuccessful)
         {
             User = response.Data;
         }
         else
         {
-            await _navigationService.NavigateToLoginPageAsync();
+            await navigationService.NavigateToLoginPageAsync();
         }
     }
 }

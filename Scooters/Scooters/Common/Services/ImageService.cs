@@ -22,7 +22,7 @@ public static class ImageService
         return newName;
     }
     
-    public static ImageSource GetImage(string imageName)
+    public static ImageSource? GetImage(string imageName)
     {
         if (string.IsNullOrEmpty(imageName))
         {

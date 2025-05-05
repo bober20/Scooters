@@ -45,12 +45,12 @@ public static class MauiProgram
         builder.Services.AddSingleton<ICurrentUserProvider, CurrentUserProvider>();
         builder.Services.AddSingleton<INavigationService, NavigationService>();
 
-        builder.Services.AddTransient<QRScannerPage, QRScannerViewModel>();
+        builder.Services.AddTransient<QrScannerPage, QrScannerViewModel>();
         builder.Services.AddTransient<LoginPage, LoginViewModel>();
         builder.Services.AddTransient<SignUpPage, SignUpViewModel>();
         builder.Services.AddTransient<ProfilePage, ProfileViewModel>();
         builder.Services.AddTransient<ScootersMapPage, ScootersMapViewModel>();
-        
+
         builder.Services.AddTransientWithShellRoute<RidePage, RideViewModel>("RidePage");
         builder.Services.AddTransientWithShellRoute<ReservationPage, ReservationViewModel>("ReservationPage");
         builder.Services.AddTransientWithShellRoute<PasswordChangePage, PasswordChangeViewModel>("PasswordChangePage");

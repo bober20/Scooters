@@ -15,65 +15,58 @@ using Map = Microsoft.Maui.Controls.Maps.Map;
 
 namespace Scooters.ViewModels;
 
-public partial class ScootersMapViewModel : ObservableObject
+public partial class ScootersMapViewModel(
+    IMediator mediator,
+    INavigationService navigationService,
+    ICurrentUserProvider currentUserProvider)
+    : ObservableObject
 {
-    [ObservableProperty] private List<Scooter> _scooters;
-    [ObservableProperty] private Scooter _selectedScooter;
+    [ObservableProperty] private List<Scooter> _scooters = new();
+    [ObservableProperty] private Scooter? _selectedScooter;
     [ObservableProperty] private ObservableCollection<Pin> _pins = new();
     [ObservableProperty] private bool _hasReservation;
     [ObservableProperty] private bool _hasRide;
-    [ObservableProperty] private string _countdown;
+    [ObservableProperty] private string _countdown = string.Empty;
     [ObservableProperty] private Guid _currentUserId;
     [ObservableProperty] private Reservation? _reservation;
     [ObservableProperty] private Ride? _ride;
-    [ObservableProperty] private Map _map;
+    [ObservableProperty] private Map? _map;
 
-    private IBottomSheetService _bottomSheetService;
-    private readonly IMediator _mediator;
-    private readonly INavigationService _navigationService;
-    private readonly ICurrentUserProvider _currentUserProvider;
-    private IMapUpdaterService _mapUpdaterService;
+    private IBottomSheetService? _bottomSheetService;
+    private IMapUpdaterService? _mapUpdaterService;
 
     private double _currentZoom = 0.01;
     private const double minZoom = 0.01;
     private const double maxZoom = 18.0;
     private System.Timers.Timer? _timer;
 
-    public ScootersMapViewModel(IMediator mediator, INavigationService navigationService,
-        ICurrentUserProvider currentUserProvider)
-    {
-        _mediator = mediator;
-        _navigationService = navigationService;
-        _currentUserProvider = currentUserProvider;
-    }
-
     [RelayCommand]
     private void ZoomIn()
     {
         double zoomIncrement = _currentZoom / 2;
         _currentZoom = Math.Max(minZoom, _currentZoom - zoomIncrement);
-        _mapUpdaterService.Zoom(_currentZoom);
+        _mapUpdaterService?.Zoom(_currentZoom);
     }
-    
+
     [RelayCommand]
     private void ZoomOut()
     {
         double zoomIncrement = _currentZoom / 2;
         _currentZoom = Math.Min(maxZoom, _currentZoom + zoomIncrement);
-        _mapUpdaterService.Zoom(_currentZoom);
+        _mapUpdaterService?.Zoom(_currentZoom);
     }
 
     [RelayCommand]
     private void ShowAppManual()
     {
-        _bottomSheetService.ShowBottomSheetCall();
+        _bottomSheetService?.ShowBottomSheetCall();
     }
 
     [RelayCommand]
     private async Task Appearing()
     {
-        await FetchUser();
-        await Task.WhenAll(FetchReservation(), FetchRide(), FetchScooters());
+        await FetchUserAsync();
+        await Task.WhenAll(FetchReservation(), FetchRideAsync(), FetchScootersAsync());
         if (Reservation is not null)
         {
             InitiateTimer();
@@ -85,9 +78,15 @@ public partial class ScootersMapViewModel : ObservableObject
     [RelayCommand]
     private async Task RidePageLink()
     {
-        await _navigationService.NavigateToRidePageAsync(Ride);
+        if (Ride is null)
+        {
+            await Shell.Current.DisplayAlert("Ride error", "Ride is not specified", "OK");
+            return;
+        }
 
-        await Task.WhenAll(FetchReservation(), FetchRide(), FetchScooters());
+        await navigationService.NavigateToRidePageAsync(Ride);
+
+        await Task.WhenAll(FetchReservation(), FetchRideAsync(), FetchScootersAsync());
         AddPins();
     }
 
@@ -99,15 +98,15 @@ public partial class ScootersMapViewModel : ObservableObject
 
         if (result == "Cancel Reservation")
         {
-            await EndReservation();
+            await EndReservationAsync();
         }
         else if (result == "Start ride")
         {
-            await CreateRide();
-            await FetchRide();
+            await CreateRideAsync();
+            await FetchRideAsync();
         }
 
-        await FetchScooters();
+        await FetchScootersAsync();
         AddPins();
     }
 
@@ -116,11 +115,15 @@ public partial class ScootersMapViewModel : ObservableObject
         _bottomSheetService = bottomSheetService;
     }
 
-    private async Task EndReservation()
+    private async Task EndReservationAsync()
     {
-        if (Reservation is null) return;
+        if (Reservation is null)
+        {
+            await Shell.Current.DisplayAlert("Reservation error", "Reservation is not specified", "OK");
+            return;
+        }
 
-        await _mediator.Send(new EndReservationCommand(Reservation.Id));
+        await mediator.Send(new EndReservationCommand(Reservation.Id));
 
         Reservation = null;
         HasReservation = false;
@@ -128,8 +131,14 @@ public partial class ScootersMapViewModel : ObservableObject
         _timer?.Dispose();
     }
 
-    private async Task CreateRide()
+    private async Task CreateRideAsync()
     {
+        if (Reservation is null)
+        {
+            await Shell.Current.DisplayAlert("Ride error", "Reservation is not specified", "OK");
+            return;
+        }
+
         Ride ride = new Ride
         {
             ScooterId = Reservation.ScooterId,
@@ -137,7 +146,7 @@ public partial class ScootersMapViewModel : ObservableObject
             StartTime = DateTime.Now,
         };
 
-        var response = await _mediator.Send(new CreateRideCommand(ride));
+        var response = await mediator.Send(new CreateRideCommand(ride));
         if (!response.IsSuccessful)
         {
             await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
@@ -149,7 +158,7 @@ public partial class ScootersMapViewModel : ObservableObject
         _timer?.Stop();
         _timer?.Dispose();
 
-        await _navigationService.NavigateToRidePageAsync(ride);
+        await navigationService.NavigateToRidePageAsync(ride);
     }
 
     private void AddPins()
@@ -180,7 +189,7 @@ public partial class ScootersMapViewModel : ObservableObject
                 BindingContext = Reservation.Scooter,
             };
             pin.MarkerClicked += OnPinMarkerClicked;
-            _mapUpdaterService.MoveTo(new Location(Reservation.Scooter.Coordinates.Latitude,
+            _mapUpdaterService?.MoveTo(new Location(Reservation.Scooter.Coordinates.Latitude,
                 Reservation.Scooter.Coordinates.Longitude));
             Pins.Add(pin);
         }
@@ -195,22 +204,22 @@ public partial class ScootersMapViewModel : ObservableObject
                 BindingContext = Ride.Scooter
             };
             pin.MarkerClicked += OnPinMarkerClicked;
-            _mapUpdaterService.MoveTo(new Location(Ride.Scooter.Coordinates.Latitude,
+            _mapUpdaterService?.MoveTo(new Location(Ride.Scooter.Coordinates.Latitude,
                 Ride.Scooter.Coordinates.Longitude));
             Pins.Add(pin);
         }
 
-        _mapUpdaterService.SetPins(Pins);
+        _mapUpdaterService?.SetPins(Pins);
     }
 
-    private async void OnPinMarkerClicked(object sender, PinClickedEventArgs e)
+    private async void OnPinMarkerClicked(object? sender, PinClickedEventArgs e)
     {
         e.HideInfoWindow = true;
 
         if (sender is Pin pin && pin.BindingContext is Scooter scooter)
         {
-            await _navigationService.NavigateToReservationPageAsync(scooter);
-            await Task.WhenAll(FetchReservation(), FetchRide(), FetchScooters());
+            await navigationService.NavigateToReservationPageAsync(scooter);
+            await Task.WhenAll(FetchReservation(), FetchRideAsync(), FetchScootersAsync());
             AddPins();
         }
     }
@@ -222,7 +231,7 @@ public partial class ScootersMapViewModel : ObservableObject
 
     private async Task FetchReservation()
     {
-        var reservation = await _mediator.Send(new GetReservationByUserQuery(CurrentUserId));
+        var reservation = await mediator.Send(new GetReservationByUserQuery(CurrentUserId));
         if (reservation.IsSuccessful)
         {
             HasReservation = true;
@@ -235,9 +244,9 @@ public partial class ScootersMapViewModel : ObservableObject
         HasReservation = false;
     }
 
-    private async Task FetchRide()
+    private async Task FetchRideAsync()
     {
-        var response = await _mediator.Send(new GetRideQuery(CurrentUserId));
+        var response = await mediator.Send(new GetRideQuery(CurrentUserId));
 
         if (response.IsSuccessful)
         {
@@ -250,25 +259,35 @@ public partial class ScootersMapViewModel : ObservableObject
         HasRide = false;
     }
 
-    private async Task FetchUser()
+    private async Task FetchUserAsync()
     {
-        if (_currentUserProvider.GetCurrentUser() is not Guid userId)
+        if (currentUserProvider.GetCurrentUser() is not { } userId)
         {
-            await _navigationService.NavigateToLoginPageAsync();
+            await navigationService.NavigateToLoginPageAsync();
             return;
         }
 
         CurrentUserId = userId;
     }
 
-    private async Task FetchScooters()
+    private async Task FetchScootersAsync()
     {
-        var response = await _mediator.Send(new GetAvailableScootersQuery());
-        Scooters = new List<Scooter>(response.Data);
+        var response = await mediator.Send(new GetAvailableScootersQuery());
+        if (response.Data is not null)
+        {
+            Scooters = new List<Scooter>(response.Data);
+        }
     }
 
     private void UpdateCountdown()
     {
+        if (Reservation is null)
+        {
+            _timer?.Stop();
+            navigationService.NavigateToLoginPageAsync();
+            return;
+        }
+
         var startTime = Reservation.StartTime;
         var duration = Reservation.Duration;
         var endTime = startTime.AddMinutes(duration);
@@ -276,7 +295,7 @@ public partial class ScootersMapViewModel : ObservableObject
 
         if (timeRemaining.TotalSeconds <= 0)
         {
-            _mediator.Send(new EndReservationCommand(Reservation.Id));
+            mediator.Send(new EndReservationCommand(Reservation.Id));
             Reservation = null;
             HasReservation = false;
             _timer?.Stop();
@@ -286,7 +305,7 @@ public partial class ScootersMapViewModel : ObservableObject
         Countdown = $"{timeRemaining.Minutes:D2}:{timeRemaining.Seconds:D2}";
     }
 
-    private void OnTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
+    private void OnTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
     {
         MainThread.BeginInvokeOnMainThread(UpdateCountdown);
     }

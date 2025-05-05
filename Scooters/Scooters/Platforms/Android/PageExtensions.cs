@@ -1,5 +1,4 @@
 using Google.Android.Material.BottomSheet;
-using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Platform;
 using Scooters.Views;
 

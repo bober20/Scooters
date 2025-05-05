@@ -4,6 +4,7 @@ using Scooters.ViewModels;
 
 #if ANDROID
 using BottomSheetView = Google.Android.Material.BottomSheet.BottomSheetDialog;
+
 #elif IOS || MACCATALYST
 using BottomSheetView = UIKit.UIViewController;
 
@@ -15,7 +16,7 @@ namespace Scooters.Views;
 
 public partial class RidePage : ContentPage, IBottomSheetService
 {
-    BottomSheetView? bottomSheet;
+    BottomSheetView? _bottomSheet;
 
     public RidePage(RideViewModel viewModel)
     {
@@ -33,11 +34,11 @@ public partial class RidePage : ContentPage, IBottomSheetService
 
     public void CloseBottomSheetCall()
     {
-        bottomSheet?.CloseBottomSheet();
+        _bottomSheet?.CloseBottomSheet();
     }
 
     public void ShowBottomSheetCall()
     {
-        this.ShowBottomSheet(GetBottomSheetView(), true);
+        _bottomSheet = this.ShowBottomSheet(GetBottomSheetView(), true);
     }
 }

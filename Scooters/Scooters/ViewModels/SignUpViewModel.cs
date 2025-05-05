@@ -8,12 +8,12 @@ using Scooters.ValidatorAttributes;
 
 namespace Scooters.ViewModels;
 
-public partial class SignUpViewModel : ObservableValidator
+public partial class SignUpViewModel(IMediator mediator, INavigationService navigationService) : ObservableValidator
 {
     [ObservableProperty] [Required(ErrorMessage = "Field is required.")] [EmailAddress]
-    private string _email;
+    private string? _email;
 
-    [ObservableProperty] private string _emailErrors;
+    [ObservableProperty] private string _emailErrors = string.Empty;
     [ObservableProperty] private bool _emailHasErrors;
 
     [ObservableProperty]
@@ -21,9 +21,9 @@ public partial class SignUpViewModel : ObservableValidator
     [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
     [MaxLength(30, ErrorMessage = "Password cannot exceed 30 characters.")]
     [PasswordsMatch(nameof(PasswordConfirmation))]
-    private string _password;
+    private string? _password;
 
-    [ObservableProperty] private string _passwordErrors;
+    [ObservableProperty] private string _passwordErrors = string.Empty;
     [ObservableProperty] private bool _passwordHasErrors;
 
     [ObservableProperty]
@@ -31,21 +31,12 @@ public partial class SignUpViewModel : ObservableValidator
     [MinLength(8, ErrorMessage = "Password confirmation must be at least 8 characters long.")]
     [MaxLength(30, ErrorMessage = "Password confirmation cannot exceed 30 characters.")]
     [PasswordsMatch(nameof(Password))]
-    private string _passwordConfirmation;
+    private string? _passwordConfirmation;
 
-    [ObservableProperty] private string _passwordConfirmErrors;
+    [ObservableProperty] private string _passwordConfirmErrors = string.Empty;
     [ObservableProperty] private bool _passwordConfirmHasErrors;
 
     [ObservableProperty] private bool _isPasswordVisible = true;
-
-    private readonly IMediator _mediator;
-    private readonly INavigationService _navigationService;
-
-    public SignUpViewModel(IMediator mediator, INavigationService navigationService)
-    {
-        _mediator = mediator;
-        _navigationService = navigationService;
-    }
 
     [RelayCommand]
     private async Task SignUp()
@@ -53,7 +44,13 @@ public partial class SignUpViewModel : ObservableValidator
         DisplayErrors();
         if (HasErrors) return;
 
-        var response = await _mediator.Send(new RegisterUserCommand(Email, Password, PasswordConfirmation));
+        if (Email is null || Password is null || PasswordConfirmation is null)
+        {
+            await Shell.Current.DisplayAlert("Sign up error", "Email and password fields cannot be null", "OK");
+            return;
+        }
+
+        var response = await mediator.Send(new RegisterUserCommand(Email, Password, PasswordConfirmation));
 
         if (!response.IsSuccessful)
         {
@@ -61,18 +58,18 @@ public partial class SignUpViewModel : ObservableValidator
         }
         else
         {
-            await _navigationService.NavigateToLoginPageAsync();
+            await navigationService.NavigateToLoginPageAsync();
         }
     }
 
     [RelayCommand]
-    private async Task LogInLink() => await _navigationService.NavigateToLoginPageAsync();
+    private async Task LogInLink() => await navigationService.NavigateToLoginPageAsync();
 
     [RelayCommand]
     private void TogglePasswordVisibility() => IsPasswordVisible = !IsPasswordVisible;
 
     private bool PropertyHasErrors(string propertyName) => GetErrors(propertyName).Any();
-    
+
     private void DisplayErrors()
     {
         ValidateAllProperties();

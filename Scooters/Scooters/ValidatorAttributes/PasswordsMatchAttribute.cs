@@ -11,11 +11,16 @@ public sealed class PasswordsMatchAttribute : ValidationAttribute
     
     public string PropertyName { get; }
     
-    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
-        object
+        object?
             instance = validationContext.ObjectInstance,
-            otherValue = instance.GetType().GetProperty(PropertyName).GetValue(instance);
+            otherValue = instance.GetType().GetProperty(PropertyName)?.GetValue(instance);
+
+        if (otherValue is null || value is null)
+        {
+            return new("Passwords do not match.");
+        }
 
         if (((IComparable)value).CompareTo(otherValue) == 0)
         {

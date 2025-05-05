@@ -17,7 +17,10 @@
             Command="{Binding AppearingCommand}" />
     </ContentPage.Behaviors>
     <ContentPage.Resources>
-        <DataTemplate x:Name="BottomSheetTemplate" x:Key="BottomSheetTemplate">
+        <DataTemplate
+            x:Name="BottomSheetTemplate"
+            x:Key="BottomSheetTemplate"
+            x:DataType="viewModels:ScootersMapViewModel">
             <Border
                 StrokeShape="RoundRectangle 40 40">
                 <VerticalStackLayout>

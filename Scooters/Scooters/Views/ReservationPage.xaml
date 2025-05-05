@@ -20,7 +20,10 @@
             Command="{Binding LoadedCommand}" />
     </ContentPage.Behaviors>
     <ContentPage.Resources>
-        <DataTemplate x:Name="BottomSheetTemplate" x:Key="BottomSheetTemplate">
+        <DataTemplate
+            x:Name="BottomSheetTemplate"
+            x:Key="BottomSheetTemplate"
+            x:DataType="viewModels:ReservationViewModel">
             <Border
                 StrokeShape="RoundRectangle 40 40 0 0">
                 <Grid
@@ -38,7 +41,7 @@
                         HorizontalOptions="Center"
                         Margin="0,10,0,30"
                         Color="{AppThemeBinding Light=#CCCCCC, Dark=#666666}" />
-                    <VerticalStackLayout 
+                    <VerticalStackLayout
                         Grid.Row="1">
                         <Border
                             StrokeThickness="0">
@@ -49,7 +52,7 @@
                         </Border>
                         <Label
                             FontAttributes="Bold"
-                            Text="{Binding Scooter.ModelDescription}"
+                            Text="{Binding Scooter.ModelDescription, FallbackValue='Scooter is not specified'}"
                             FontSize="26" />
                         <Label
                             Text="$10/hour"
@@ -96,13 +99,16 @@
                         </Button>
                         <Button
                             Text="Ride straight away"
-                            Command="{Binding RideLinkCommand}">
+                            Command="{Binding RidePageLinkCommand}">
                         </Button>
                     </VerticalStackLayout>
                 </Grid>
             </Border>
         </DataTemplate>
-        <DataTemplate x:Name="MinutesBottomSheetTemplate" x:Key="MinutesBottomSheetTemplate">
+        <DataTemplate
+            x:Name="MinutesBottomSheetTemplate"
+            x:Key="MinutesBottomSheetTemplate"
+            x:DataType="viewModels:ReservationViewModel">
             <Border
                 Padding="10"
                 StrokeShape="RoundRectangle 40 40 0 0">

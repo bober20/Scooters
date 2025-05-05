@@ -8,20 +8,12 @@ using ZXing.Net.Maui;
 
 namespace Scooters.ViewModels;
 
-public partial class QRScannerViewModel : ObservableObject
+public partial class QrScannerViewModel(INavigationService navigationService, IMediator mediator) : ObservableObject
 {
     [ObservableProperty] private bool _isDetecting;
     [ObservableProperty] private bool _isEnabled;
 
-    private IQrUpdaterService _qrUpdaterService;
-    private readonly INavigationService _navigationService;
-    private readonly IMediator _mediator;
-
-    public QRScannerViewModel(INavigationService navigationService, IMediator mediator)
-    {
-        _navigationService = navigationService;
-        _mediator = mediator;
-    }
+    private IQrUpdaterService? _qrUpdaterService;
 
     [RelayCommand]
     private async Task BarcodeDetected(BarcodeDetectionEventArgs e)
@@ -35,10 +27,16 @@ public partial class QRScannerViewModel : ObservableObject
         }
 
         Guid.TryParse(barcode.Value, out var barcodeGuid);
-        var response = await _mediator.Send(new GetScooterQuery(barcodeGuid));
+        var response = await mediator.Send(new GetScooterQuery(barcodeGuid));
         if (response.IsSuccessful)
         {
-            await _navigationService.NavigateToReservationPageAsync(response.Data);
+            if (response.Data is null)
+            {
+                await Shell.Current.DisplayAlert("QR Scanner", "There is no scooter with this id", "OK");
+                return;
+            }
+
+            await navigationService.NavigateToReservationPageAsync(response.Data);
         }
 
         IsDetecting = true;

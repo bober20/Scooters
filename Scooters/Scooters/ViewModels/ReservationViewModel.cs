@@ -2,7 +2,6 @@ using System.Collections.ObjectModel;
 using Application.Common.Interfaces;
 using Application.Reservations.Commands.CreateReservation;
 using Application.Rides.Commands.CreateRide;
-using Application.Scooters.Queries.GetScooterById;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
@@ -12,44 +11,36 @@ using Scooters.Common.Interfaces;
 
 namespace Scooters.ViewModels;
 
-public partial class ReservationViewModel : ObservableObject
+public partial class ReservationViewModel(
+    IMediator mediator,
+    ICurrentUserProvider currentUserProvider,
+    INavigationService navigationService,
+    INotificationService notificationService)
+    : ObservableObject
 {
     [ObservableProperty] private Reservation _reservation = new();
     [ObservableProperty] private ObservableCollection<int> _timeSlots = new();
-    [ObservableProperty] private Scooter _scooter;
-    [ObservableProperty] private string _distance;
+    [ObservableProperty] private Scooter? _scooter;
+    [ObservableProperty] private string _distance = string.Empty;
 
     private Guid _currentUserId;
-    private Location _userLocation;
+    private Location? _userLocation;
 
-    private IMinutesSheetService _minutesSheetService;
-    private IBottomSheetService _bottomSheetService;
-    private readonly IMediator _mediator;
-    private readonly ICurrentUserProvider _currentUserProvider;
-    private readonly INavigationService _navigationService;
-    private readonly INotificationService _notificationService;
-
-    public ReservationViewModel(IMediator mediator, ICurrentUserProvider currentUserProvider,
-        INavigationService navigationService, INotificationService notificationService)
-    {
-        _mediator = mediator;
-        _currentUserProvider = currentUserProvider;
-        _navigationService = navigationService;
-        _notificationService = notificationService;
-    }
+    private IMinutesSheetService? _minutesSheetService;
+    private IBottomSheetService? _bottomSheetService;
 
     [RelayCommand]
     private void Loaded()
     {
-        _bottomSheetService.ShowBottomSheetCall();
+        _bottomSheetService?.ShowBottomSheetCall();
     }
-    
+
     [RelayCommand]
     private void ShowMinutesBottomSheet()
     {
-        _minutesSheetService.ShowMinutesBottomSheetCall();
+        _minutesSheetService?.ShowMinutesBottomSheetCall();
     }
-        
+
     [RelayCommand]
     private async Task ReserveScooter()
     {
@@ -60,12 +51,12 @@ public partial class ReservationViewModel : ObservableObject
 
         Reservation.StartTime = DateTime.Now;
 
-        var response = await _mediator.Send(new CreateReservationCommand(Reservation));
+        var response = await mediator.Send(new CreateReservationCommand(Reservation));
         if (response.IsSuccessful)
         {
-            await ShowNotification();
-            _bottomSheetService.CloseBottomSheetCall();
-            await _navigationService.GoBackAsync();
+            await ShowReservationNotificationAsync();
+            _bottomSheetService?.CloseBottomSheetCall();
+            await navigationService.GoBackAsync();
             return;
         }
 
@@ -79,34 +70,41 @@ public partial class ReservationViewModel : ObservableObject
         InitializeTimeSlots();
         InitializeReservation();
         _userLocation = await GetUserLocationAsync();
-        GetDistance();
+        GetScooterDistance();
     }
 
     [RelayCommand]
-    private async Task RideLink()
+    private async Task RidePageLink()
     {
+        if (Scooter is null) return;
         var ride = new Ride
         {
             StartTime = DateTime.Now,
             ScooterId = Scooter.Id,
             UserId = _currentUserId
         };
-        var response = await _mediator.Send(new CreateRideCommand(ride));
+        var response = await mediator.Send(new CreateRideCommand(ride));
         if (!response.IsSuccessful)
         {
             await Shell.Current.DisplayAlert("Error", response.ErrorMessage, "OK");
             return;
         }
 
-        _bottomSheetService.CloseBottomSheetCall();
-        await _navigationService.GoBackAndNavigateToRidePageAsync(response.Data);
+        _bottomSheetService?.CloseBottomSheetCall();
+        if (response.Data is null)
+        {
+            await Shell.Current.DisplayAlert("Error", "Ride creation failed", "OK");
+            return;
+        }
+
+        await navigationService.GoBackAndNavigateToRidePageAsync(response.Data);
     }
-    
+
     public void SetBottomSheetService(IBottomSheetService bottomSheetService)
     {
         _bottomSheetService = bottomSheetService;
     }
-    
+
     public void SetMinutesBottomSheetService(IMinutesSheetService minutesSheetService)
     {
         _minutesSheetService = minutesSheetService;
@@ -117,7 +115,7 @@ public partial class ReservationViewModel : ObservableObject
         Scooter = scooter;
     }
 
-    private void GetDistance()
+    private void GetScooterDistance()
     {
         if (_userLocation is null || Scooter is null)
         {
@@ -130,7 +128,7 @@ public partial class ReservationViewModel : ObservableObject
         Distance = $"{Math.Round(distance, 3)} km";
     }
 
-    private async Task<Location> GetUserLocationAsync()
+    private async Task<Location?> GetUserLocationAsync()
     {
         try
         {
@@ -154,7 +152,7 @@ public partial class ReservationViewModel : ObservableObject
                 return _userLocation;
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             await Shell.Current.DisplayAlert("Error",
                 "Could not fetch user's location. Distance to the scooter won't be displayed", "OK");
@@ -165,10 +163,10 @@ public partial class ReservationViewModel : ObservableObject
 
     private async Task GetCurrentUserAsync()
     {
-        if (_currentUserProvider.GetCurrentUser() is not Guid userId)
+        if (currentUserProvider.GetCurrentUser() is not { } userId)
         {
-            _bottomSheetService.CloseBottomSheetCall();
-            await _navigationService.GoBackAsync();
+            _bottomSheetService?.CloseBottomSheetCall();
+            await navigationService.GoBackAsync();
             return;
         }
 
@@ -186,15 +184,16 @@ public partial class ReservationViewModel : ObservableObject
 
     private void InitializeReservation()
     {
+        if (Scooter is null) return;
         Reservation.ScooterId = Scooter.Id;
         Reservation.UserId = _currentUserId;
     }
 
-    private async Task ShowNotification()
+    private async Task ShowReservationNotificationAsync()
     {
-        if (await _notificationService.AreNotificationsEnabled() == false)
+        if (await notificationService.AreNotificationsEnabled() == false)
         {
-            await _notificationService.RequestNotificationPermission();
+            await notificationService.RequestNotificationPermission();
         }
 
         var request = new NotificationRequest
@@ -204,6 +203,6 @@ public partial class ReservationViewModel : ObservableObject
             Description = $"You have created a reservation for {Reservation.Duration} mins"
         };
 
-        await _notificationService.Show(request);
+        await notificationService.Show(request);
     }
 }
