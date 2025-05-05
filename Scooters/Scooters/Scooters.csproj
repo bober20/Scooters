@@ -105,8 +105,4 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="CustomComponents\" />
-    </ItemGroup>
 </Project>

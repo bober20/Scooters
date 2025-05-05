@@ -73,8 +73,12 @@ public partial class RideViewModel : ObservableObject
             var timePassed = DateTime.Now - Ride.StartTime;
             Countdown = $"{timePassed.Minutes:D2}:{timePassed.Seconds:D2}";
 
-            var distance = timePassed.TotalSeconds * 4.1;
-            Distance = $"{distance:F2}";
+            double.TryParse(Distance, out var currentDistance);
+            var distance = timePassed.TotalSeconds * 4;
+            if (distance - currentDistance > 15)
+            {
+                Distance = $"{distance:F2}";
+            }
         });
     }
 }

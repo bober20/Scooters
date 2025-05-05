@@ -34,7 +34,7 @@
                         Spacing="10">
                         <Label
                             HorizontalTextAlignment="Justify"
-                            FontSize="30"
+                            FontSize="26"
                             Text="App manual"
                             FontAttributes="Bold"
                             HorizontalOptions="Center" />
@@ -53,7 +53,7 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <Grid
-            RowDefinitions="*,Auto"
+            RowDefinitions="*"
             IgnoreSafeArea="True">
             <maps:Map
                 Grid.Row="0"
@@ -233,6 +233,37 @@
                     TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
                     Command="{Binding ShowAppManualCommand}"
                     AbsoluteLayout.LayoutBounds="0,0,40,40"
+                    AbsoluteLayout.LayoutFlags="None" />
+            </AbsoluteLayout>
+            <AbsoluteLayout
+                x:Name="ZoomControls"
+                Grid.Row="0"
+                HeightRequest="120"
+                WidthRequest="60"
+                HorizontalOptions="End"
+                VerticalOptions="Center"
+                Margin="0,0,5,0">
+                <Button
+                    Text="+"
+                    FontAttributes="Bold"
+                    CornerRadius="20"
+                    HeightRequest="40"
+                    WidthRequest="40"
+                    Command="{Binding ZoomInCommand}"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#000000}"
+                    TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
+                    AbsoluteLayout.LayoutBounds="0,0,40,40"
+                    AbsoluteLayout.LayoutFlags="None" />
+                <Button
+                    Text="-"
+                    FontAttributes="Bold"
+                    CornerRadius="20"
+                    HeightRequest="40"
+                    WidthRequest="40"
+                    Command="{Binding ZoomOutCommand}"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#000000}"
+                    TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
+                    AbsoluteLayout.LayoutBounds="0,60,40,40"
                     AbsoluteLayout.LayoutFlags="None" />
             </AbsoluteLayout>
         </Grid>

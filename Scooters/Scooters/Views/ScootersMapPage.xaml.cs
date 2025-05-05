@@ -24,6 +24,9 @@ public partial class ScootersMapPage : ContentPage, IMapUpdaterService, IBottomS
         BindingContext = viewModel;
         viewModel.SetMapService(this);
         viewModel.SetBottomSheetService(this);
+#if ANDROID
+        ZoomControls.IsEnabled = false;
+#endif
     }
 
     public void SetPins(IEnumerable<Pin> pins)
@@ -33,9 +36,17 @@ public partial class ScootersMapPage : ContentPage, IMapUpdaterService, IBottomS
             ScootersMap.Pins.Add(pin);
     }
 
-    public void MoveTo(Location center, double latSpan = 0.0001, double lonSpan = 0.0001)
+    public void MoveTo(Location center, double latSpan = 0.01)
     {
         ScootersMap.MoveToRegion(MapSpan.FromCenterAndRadius(center, Distance.FromKilometers(latSpan)));
+    }
+
+    public void Zoom(double zoomLevel)
+    {
+        Location? location = ScootersMap?.VisibleRegion?.Center;
+        if (location == null)
+            return;
+        ScootersMap?.MoveToRegion(MapSpan.FromCenterAndRadius(location, Distance.FromKilometers(zoomLevel)));
     }
 
     private View GetBottomSheetView()

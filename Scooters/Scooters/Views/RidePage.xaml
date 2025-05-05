@@ -23,8 +23,9 @@
             <Border
                 Padding="10"
                 StrokeShape="RoundRectangle 40 40 0 0">
-                <VerticalStackLayout>
+                <Grid RowDefinitions="Auto, Auto, Auto, *">
                     <BoxView
+                        Grid.Row="0"
                         BackgroundColor="Transparent"
                         HeightRequest="5"
                         WidthRequest="38"
@@ -32,82 +33,71 @@
                         HorizontalOptions="Center"
                         Margin="0,5,0,25"
                         Color="{AppThemeBinding Light=#CCCCCC, Dark=#666666}" />
-                    <FlexLayout
-                        JustifyContent="SpaceBetween"
-                        AlignItems="Stretch"
-                        Direction="Column">
-                        <VerticalStackLayout Spacing="5">
-                            <Label
-                                HorizontalTextAlignment="Center"
-                                Text="{Binding Ride.Scooter.ModelDescription,
+                    <VerticalStackLayout 
+                        Spacing="5"
+                        Grid.Row="1">
+                        <Label
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding Ride.Scooter.ModelDescription,
                                 FallbackValue='Scooter is not specified'}"
-                                FontSize="28"
-                                FontAttributes="Bold" />
+                            FontSize="26"
+                            FontAttributes="Bold" />
+                        <Label
+                            HorizontalTextAlignment="Center"
+                            Text="Electric scooter"
+                            TextColor="DimGrey" />
+                    </VerticalStackLayout>
+                    <Grid
+                        Margin="20"
+                        Grid.Row="2"
+                        ColumnDefinitions="*,*"
+                        ColumnSpacing="5"
+                        Padding="20,0">
+                        <HorizontalStackLayout
+                            Grid.Column="0">
                             <Label
-                                HorizontalTextAlignment="Center"
-                                Text="Electric scooter"
-                                TextColor="DimGrey" />
+                                Margin="5,0"
+                                Text="&#xe71e;"
+                                FontFamily="MauiMaterialAssets"
+                                FontSize="40" />
+                            <VerticalStackLayout>
+                                <Label
+                                    Text="TIME PASSED"
+                                    TextColor="DimGrey" />
+                                <Label
+                                    FontAttributes="Bold"
+                                    Text="{Binding Countdown}" />
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout
+                            Grid.Column="1">
                             <Label
-                                Margin="0,10,0,0"
-                                Text="Statistics"
-                                FontSize="18"
-                                FontAttributes="Bold"
-                                HorizontalTextAlignment="Center" />
-                            <Border
-                                Padding="10"
-                                StrokeShape="RoundRectangle 40 40"
-                                StrokeThickness="0">
-                                <VerticalStackLayout Spacing="15">
-                                    <Grid
-                                        ColumnDefinitions="*,*"
-                                        ColumnSpacing="5"
-                                        Padding="20,0">
-                                        <HorizontalStackLayout
-                                            Grid.Column="0">
-                                            <Label
-                                                Margin="5,0"
-                                                Text="&#xe71e;"
-                                                FontFamily="MauiMaterialAssets"
-                                                FontSize="40" />
-                                            <VerticalStackLayout>
-                                                <Label
-                                                    Text="TIME PASSED"
-                                                    TextColor="DimGrey" />
-                                                <Label
-                                                    FontAttributes="Bold"
-                                                    Text="{Binding Countdown}" />
-                                            </VerticalStackLayout>
-                                        </HorizontalStackLayout>
-                                        <HorizontalStackLayout
-                                            Grid.Column="1">
-                                            <Label
-                                                Margin="5,0"
-                                                Text="&#xe71c;"
-                                                FontFamily="MauiMaterialAssets"
-                                                FontSize="40" />
-                                            <VerticalStackLayout>
-                                                <Label
-                                                    Text="DISTANCE"
-                                                    TextColor="DimGrey" />
-                                                <Label>
-                                                    <Label.FormattedText>
-                                                        <FormattedString>
-                                                            <Span Text="{Binding Distance}" />
-                                                            <Span Text=" m" />
-                                                        </FormattedString>
-                                                    </Label.FormattedText>
-                                                </Label>
-                                            </VerticalStackLayout>
-                                        </HorizontalStackLayout>
-                                    </Grid>
-                                </VerticalStackLayout>
-                            </Border>
-                            <Button
-                                Text="End ride"
-                                Command="{Binding EndRideCommand}" />
-                        </VerticalStackLayout>
-                    </FlexLayout>
-                </VerticalStackLayout>
+                                Margin="5,0"
+                                Text="&#xe71c;"
+                                FontFamily="MauiMaterialAssets"
+                                FontSize="40" />
+                            <VerticalStackLayout>
+                                <Label
+                                    Text="DISTANCE"
+                                    TextColor="DimGrey" />
+                                <Label>
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding Distance}" />
+                                            <Span Text=" m" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Grid>
+                    <Button
+                        Margin="20,0,20,30"
+                        Grid.Row="3"
+                        VerticalOptions="End"
+                        Text="End ride"
+                        Command="{Binding EndRideCommand}" />
+                </Grid>
             </Border>
         </DataTemplate>
     </ContentPage.Resources>

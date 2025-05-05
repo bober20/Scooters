@@ -34,6 +34,9 @@ public partial class ScootersMapViewModel : ObservableObject
     private readonly ICurrentUserProvider _currentUserProvider;
     private IMapUpdaterService _mapUpdaterService;
 
+    private double _currentZoom = 0.01;
+    private const double minZoom = 0.01;
+    private const double maxZoom = 18.0;
     private System.Timers.Timer? _timer;
 
     public ScootersMapViewModel(IMediator mediator, INavigationService navigationService,
@@ -42,6 +45,22 @@ public partial class ScootersMapViewModel : ObservableObject
         _mediator = mediator;
         _navigationService = navigationService;
         _currentUserProvider = currentUserProvider;
+    }
+
+    [RelayCommand]
+    private void ZoomIn()
+    {
+        double zoomIncrement = _currentZoom / 2;
+        _currentZoom = Math.Max(minZoom, _currentZoom - zoomIncrement);
+        _mapUpdaterService.Zoom(_currentZoom);
+    }
+    
+    [RelayCommand]
+    private void ZoomOut()
+    {
+        double zoomIncrement = _currentZoom / 2;
+        _currentZoom = Math.Min(maxZoom, _currentZoom + zoomIncrement);
+        _mapUpdaterService.Zoom(_currentZoom);
     }
 
     [RelayCommand]
