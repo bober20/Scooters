@@ -17,7 +17,6 @@
     <ContentPage.Content>
         <Grid
             IgnoreSafeArea="True"
-            RowSpan="2"
             RowDefinitions="Auto,*">
             <Image
                 Source="scooterslogo.png"
@@ -27,27 +26,54 @@
                 Grid.Row="1"
                 StrokeShape="RoundRectangle 40 40 0 0">
                 <VerticalStackLayout
-                    Spacing="20"
+                    Spacing="5"
                     Padding="20,30,20,10">
                     <Label
                         Text="Sign in"
                         FontSize="32"
                         FontAttributes="Bold"
                         HorizontalTextAlignment="Center" />
-                    <VerticalStackLayout Spacing="5">
-                        <Label
-                            Text="Email"
-                            TextColor="DimGrey" />
+                    <Label
+                        Margin="0,15,0,0"
+                        Text="Email"
+                        TextColor="DimGrey" />
+                    <Entry
+                        Keyboard="Email"
+                        IsTextPredictionEnabled="False"
+                        IsSpellCheckEnabled="False"
+                        Placeholder="Email"
+                        Text="{Binding Email}">
+                        <Entry.Triggers>
+                            <DataTrigger
+                                TargetType="Entry"
+                                Binding="{Binding EmailHasErrors}"
+                                Value="True">
+                                <Setter
+                                    Property="BackgroundColor"
+                                    Value="{StaticResource Error}" />
+                            </DataTrigger>
+                        </Entry.Triggers>
+                    </Entry>
+                    <Label
+                        Text="{Binding EmailErrors}"
+                        TextColor="{StaticResource ErrorText}" />
+                    <Label
+                        Margin="0,15,0,0"
+                        Text="Password"
+                        TextColor="DimGrey" />
+                    <FlexLayout>
                         <Entry
-                            Keyboard="Email"
                             IsTextPredictionEnabled="False"
                             IsSpellCheckEnabled="False"
-                            Placeholder="Email"
-                            Text="{Binding Email}">
+                            Placeholder="Password"
+                            FlexLayout.Grow="1"
+                            FlexLayout.Basis="0"
+                            Text="{Binding Password}"
+                            IsPassword="{Binding IsPasswordVisible}">
                             <Entry.Triggers>
                                 <DataTrigger
                                     TargetType="Entry"
-                                    Binding="{Binding EmailHasErrors}"
+                                    Binding="{Binding PasswordHasErrors}"
                                     Value="True">
                                     <Setter
                                         Property="BackgroundColor"
@@ -55,57 +81,29 @@
                                 </DataTrigger>
                             </Entry.Triggers>
                         </Entry>
-                        <Label
-                            Text="{Binding EmailErrors}"
-                            TextColor="{StaticResource ErrorText}" />
-                    </VerticalStackLayout>
-                    <VerticalStackLayout Spacing="5">
-                        <Label
-                            Text="Password"
-                            TextColor="DimGrey" />
-                        <FlexLayout>
-                            <Entry
-                                IsTextPredictionEnabled="False"
-                                IsSpellCheckEnabled="False"
-                                Placeholder="Password"
-                                FlexLayout.Grow="1"
-                                FlexLayout.Basis="0"
-                                Text="{Binding Password}"
-                                IsPassword="{Binding IsPasswordVisible}">
-                                <Entry.Triggers>
-                                    <DataTrigger
-                                        TargetType="Entry"
-                                        Binding="{Binding PasswordHasErrors}"
-                                        Value="True">
-                                        <Setter
-                                            Property="BackgroundColor"
-                                            Value="{StaticResource Error}" />
-                                    </DataTrigger>
-                                </Entry.Triggers>
-                            </Entry>
-                            <Button
-                                BackgroundColor="Transparent"
-                                TextColor="DimGrey"
-                                Text="&#xe758;"
-                                FontFamily="MauiMaterialAssets"
-                                Command="{Binding TogglePasswordVisibilityCommand}">
-                                <Button.Triggers>
-                                    <DataTrigger
-                                        TargetType="Button"
-                                        Binding="{Binding IsPasswordVisible}"
-                                        Value="True">
-                                        <Setter
-                                            Property="Text"
-                                            Value="&#xe78e;" />
-                                    </DataTrigger>
-                                </Button.Triggers>
-                            </Button>
-                        </FlexLayout>
-                        <Label
-                            Text="{Binding PasswordErrors}"
-                            TextColor="{StaticResource ErrorText}" />
-                    </VerticalStackLayout>
+                        <Button
+                            BackgroundColor="Transparent"
+                            TextColor="DimGrey"
+                            Text="&#xe758;"
+                            FontFamily="MauiMaterialAssets"
+                            Command="{Binding TogglePasswordVisibilityCommand}">
+                            <Button.Triggers>
+                                <DataTrigger
+                                    TargetType="Button"
+                                    Binding="{Binding IsPasswordVisible}"
+                                    Value="True">
+                                    <Setter
+                                        Property="Text"
+                                        Value="&#xe78e;" />
+                                </DataTrigger>
+                            </Button.Triggers>
+                        </Button>
+                    </FlexLayout>
+                    <Label
+                        Text="{Binding PasswordErrors}"
+                        TextColor="{StaticResource ErrorText}" />
                     <Button
+                        Margin="0,15"
                         Text="Log in"
                         CornerRadius="10"
                         Command="{Binding LogInCommand}" />

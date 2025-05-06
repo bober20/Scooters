@@ -19,27 +19,54 @@
                 Grid.Row="1"
                 StrokeShape="RoundRectangle 40 40 0 0">
                 <VerticalStackLayout
-                    Spacing="20"
+                    Spacing="5"
                     Padding="20,30,20,10">
                     <Label
                         HorizontalTextAlignment="Center"
                         Text="Sign up"
                         FontSize="32"
                         FontAttributes="Bold" />
-                    <VerticalStackLayout Spacing="5">
-                        <Label
-                            Text="Email"
-                            TextColor="DimGrey" />
+                    <Label
+                        Margin="0,15,0,0"
+                        Text="Email"
+                        TextColor="DimGrey" />
+                    <Entry
+                        Keyboard="Email"
+                        IsTextPredictionEnabled="False"
+                        IsSpellCheckEnabled="False"
+                        Placeholder="Email"
+                        Text="{Binding Email}">
+                        <Entry.Triggers>
+                            <DataTrigger
+                                TargetType="Entry"
+                                Binding="{Binding EmailHasErrors}"
+                                Value="True">
+                                <Setter
+                                    Property="BackgroundColor"
+                                    Value="{StaticResource Error}" />
+                            </DataTrigger>
+                        </Entry.Triggers>
+                    </Entry>
+                    <Label
+                        Text="{Binding EmailErrors}"
+                        TextColor="{StaticResource ErrorText}" />
+                    <Label
+                        Margin="0,15,0,0"
+                        Text="Password"
+                        TextColor="DimGrey" />
+                    <FlexLayout>
                         <Entry
-                            Keyboard="Email"
                             IsTextPredictionEnabled="False"
                             IsSpellCheckEnabled="False"
-                            Placeholder="Email"
-                            Text="{Binding Email}">
+                            Placeholder="Password"
+                            FlexLayout.Basis="0"
+                            FlexLayout.Grow="1"
+                            IsPassword="{Binding IsPasswordVisible}"
+                            Text="{Binding Password}">
                             <Entry.Triggers>
                                 <DataTrigger
                                     TargetType="Entry"
-                                    Binding="{Binding EmailHasErrors}"
+                                    Binding="{Binding PasswordHasErrors}"
                                     Value="True">
                                     <Setter
                                         Property="BackgroundColor"
@@ -47,111 +74,82 @@
                                 </DataTrigger>
                             </Entry.Triggers>
                         </Entry>
-                        <Label
-                            Text="{Binding EmailErrors}"
-                            TextColor="{StaticResource ErrorText}" />
-                    </VerticalStackLayout>
-                    <VerticalStackLayout Spacing="5">
-                        <Label
-                            Text="Password"
-                            TextColor="DimGrey" />
-                        <FlexLayout>
-                            <Entry
-                                IsTextPredictionEnabled="False"
-                                IsSpellCheckEnabled="False"
-                                Placeholder="Password"
-                                FlexLayout.Basis="0"
-                                FlexLayout.Grow="1"
-                                IsPassword="{Binding IsPasswordVisible}"
-                                Text="{Binding Password}">
-                                <Entry.Triggers>
-                                    <DataTrigger
-                                        TargetType="Entry"
-                                        Binding="{Binding PasswordHasErrors}"
-                                        Value="True">
-                                        <Setter
-                                            Property="BackgroundColor"
-                                            Value="{StaticResource Error}" />
-                                    </DataTrigger>
-                                </Entry.Triggers>
-                            </Entry>
-                            <Button
-                                BackgroundColor="Transparent"
-                                FontFamily="MauiMaterialAssets"
-                                TextColor="DimGrey"
-                                Command="{Binding TogglePasswordVisibilityCommand}"
-                                Text="&#xe758;">
-                                <Button.Triggers>
-                                    <DataTrigger
-                                        TargetType="Button"
-                                        Binding="{Binding IsPasswordVisible}"
-                                        Value="True">
-                                        <Setter
-                                            Property="Text"
-                                            Value="&#xe78e;" />
-                                    </DataTrigger>
-                                </Button.Triggers>
-                            </Button>
-                        </FlexLayout>
-                        <Label
-                            Text="Use uppercase letters, numbers and special characters"
+                        <Button
+                            BackgroundColor="Transparent"
+                            FontFamily="MauiMaterialAssets"
                             TextColor="DimGrey"
-                            FontSize="10" />
-                        <Label
-                            Text="{Binding PasswordErrors}"
-                            TextColor="{StaticResource ErrorText}" />
-                    </VerticalStackLayout>
-                    <VerticalStackLayout Spacing="5">
-                        <Label
-                            Text="Password confirmation"
-                            TextColor="DimGrey" />
-                        <FlexLayout>
-                            <Entry
-                                IsTextPredictionEnabled="False"
-                                IsSpellCheckEnabled="False"
-                                FlexLayout.Basis="0"
-                                FlexLayout.Grow="1"
-                                Placeholder="Password confirmation"
-                                IsPassword="{Binding IsPasswordVisible}"
-                                Text="{Binding PasswordConfirmation}">
-                                <Entry.Triggers>
-                                    <DataTrigger
-                                        TargetType="Entry"
-                                        Binding="{Binding PasswordConfirmHasErrors}"
-                                        Value="True">
-                                        <Setter
-                                            Property="BackgroundColor"
-                                            Value="{StaticResource Error}" />
-                                    </DataTrigger>
-                                </Entry.Triggers>
-                            </Entry>
-                            <Button
-                                BackgroundColor="Transparent"
-                                FontFamily="MauiMaterialAssets"
-                                TextColor="DimGrey"
-                                Command="{Binding TogglePasswordVisibilityCommand}"
-                                Text="&#xe758;">
-                                <Button.Triggers>
-                                    <DataTrigger
-                                        TargetType="Button"
-                                        Binding="{Binding IsPasswordVisible}"
-                                        Value="True">
-                                        <Setter
-                                            Property="Text"
-                                            Value="&#xe78e;" />
-                                    </DataTrigger>
-                                </Button.Triggers>
-                            </Button>
-                        </FlexLayout>
-                        <Label
-                            Text="Password confirmation must match password"
+                            Command="{Binding TogglePasswordVisibilityCommand}"
+                            Text="&#xe758;">
+                            <Button.Triggers>
+                                <DataTrigger
+                                    TargetType="Button"
+                                    Binding="{Binding IsPasswordVisible}"
+                                    Value="True">
+                                    <Setter
+                                        Property="Text"
+                                        Value="&#xe78e;" />
+                                </DataTrigger>
+                            </Button.Triggers>
+                        </Button>
+                    </FlexLayout>
+                    <Label
+                        Text="Use uppercase letters, numbers and special characters"
+                        TextColor="DimGrey"
+                        FontSize="10" />
+                    <Label
+                        Text="{Binding PasswordErrors}"
+                        TextColor="{StaticResource ErrorText}" />
+                    <Label
+                        Margin="0,15,0,0"
+                        Text="Password confirmation"
+                        TextColor="DimGrey" />
+                    <FlexLayout>
+                        <Entry
+                            IsTextPredictionEnabled="False"
+                            IsSpellCheckEnabled="False"
+                            FlexLayout.Basis="0"
+                            FlexLayout.Grow="1"
+                            Placeholder="Password confirmation"
+                            IsPassword="{Binding IsPasswordVisible}"
+                            Text="{Binding PasswordConfirmation}">
+                            <Entry.Triggers>
+                                <DataTrigger
+                                    TargetType="Entry"
+                                    Binding="{Binding PasswordConfirmHasErrors}"
+                                    Value="True">
+                                    <Setter
+                                        Property="BackgroundColor"
+                                        Value="{StaticResource Error}" />
+                                </DataTrigger>
+                            </Entry.Triggers>
+                        </Entry>
+                        <Button
+                            BackgroundColor="Transparent"
+                            FontFamily="MauiMaterialAssets"
                             TextColor="DimGrey"
-                            FontSize="10" />
-                        <Label
-                            Text="{Binding PasswordConfirmErrors}"
-                            TextColor="{StaticResource ErrorText}" />
-                    </VerticalStackLayout>
+                            Command="{Binding TogglePasswordVisibilityCommand}"
+                            Text="&#xe758;">
+                            <Button.Triggers>
+                                <DataTrigger
+                                    TargetType="Button"
+                                    Binding="{Binding IsPasswordVisible}"
+                                    Value="True">
+                                    <Setter
+                                        Property="Text"
+                                        Value="&#xe78e;" />
+                                </DataTrigger>
+                            </Button.Triggers>
+                        </Button>
+                    </FlexLayout>
+                    <Label
+                        Text="Password confirmation must match password"
+                        TextColor="DimGrey"
+                        FontSize="10" />
+                    <Label
+                        Text="{Binding PasswordConfirmErrors}"
+                        TextColor="{StaticResource ErrorText}" />
                     <Button
+                        Margin="0,15"
                         Text="Sign up"
                         CornerRadius="10"
                         Command="{Binding SignUpCommand}" />
