@@ -97,10 +97,6 @@
                             Text="Reserve"
                             Command="{Binding ShowMinutesBottomSheetCommand}">
                         </Button>
-                        <Button
-                            Text="Ride straight away"
-                            Command="{Binding RidePageLinkCommand}">
-                        </Button>
                     </VerticalStackLayout>
                 </Grid>
             </Border>
@@ -113,7 +109,7 @@
                 Padding="10"
                 StrokeShape="RoundRectangle 40 40 0 0">
                 <Grid
-                    RowDefinitions="Auto, Auto, Auto, *"
+                    RowDefinitions="Auto, Auto, *"
                     RowSpacing="5"
                     Padding="20,0,20,30">
                     <BoxView
@@ -125,22 +121,27 @@
                         HorizontalOptions="Center"
                         Margin="0,5,0,25"
                         Color="{AppThemeBinding Light=#CCCCCC, Dark=#666666}" />
-                    <Label
-                        Grid.Row="1"
-                        Text="Select time interval for reservation (min)"
-                        FontAttributes="Bold"
-                        HorizontalTextAlignment="Center"
-                        FontSize="26"
-                        Margin="0,0,0,5" />
-                    <Picker
-                        Grid.Row="2"
-                        Title="Select time interval"
-                        ItemsSource="{Binding TimeSlots}"
-                        SelectedItem="{Binding Reservation.Duration}" />
+                    <VerticalStackLayout
+                        Spacing="5"
+                        Grid.Row="1">
+                        <Label
+                            Text="Select time interval for reservation (min)"
+                            FontAttributes="Bold"
+                            HorizontalTextAlignment="Center"
+                            FontSize="26"
+                            Margin="0,0,0,5" />
+                        <Picker
+                            Title="Start ride immediately"
+                            ItemsSource="{Binding TimeSlots}"
+                            SelectedItem="{Binding Reservation.Duration}" />
+                        <Label
+                            TextColor="DimGrey"
+                            Text="To start the ride immediately leave the above field empty." />
+                    </VerticalStackLayout>
                     <Button
+                        Grid.Row="2"
                         VerticalOptions="End"
-                        Grid.Row="3"
-                        Text="Reserve"
+                        Text="Confirm"
                         Command="{Binding ReserveScooterCommand}" />
                 </Grid>
             </Border>

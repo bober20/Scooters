@@ -46,6 +46,7 @@ public partial class ReservationViewModel(
     {
         if (Reservation.Duration == 0)
         {
+            await GoToRidePage();
             return;
         }
 
@@ -73,8 +74,7 @@ public partial class ReservationViewModel(
         GetScooterDistance();
     }
 
-    [RelayCommand]
-    private async Task RidePageLink()
+    private async Task GoToRidePage()
     {
         if (Scooter is null) return;
         var ride = new Ride
