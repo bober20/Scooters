@@ -87,17 +87,9 @@
                     HorizontalOptions="Fill"
                     AbsoluteLayout.LayoutBounds="0,0,1,150"
                     AbsoluteLayout.LayoutFlags="WidthProportional">
-                    <VerticalStackLayout HorizontalOptions="Fill">
-                        <VerticalStackLayout.Triggers>
-                            <DataTrigger
-                                TargetType="VerticalStackLayout"
-                                Binding="{Binding HasReservation}"
-                                Value="False">
-                                <Setter
-                                    Property="IsVisible"
-                                    Value="False" />
-                            </DataTrigger>
-                        </VerticalStackLayout.Triggers>
+                    <VerticalStackLayout
+                        HorizontalOptions="Fill"
+                        IsVisible="{Binding HasReservation}">
                         <Border
                             Margin="0"
                             StrokeShape="RoundRectangle 40 40"
@@ -155,17 +147,7 @@
                             </FlexLayout>
                         </Border>
                     </VerticalStackLayout>
-                    <VerticalStackLayout>
-                        <VerticalStackLayout.Triggers>
-                            <DataTrigger
-                                TargetType="VerticalStackLayout"
-                                Binding="{Binding HasRide}"
-                                Value="False">
-                                <Setter
-                                    Property="IsVisible"
-                                    Value="False" />
-                            </DataTrigger>
-                        </VerticalStackLayout.Triggers>
+                    <VerticalStackLayout IsVisible="{Binding HasRide}">
                         <Border
                             Padding="10"
                             StrokeShape="RoundRectangle 40 40">
