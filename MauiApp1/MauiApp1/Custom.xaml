@@ -11,10 +11,11 @@
         RowDefinitions="*"
         Margin="10">
         <Border
+            Stroke="{Binding DropDownBorderColor}"
             HorizontalOptions="Fill"
-            BackgroundColor="Bisque"
             StrokeShape="RoundRectangle 10 10"
-            Padding="10">
+            Padding="15"
+            BackgroundColor="{Binding DropDownBackgroundColor}">
             <FlexLayout
                 JustifyContent="SpaceBetween"
                 AlignItems="Center">
@@ -46,10 +47,11 @@
             AbsoluteLayout.LayoutFlags="WidthProportional"
             AbsoluteLayout.LayoutBounds="0,0,1,1"
             HeightRequest="0"
-            Margin="0,35,0,0">
+            Margin="0,40,0,0">
             <Border
+                Stroke="{Binding DropDownBorderColor}"
                 WidthRequest="{Binding Width, Source={RelativeSource AncestorType={x:Type Grid}}}"
-                BackgroundColor="{Binding NewBackgroundColor}"
+                BackgroundColor="{Binding DropDownBackgroundColor}"
                 StrokeShape="RoundRectangle 10 10"
                 Padding="10">
                 <CollectionView

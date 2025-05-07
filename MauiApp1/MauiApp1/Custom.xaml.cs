@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using Microsoft.Maui.Controls.Shapes;
 
 namespace MauiApp1;
 
@@ -24,8 +18,11 @@ public partial class Custom : ContentView
     public static readonly BindableProperty IsDropDownOpenProperty = BindableProperty.Create(
         nameof(IsDropDownOpen), typeof(bool), typeof(Custom), false);
     
-    public static readonly BindableProperty NewBackgroundColorProperty = BindableProperty.Create(
-        nameof(NewBackgroundColor), typeof(Color), typeof(Custom), Colors.Chartreuse);
+    public static readonly BindableProperty DropDownBackgroundColorProperty = BindableProperty.Create(
+        nameof(DropDownBackgroundColor), typeof(Color), typeof(Custom), Colors.Black);
+    
+    public static BindableProperty DropDownBorderColorProperty = BindableProperty.Create(
+        nameof(DropDownBorderColor), typeof(Color), typeof(Custom), Colors.Black);
     
     public static readonly BindableProperty DropDownClosedIconProperty = BindableProperty.Create(
         nameof(DropDownClosedIcon), typeof(string), typeof(Custom), "\ue705");
@@ -57,10 +54,16 @@ public partial class Custom : ContentView
         set => SetValue(DropDownOpenedIconProperty, value);
     }
 
-    public Color NewBackgroundColor
+    public Color DropDownBackgroundColor
     {
-        get => (Color)GetValue(BackgroundColorProperty);
-        set => SetValue(BackgroundColorProperty, value);
+        get => (Color)GetValue(DropDownBackgroundColorProperty);
+        set => SetValue(DropDownBackgroundColorProperty, value);
+    }
+    
+    public Color DropDownBorderColor
+    {
+        get => (Color)GetValue(DropDownBorderColorProperty);
+        set => SetValue(DropDownBorderColorProperty, value);
     }
     
     public bool IsDropDownOpen

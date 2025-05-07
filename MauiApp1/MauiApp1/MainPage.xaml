@@ -19,13 +19,13 @@
                 <Label Text="fgdkhgk" />
             </VerticalStackLayout>
             <mauiApp1:Custom
-                NewBackgroundColor="Blue"
+                DropDownBorderColor="Coral"
+                DropDownBackgroundColor="CornflowerBlue"
                 ZIndex="1000"
                 Grid.Row="1"
                 Placeholder="DJFDKSJFDHFKHF"
                 x:Name="Viewssss" />
             <Label Grid.Row="2" Text="fgdkhgk" BackgroundColor="Bisque" />
         </Grid>
-
     </ContentPage.Content>
 </ContentPage>
