@@ -25,6 +25,6 @@ public class IntCollectionToStringCollectionConverter : IValueConverter
             ).ToList();
         }
         
-        return 0;
+        return Enumerable.Empty<int>();
     }
 }
