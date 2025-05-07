@@ -9,13 +9,13 @@ public partial class MainPage : ContentPage
         BindingContext = this;
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            Viewssss.ItemsSource = new List<string>()
+            DropDown.ItemsSource = CustomSearch.ItemsSource = new List<string>()
             {
-                "Item 1",
-                "Item 2",
-                "Item 3",
-                "Item 4",
-                "Item 5"
+                "aaafdjhf",
+                "aafjdkjshf",
+                "adshhfh",
+                "bdjfdjkf",
+                "nvsjdhid"
             };
         });
     }

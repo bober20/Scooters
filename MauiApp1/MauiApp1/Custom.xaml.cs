@@ -15,7 +15,7 @@ public partial class Custom : ContentView
     public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(
         nameof(ItemsSource), typeof(IEnumerable<string>), typeof(Custom));
     
-    public static readonly BindableProperty IsDropDownOpenProperty = BindableProperty.Create(
+    private static readonly BindableProperty IsDropDownOpenProperty = BindableProperty.Create(
         nameof(IsDropDownOpen), typeof(bool), typeof(Custom), false);
     
     public static readonly BindableProperty DropDownBackgroundColorProperty = BindableProperty.Create(
