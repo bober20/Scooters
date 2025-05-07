@@ -5,6 +5,7 @@
              x:Class="Scooters.Views.ReservationPage"
              xmlns:viewModels="clr-namespace:Scooters.ViewModels"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:converters="clr-namespace:Scooters.Converters"
              x:DataType="viewModels:ReservationViewModel"
              IgnoresContainerArea="True"
              Shell.NavBarIsVisible="False"
@@ -20,6 +21,7 @@
             Command="{Binding LoadedCommand}" />
     </ContentPage.Behaviors>
     <ContentPage.Resources>
+        <converters:IntCollectionToStringCollectionConverter x:Key="IntCollectionToStringCollectionConverter"/>
         <DataTemplate
             x:Name="BottomSheetTemplate"
             x:Key="BottomSheetTemplate"
@@ -132,7 +134,7 @@
                             Margin="0,0,0,5" />
                         <Picker
                             Title="Start ride immediately"
-                            ItemsSource="{Binding TimeSlots}"
+                            ItemsSource="{Binding TimeSlots, Converter={StaticResource IntCollectionToStringCollectionConverter}}"
                             SelectedItem="{Binding Reservation.Duration}" />
                         <Label
                             TextColor="DimGrey"

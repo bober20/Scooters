@@ -176,7 +176,7 @@ public partial class ReservationViewModel(
     private void InitializeTimeSlots()
     {
         TimeSlots.Clear();
-        for (int i = 10; i < 60; i += 10)
+        for (int i = 0; i < 60; i += 10)
         {
             TimeSlots.Add(i);
         }
