@@ -7,7 +7,7 @@
              x:DataType="mauiApp1:Custom"
              BindingContext="this">
     <ContentPage.Content>
-        <Grid RowDefinitions="Auto, Auto, Auto, Auto" InputTransparent="False">
+        <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto" InputTransparent="False">
             <VerticalStackLayout Grid.Row="0">
                 <Label Text="fgdkhgk" />
                 <Label Text="fgdkhgk" />
@@ -25,10 +25,10 @@
                 Grid.Row="1"
                 Placeholder="DJFDKSJFDHFKHF"
                 x:Name="DropDown" />
-            <mauiApp1:SearchCustomView
-                ZIndex="999"
-                Grid.Row="2"
-                x:Name="CustomSearch"/>
+            <!-- <mauiApp1:SearchCustomView -->
+            <!--     ZIndex="999" -->
+            <!--     Grid.Row="2" -->
+            <!--     x:Name="CustomSearch" /> -->
             <VerticalStackLayout Grid.Row="3">
                 <Label Text="fgdkhgk" />
                 <Label Text="fgdkhgk" />
@@ -39,6 +39,7 @@
                 <Label Text="fgdkhgk" />
                 <Label Text="fgdkhgk" />
             </VerticalStackLayout>
+            <Button Grid.Row="4" Clicked="Button_OnClicked"></Button>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

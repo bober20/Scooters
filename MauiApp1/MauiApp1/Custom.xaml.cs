@@ -13,7 +13,7 @@ public partial class Custom : ContentView
         nameof(StrokeThickness), typeof(int), typeof(Custom), 1);
     
     public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(
-        nameof(ItemsSource), typeof(IEnumerable<string>), typeof(Custom));
+        nameof(ItemsSource), typeof(IEnumerable<int>), typeof(Custom));
     
     private static readonly BindableProperty IsDropDownOpenProperty = BindableProperty.Create(
         nameof(IsDropDownOpen), typeof(bool), typeof(Custom), false);
@@ -84,9 +84,9 @@ public partial class Custom : ContentView
         set => SetValue(StrokeThicknessProperty, value);
     }
     
-    public IEnumerable<string> ItemsSource
+    public IEnumerable<int> ItemsSource
     {
-        get => (IEnumerable<string>)GetValue(ItemsSourceProperty);
+        get => (IEnumerable<int>)GetValue(ItemsSourceProperty);
         set => SetValue(ItemsSourceProperty, value);
     }
     

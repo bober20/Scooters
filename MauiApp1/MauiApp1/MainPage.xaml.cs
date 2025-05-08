@@ -7,15 +7,15 @@ public partial class MainPage : ContentPage
     {
         InitializeComponent();
         BindingContext = this;
+    }
+
+    private void Button_OnClicked(object? sender, EventArgs e)
+    {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            DropDown.ItemsSource = CustomSearch.ItemsSource = new List<string>()
+            DropDown.ItemsSource = new List<int>()
             {
-                "aaafdjhf",
-                "aafjdkjshf",
-                "adshhfh",
-                "bdjfdjkf",
-                "nvsjdhid"
+                1,2,3,4,5,6
             };
         });
     }
