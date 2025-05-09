@@ -2,11 +2,10 @@
 
 public partial class MainPage : ContentPage
 {
-
-    public MainPage()
+    public MainPage(MainViewModel vm)
     {
         InitializeComponent();
-        BindingContext = this;
+        BindingContext = vm;
     }
 
     private void Button_OnClicked(object? sender, EventArgs e)

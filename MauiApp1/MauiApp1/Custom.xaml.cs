@@ -34,7 +34,6 @@ public partial class Custom : ContentView
     {
         InitializeComponent();
         DropDownTappedCommand = new Command(DropDownTapped);
-        BindingContext = this;
     }
     
     public void DropDownTapped()
@@ -87,9 +86,13 @@ public partial class Custom : ContentView
     public IEnumerable<int> ItemsSource
     {
         get => (IEnumerable<int>)GetValue(ItemsSourceProperty);
-        set => SetValue(ItemsSourceProperty, value);
+        set
+        {
+            SetValue(ItemsSourceProperty, value);
+            OnPropertyChanged();
+        }
     }
-    
+
     // public int CornerRadius
     // {
     //     get => (int)GetValue(CornerRadiusProperty);

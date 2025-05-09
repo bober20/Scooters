@@ -3,39 +3,38 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiApp1.Custom"
-             xmlns:local="clr-namespace:MauiApp1"
-             x:DataType="local:Custom">
+             xmlns:local="clr-namespace:MauiApp1">
     <Grid
         InputTransparent="False"
         Row="0"
-        RowDefinitions="*"
+        RowDefinitions="*, Auto"
         Margin="10">
         <Border
-            Stroke="{Binding DropDownBorderColor}"
+            Stroke="{Binding DropDownBorderColor, Source={RelativeSource AncestorType={x:Type ContentView}}}"
             HorizontalOptions="Fill"
             StrokeShape="RoundRectangle 10 10"
             Padding="15"
-            BackgroundColor="{Binding DropDownBackgroundColor}">
+            BackgroundColor="{Binding DropDownBackgroundColor, Source={RelativeSource AncestorType={x:Type ContentView}}}">
             <FlexLayout
                 JustifyContent="SpaceBetween"
                 AlignItems="Center">
                 <FlexLayout.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding DropDownTappedCommand}" />
+                    <TapGestureRecognizer Command="{Binding DropDownTappedCommand, Source={RelativeSource AncestorType={x:Type ContentView}}}" />
                 </FlexLayout.GestureRecognizers>
-                <Label Text="Select string" />
+                <Label Text="{Binding Placeholder}" />
                 <Label
                     Margin="5,0"
-                    Text="{Binding DropDownClosedIcon}"
+                    Text="{Binding DropDownClosedIcon, Source={RelativeSource AncestorType={x:Type ContentView}}}"
                     FontFamily="MauiMaterialAssets"
                     FontSize="25">
                     <Label.Triggers>
                         <DataTrigger
                             TargetType="Label"
-                            Binding="{Binding IsDropDownOpen}"
+                            Binding="{Binding IsDropDownOpen, Source={RelativeSource AncestorType={x:Type ContentView}}}"
                             Value="True">
                             <Setter
                                 Property="Text"
-                                Value="{Binding DropDownOpenedIcon}" />
+                                Value="{Binding DropDownOpenedIcon, Source={RelativeSource AncestorType={x:Type ContentView}}}" />
                         </DataTrigger>
                     </Label.Triggers>
                 </Label>
@@ -43,20 +42,21 @@
         </Border>
         <AbsoluteLayout
             ZIndex="1000"
-            IsVisible="{Binding IsDropDownOpen}"
+            IsVisible="{Binding Source={RelativeSource AncestorType={x:Type ContentView}}, Path=IsDropDownOpen}"
             AbsoluteLayout.LayoutFlags="WidthProportional"
             AbsoluteLayout.LayoutBounds="0,0,1,1"
             HeightRequest="0"
             Margin="0,40,0,0">
             <Border
-                Stroke="{Binding DropDownBorderColor}"
+                Stroke="{Binding DropDownBorderColor, Source={RelativeSource AncestorType={x:Type ContentView}}}"
                 WidthRequest="{Binding Width, Source={RelativeSource AncestorType={x:Type Grid}}}"
-                BackgroundColor="{Binding DropDownBackgroundColor}"
+                BackgroundColor="{Binding DropDownBackgroundColor, Source={RelativeSource AncestorType={x:Type ContentView}}}"
                 StrokeShape="RoundRectangle 10 10"
                 Padding="10">
                 <CollectionView
                     HorizontalOptions="Fill"
-                    ItemsSource="{Binding ItemsSource}" />
+                    ItemsSource="{Binding Items}">
+                </CollectionView>
             </Border>
         </AbsoluteLayout>
     </Grid>

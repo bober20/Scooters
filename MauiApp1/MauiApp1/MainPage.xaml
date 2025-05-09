@@ -4,7 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiApp1.MainPage"
              xmlns:mauiApp1="clr-namespace:MauiApp1"
-             x:DataType="mauiApp1:Custom"
+             x:DataType="mauiApp1:MainViewModel"
              BindingContext="this">
     <ContentPage.Content>
         <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto" InputTransparent="False">
@@ -23,7 +23,8 @@
                 DropDownBackgroundColor="CornflowerBlue"
                 ZIndex="1000"
                 Grid.Row="1"
-                Placeholder="DJFDKSJFDHFKHF"
+                ItemsSource="{Binding Items, Mode=TwoWay}"
+                Placeholder="{Binding Placeholder}"
                 x:Name="DropDown" />
             <!-- <mauiApp1:SearchCustomView -->
             <!--     ZIndex="999" -->
@@ -39,7 +40,11 @@
                 <Label Text="fgdkhgk" />
                 <Label Text="fgdkhgk" />
             </VerticalStackLayout>
-            <Button Grid.Row="4" Clicked="Button_OnClicked"></Button>
+            <CollectionView
+                Grid.Row="4"
+                HorizontalOptions="Fill"
+                ItemsSource="{Binding Items}">
+            </CollectionView>
         </Grid>
     </ContentPage.Content>
 </ContentPage>
