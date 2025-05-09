@@ -3,7 +3,8 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiApp1.Custom"
-             xmlns:local="clr-namespace:MauiApp1">
+             xmlns:local="clr-namespace:MauiApp1"
+             x:Name="this">
     <Grid
         InputTransparent="False"
         Row="0"
@@ -21,7 +22,7 @@
                 <FlexLayout.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding DropDownTappedCommand, Source={RelativeSource AncestorType={x:Type ContentView}}}" />
                 </FlexLayout.GestureRecognizers>
-                <Label Text="{Binding Placeholder}" />
+                <Label Text="{Binding Placeholder, Source={x:Reference Name=this}}" />
                 <Label
                     Margin="5,0"
                     Text="{Binding DropDownClosedIcon, Source={RelativeSource AncestorType={x:Type ContentView}}}"
@@ -55,7 +56,7 @@
                 Padding="10">
                 <CollectionView
                     HorizontalOptions="Fill"
-                    ItemsSource="{Binding Items}">
+                    ItemsSource="{Binding ItemsSource, Source={x:Reference this}}">
                 </CollectionView>
             </Border>
         </AbsoluteLayout>

@@ -24,7 +24,7 @@
                 ZIndex="1000"
                 Grid.Row="1"
                 ItemsSource="{Binding Items, Mode=TwoWay}"
-                Placeholder="{Binding Placeholder}"
+                Placeholder="{Binding Ppp}"
                 x:Name="DropDown" />
             <!-- <mauiApp1:SearchCustomView -->
             <!--     ZIndex="999" -->
